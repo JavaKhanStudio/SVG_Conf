@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formation SVG</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" href="images/LogoHeaderSBP.png" type="image/png">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+        <div class="page-hero">
+            <h2 data-i18n="home_title">Formation SVG</h2>
+            <p data-i18n="home_subtitle">Decouvrez la puissance du SVG pour le web</p>
+        </div>
+
+        <!-- Hero SVG animation -->
+        <div class="content-block" style="text-align:center; padding: 2rem;">
+            <svg viewBox="0 0 600 200" style="max-width:600px; width:100%;" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="heroGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#BA0101"/>
+                        <stop offset="100%" style="stop-color:#0752CF"/>
+                    </linearGradient>
+                </defs>
+                <text x="300" y="80" text-anchor="middle" font-size="72" font-weight="bold" fill="url(#heroGrad)" font-family="Arial, sans-serif">
+                    &lt;SVG /&gt;
+                </text>
+                <text x="300" y="130" text-anchor="middle" font-size="20" fill="#666" font-family="Arial, sans-serif">
+                    Scalable Vector Graphics
+                </text>
+                <!-- Animated decorative elements -->
+                <circle cx="50" cy="100" r="6" fill="#BA0101" opacity="0.6">
+                    <animate attributeName="cy" values="100;80;100" dur="3s" repeatCount="indefinite"/>
+                </circle>
+                <rect x="540" y="90" width="12" height="12" rx="2" fill="#0752CF" opacity="0.6">
+                    <animateTransform attributeName="transform" type="rotate" values="0 546 96;360 546 96" dur="4s" repeatCount="indefinite"/>
+                </rect>
+                <polygon points="300,155 305,170 320,170 308,179 312,194 300,185 288,194 292,179 280,170 295,170" fill="url(#heroGrad)" opacity="0.4">
+                    <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2s" repeatCount="indefinite"/>
+                </polygon>
+            </svg>
+        </div>
+
+        <!-- Pitch -->
+        <div class="content-block">
+            <h3 data-i18n="home_pitch_title">Le SVG, un outil sous-estime</h3>
+            <p data-i18n="home_pitch">Le SVG est un outil precieux pour n'importe quel developpeur web. Optimise pour toutes les tailles d'ecran, il offre une puissance et une elegance pixel-perfect. Mais pas seulement : d'une flexibilite incomparable, il est capable de s'adapter a vos utilisateurs avec un minimum de JavaScript.</p>
+        </div>
+
+        <!-- The problem -->
+        <div class="content-block">
+            <h3 data-i18n="home_problem_title">Seul probleme...</h3>
+            <p data-i18n="home_problem">Sa complexite peut effrayer :</p>
+            <div class="code-block" style="margin: 1.5rem 0;">
+                <span class="code-label">SVG</span>
+                <code><span class="tag">&lt;path</span> <span class="attr">d</span>=<span class="val">"M30,45 C30,45 10,30 10,18 C10,12 14,8 20,8 C24,8 27,10 30,13 C33,10 36,8 40,8 C46,8 50,12 50,18 C50,30 30,45 30,45 Z"</span> <span class="attr">fill</span>=<span class="val">"#e74c3c"</span><span class="tag">/&gt;</span></code>
+            </div>
+            <!-- Show the heart this code produces -->
+            <div style="text-align:center; margin: 1rem 0;">
+                <svg viewBox="0 0 60 55" width="120" height="110" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M30,45 C30,45 10,30 10,18 C10,12 14,8 20,8 C24,8 27,10 30,13 C33,10 36,8 40,8 C46,8 50,12 50,18 C50,30 30,45 30,45 Z" fill="#e74c3c"/>
+                </svg>
+            </div>
+            <p data-i18n="home_solution">Cette suite peut sembler abstraite pour un humain, mais heureusement, pas pour une IA !</p>
+        </div>
+
+        <!-- CTA -->
+        <div class="content-block" style="text-align:center;">
+            <p data-i18n="home_cta" style="font-size:1.1rem; margin-bottom:1.5rem;">Venez decouvrir ou redecouvrir ce format d'image, dans une courte presentation avec de multiples exemples, dont certains generes en live !</p>
+            <a href="what-is-svg.html" style="display:inline-block; padding:0.75rem 2rem; background:var(--accent-gradient); color:white; text-decoration:none; border-radius:var(--radius); font-weight:600; font-size:1.05rem; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" data-i18n="home_start">Commencer l'exploration</a>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <!-- QR Code Easter Egg -->
+    <a href="https://javakhanstudio.github.io/Shader_Demo_Conf/" target="_blank" title="Easter egg!">
+        <img src="QR_CODE.svg" class="qr-easter-egg" alt="QR Code">
+    </a>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

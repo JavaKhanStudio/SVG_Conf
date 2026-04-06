@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C'est quoi un SVG ? - Formation SVG</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" href="images/LogoHeaderSBP.png" type="image/png">
+    <style>
+        .zoom-target { transition: transform 0.3s ease; transform-origin: center center; }
+        .pixelated { image-rendering: pixelated; }
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .feature-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 1rem; background: #f8f9fa; border-radius: 8px; }
+        .feature-icon { font-size: 1.5rem; flex-shrink: 0; }
+        .feature-icon.blue { color: var(--primary-blue); }
+        .feature-icon.red { color: var(--primary-red); }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+        <div class="page-hero">
+            <h2 data-i18n="what_title">C'est quoi, un SVG ?</h2>
+            <p data-i18n="what_subtitle">Comprendre la difference entre images vectorielles et matricielles</p>
+        </div>
+
+        <!-- Vector vs Raster comparison -->
+        <div class="content-block">
+            <h3 data-i18n="what_zoom">Zoomez pour voir la difference !</h3>
+            <div class="comparison">
+                <div class="comparison-side vector">
+                    <h4 data-i18n="what_vector_title">Image Vectorielle (SVG)</h4>
+                    <div class="comparison-box" id="vector-box">
+                        <svg id="vector-demo" viewBox="0 0 100 100" width="180" height="180" xmlns="http://www.w3.org/2000/svg" class="zoom-target">
+                            <circle cx="50" cy="50" r="40" fill="#0752CF" opacity="0.9"/>
+                            <circle cx="50" cy="50" r="28" fill="none" stroke="white" stroke-width="2"/>
+                            <polygon points="50,22 55,40 73,40 58,50 63,68 50,57 37,68 42,50 27,40 45,40" fill="white" opacity="0.9"/>
+                        </svg>
+                    </div>
+                    <div class="zoom-controls">
+                        <button class="zoom-btn" onclick="zoomVector(1)">1x</button>
+                        <button class="zoom-btn" onclick="zoomVector(2)">2x</button>
+                        <button class="zoom-btn" onclick="zoomVector(4)">4x</button>
+                        <button class="zoom-btn" onclick="zoomVector(8)">8x</button>
+                    </div>
+                </div>
+                <div class="comparison-side raster">
+                    <h4 data-i18n="what_raster_title">Image Matricielle (PNG/JPG)</h4>
+                    <div class="comparison-box" id="raster-box">
+                        <canvas id="raster-demo" width="180" height="180" class="zoom-target"></canvas>
+                    </div>
+                    <div class="zoom-controls">
+                        <button class="zoom-btn" onclick="zoomRaster(1)">1x</button>
+                        <button class="zoom-btn" onclick="zoomRaster(2)">2x</button>
+                        <button class="zoom-btn" onclick="zoomRaster(4)">4x</button>
+                        <button class="zoom-btn" onclick="zoomRaster(8)">8x</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Explanation -->
+        <div class="split-layout">
+            <div class="content-block">
+                <h3 data-i18n="what_vector_title">Image Vectorielle (SVG)</h3>
+                <p data-i18n="what_vector_desc">Definie par des formules mathematiques. Chaque forme est decrite par des equations, ce qui permet un redimensionnement infini sans perte de qualite.</p>
+                <div class="code-block">
+                    <span class="code-label">SVG</span>
+                    <code><span class="tag">&lt;circle</span> <span class="attr">cx</span>=<span class="val">"50"</span> <span class="attr">cy</span>=<span class="val">"50"</span> <span class="attr">r</span>=<span class="val">"40"</span><span class="tag">/&gt;</span>
+<span class="comment">&lt;!-- Math: x^2 + y^2 = r^2 --&gt;</span></code>
+                </div>
+            </div>
+            <div class="content-block">
+                <h3 data-i18n="what_raster_title">Image Matricielle (PNG/JPG)</h3>
+                <p data-i18n="what_raster_desc">Composee d'une grille de pixels. Chaque pixel a une couleur fixe. En zoomant, les pixels deviennent visibles et l'image parait floue.</p>
+                <div class="code-block">
+                    <span class="code-label">Pixel Grid</span>
+                    <code>[#0752CF] [#0752CF] [#0752CF] [#fff]
+[#0752CF] [#ffffff] [#0752CF] [#fff]
+[#0752CF] [#0752CF] [#0752CF] [#fff]
+[#ffffff] [#ffffff] [#ffffff] [#fff]</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advantages -->
+        <div class="content-block">
+            <h3 data-i18n="what_advantages_title">Avantages du SVG</h3>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <span class="feature-icon blue"><i class="fas fa-expand-arrows-alt"></i></span>
+                    <span data-i18n="what_adv1">Scalable a l'infini sans perte de qualite</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon blue"><i class="fas fa-feather-alt"></i></span>
+                    <span data-i18n="what_adv2">Fichiers legers pour les formes simples</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon blue"><i class="fas fa-code"></i></span>
+                    <span data-i18n="what_adv3">Modifiable par CSS et JavaScript</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon blue"><i class="fas fa-play-circle"></i></span>
+                    <span data-i18n="what_adv4">Animable nativement</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon blue"><i class="fas fa-universal-access"></i></span>
+                    <span data-i18n="what_adv5">Accessible (texte indexable par les moteurs de recherche)</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon blue"><i class="fas fa-icons"></i></span>
+                    <span data-i18n="what_adv6">Ideal pour les icones, logos, illustrations</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- When to use -->
+        <div class="content-block">
+            <h3 data-i18n="what_when_title">Quand utiliser le SVG ?</h3>
+            <div class="split-layout">
+                <div style="padding:1rem; background:#e8f0fe; border-radius:8px; border-left: 4px solid var(--primary-blue);">
+                    <p><strong>SVG</strong></p>
+                    <p data-i18n="what_when_svg">SVG : icones, logos, illustrations, graphiques, animations</p>
+                </div>
+                <div style="padding:1rem; background:#fce8e8; border-radius:8px; border-left: 4px solid var(--primary-red);">
+                    <p><strong>PNG / JPG</strong></p>
+                    <p data-i18n="what_when_raster">PNG/JPG : photos, images complexes avec beaucoup de couleurs</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <a href="https://javakhanstudio.github.io/Shader_Demo_Conf/" target="_blank" title="Easter egg!">
+        <img src="QR_CODE.svg" class="qr-easter-egg" alt="QR Code">
+    </a>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Draw the low-res raster version
+        function drawRaster() {
+            const canvas = document.getElementById('raster-demo');
+            const ctx = canvas.getContext('2d');
+            // Draw at low resolution to simulate raster
+            const size = 24;
+            const offscreen = document.createElement('canvas');
+            offscreen.width = size;
+            offscreen.height = size;
+            const octx = offscreen.getContext('2d');
+
+            // Draw same design as SVG but at low res
+            octx.fillStyle = '#0752CF';
+            octx.beginPath();
+            octx.arc(size/2, size/2, size*0.4, 0, Math.PI*2);
+            octx.fill();
+
+            octx.strokeStyle = 'white';
+            octx.lineWidth = 1;
+            octx.beginPath();
+            octx.arc(size/2, size/2, size*0.28, 0, Math.PI*2);
+            octx.stroke();
+
+            // Star
+            octx.fillStyle = 'white';
+            octx.beginPath();
+            const cx = size/2, cy = size/2, spikes = 5, outerR = size*0.28, innerR = size*0.14;
+            for (let i = 0; i < spikes * 2; i++) {
+                const r = i % 2 === 0 ? outerR : innerR;
+                const angle = (i * Math.PI / spikes) - Math.PI / 2;
+                const x = cx + Math.cos(angle) * r;
+                const y = cy + Math.sin(angle) * r;
+                i === 0 ? octx.moveTo(x, y) : octx.lineTo(x, y);
+            }
+            octx.closePath();
+            octx.fill();
+
+            // Draw to visible canvas with pixelation
+            ctx.imageSmoothingEnabled = false;
+            ctx.drawImage(offscreen, 0, 0, canvas.width, canvas.height);
+        }
+
+        let vectorScale = 1, rasterScale = 1;
+
+        function zoomVector(scale) {
+            vectorScale = scale;
+            const svg = document.getElementById('vector-demo');
+            svg.style.transform = `scale(${scale})`;
+        }
+
+        function zoomRaster(scale) {
+            rasterScale = scale;
+            const canvas = document.getElementById('raster-demo');
+            canvas.style.transform = `scale(${scale})`;
+            canvas.style.imageRendering = scale > 1 ? 'pixelated' : 'auto';
+        }
+
+        drawRaster();
+    </script>
+</body>
+</html>

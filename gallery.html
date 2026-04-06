@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galerie SVG - Formation SVG</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" href="images/LogoHeaderSBP.png" type="image/png">
+    <style>
+        .filter-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-bottom: 2rem; }
+        .filter-btn { padding: 0.5rem 1.2rem; border: 2px solid var(--border-color); border-radius: 25px; background: white; cursor: pointer; font-size: 0.9rem; transition: all 0.3s ease; }
+        .filter-btn:hover { border-color: var(--primary-blue); color: var(--primary-blue); }
+        .filter-btn.active { background: var(--accent-gradient); color: white; border-color: transparent; }
+        .gallery-card { display: block; }
+        .gallery-card.hidden { display: none; }
+        .prompt-box { background: #f3e5f5; border-left: 3px solid #9b59b6; padding: 0.5rem 0.75rem; border-radius: 0 4px 4px 0; margin-top: 0.5rem; font-size: 0.8rem; color: #6a1b9a; font-style: italic; }
+        .step-scroll { display: flex; gap: 1.5rem; overflow-x: auto; padding: 1.5rem 0.5rem; scroll-snap-type: x mandatory; }
+        .step-scroll::-webkit-scrollbar { height: 6px; }
+        .step-scroll::-webkit-scrollbar-track { background: #f0f0f0; border-radius: 3px; }
+        .step-scroll::-webkit-scrollbar-thumb { background: var(--primary-blue); border-radius: 3px; }
+        .step-item { scroll-snap-align: center; min-width: 200px; max-width: 220px; flex-shrink: 0; text-align: center; background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1rem; position: relative; }
+        .step-item .step-num { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--accent-gradient); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+        .step-item img { max-width: 100%; max-height: 140px; margin: 0.5rem 0; }
+        .step-item p { font-size: 0.8rem; color: var(--text-light); }
+        .arrow-hint { text-align: center; color: var(--text-light); font-size: 0.85rem; margin-top: -0.5rem; margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+        <div class="page-hero">
+            <h2 data-i18n="gal_title">Galerie SVG</h2>
+            <p data-i18n="gal_subtitle">Une collection d'exemples SVG, des fleurs aux os en passant par l'IA</p>
+        </div>
+
+        <!-- Filter tabs -->
+        <div class="filter-tabs">
+            <button class="filter-btn active" data-filter="all" data-i18n="gal_tab_all">Tout</button>
+            <button class="filter-btn" data-filter="flower" data-i18n="gal_tab_flowers">Fleurs</button>
+            <button class="filter-btn" data-filter="bone" data-i18n="gal_tab_bones">Os (etape par etape)</button>
+            <button class="filter-btn" data-filter="ai" data-i18n="gal_tab_ai">Genere par IA</button>
+            <button class="filter-btn" data-filter="cheatsheet" data-i18n="gal_tab_cheatsheets">Aide-memoires</button>
+        </div>
+
+        <!-- Bone Step-by-step (shown only in bone or all filter) -->
+        <div class="content-block gallery-section" data-category="bone" id="bone-section">
+            <h3 data-i18n="gal_tab_bones">Os - Construction etape par etape</h3>
+            <p class="arrow-hint">&larr; scroll &rarr;</p>
+            <div class="step-scroll">
+                <div class="step-item">
+                    <div class="step-num">1</div>
+                    <img src="images/bones/bone.svg" alt="Bone V1">
+                    <p>Base icon (16x16)</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">2</div>
+                    <img src="images/bones/boneV2.svg" alt="Bone V2">
+                    <p>+ rotation (transform)</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">3</div>
+                    <img src="images/bones/boneV3.svg" alt="Bone V3">
+                    <p>+ matrix transform + text</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">4</div>
+                    <img src="images/bones/boneV4.svg" alt="Bone V4">
+                    <p>+ viewBox + layout</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">5</div>
+                    <img src="images/bones/boneV5.svg" alt="Bone V5">
+                    <p>+ gradients + filters</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">6</div>
+                    <img src="images/bones/boneV6.svg" alt="Bone V6">
+                    <p>+ highlight gradient</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">7</div>
+                    <img src="images/bones/boneV7.svg" alt="Bone V7">
+                    <p>+ refinements</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">8</div>
+                    <img src="images/bones/boneV8.svg" alt="Bone V8">
+                    <p>+ shadow & depth</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">9</div>
+                    <img src="images/bones/boneV9.svg" alt="Bone V9">
+                    <p>+ texture pattern</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">10</div>
+                    <img src="images/bones/boneV10.svg" alt="Bone V10">
+                    <p>+ edge effects</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">11</div>
+                    <img src="images/bones/boneV11.svg" alt="Bone V11">
+                    <p>+ text emboss filter</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">12</div>
+                    <img src="images/bones/boneV12.svg" alt="Bone V12">
+                    <p>+ polished styling</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">13</div>
+                    <img src="images/bones/boneV13.svg" alt="Bone V13">
+                    <p>Final: full metallic bone</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div class="gallery-grid" id="gallery-grid">
+
+            <!-- Flowers -->
+            <div class="gallery-card" data-category="flower">
+                <div class="card-image">
+                    <img src="images/flowerWorkshop/BlackThorn.svg" alt="BlackThorn">
+                </div>
+                <div class="card-body">
+                    <h4>BlackThorn</h4>
+                    <p>Prunellier - CSS variables, defs/use pattern</p>
+                    <span class="card-tag flower">Flower</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="flower">
+                <div class="card-image">
+                    <img src="images/flowerWorkshop/BlackThornV2.svg" alt="BlackThorn V2">
+                </div>
+                <div class="card-body">
+                    <h4>BlackThorn V2</h4>
+                    <p>Variation with refined petals</p>
+                    <span class="card-tag flower">Flower</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="flower">
+                <div class="card-image">
+                    <img src="images/flowerWorkshop/newFlower/Rose.svg" alt="Rose">
+                </div>
+                <div class="card-body">
+                    <h4>Rose</h4>
+                    <p>Complex petal layering with gradients</p>
+                    <span class="card-tag flower">Flower</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="flower">
+                <div class="card-image">
+                    <img src="images/flowerWorkshop/newFlower/Daisy.svg" alt="Daisy">
+                </div>
+                <div class="card-body">
+                    <h4>Daisy</h4>
+                    <p>Symmetrical petal arrangement</p>
+                    <span class="card-tag flower">Flower</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="flower">
+                <div class="card-image">
+                    <img src="images/flowerWorkshop/newFlower/Bluebell.svg" alt="Bluebell">
+                </div>
+                <div class="card-body">
+                    <h4>Bluebell</h4>
+                    <p>Bell-shaped flower with curves</p>
+                    <span class="card-tag flower">Flower</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="flower">
+                <div class="card-image">
+                    <img src="images/flowerWorkshop/newFlower/Pansy.svg" alt="Pansy">
+                </div>
+                <div class="card-body">
+                    <h4>Pansy</h4>
+                    <p>Multi-colored petals with detail</p>
+                    <span class="card-tag flower">Flower</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="flower">
+                <div class="card-image">
+                    <img src="images/flowerWorkshop/newFlower/wildRose/wildRoseV4.svg" alt="Wild Rose">
+                </div>
+                <div class="card-body">
+                    <h4>Wild Rose</h4>
+                    <p>Progressive wild rose design</p>
+                    <span class="card-tag flower">Flower</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="flower">
+                <div class="card-image">
+                    <img src="images/flowerWorkshop/vine.svg" alt="Vine">
+                </div>
+                <div class="card-body">
+                    <h4>Vine</h4>
+                    <p>Curved stroke with depth layers</p>
+                    <span class="card-tag flower">Flower</span>
+                </div>
+            </div>
+
+            <!-- AI Generated -->
+            <div class="gallery-card" data-category="ai">
+                <div class="card-image">
+                    <img src="images/exemple_AI/claude/HeatherClosed.svg" alt="Heather Closed - Claude">
+                </div>
+                <div class="card-body">
+                    <h4>Heather (Closed) - Claude</h4>
+                    <p>AI: Claude</p>
+                    <div class="prompt-box">
+                        <strong data-i18n="gal_prompt">Prompt :</strong>
+                        <span data-i18n="gal_prompt_placeholder">Le prompt sera ajoute prochainement</span>
+                    </div>
+                    <span class="card-tag ai">AI Generated</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="ai">
+                <div class="card-image">
+                    <img src="images/exemple_AI/claude/HeatherOpen.svg" alt="Heather Open - Claude">
+                </div>
+                <div class="card-body">
+                    <h4>Heather (Open) - Claude</h4>
+                    <p>AI: Claude</p>
+                    <div class="prompt-box">
+                        <strong data-i18n="gal_prompt">Prompt :</strong>
+                        <span data-i18n="gal_prompt_placeholder">Le prompt sera ajoute prochainement</span>
+                    </div>
+                    <span class="card-tag ai">AI Generated</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="ai">
+                <div class="card-image">
+                    <img src="images/exemple_AI/deepSeek/calluna.svg" alt="Calluna - DeepSeek">
+                </div>
+                <div class="card-body">
+                    <h4>Calluna - DeepSeek</h4>
+                    <p>AI: DeepSeek</p>
+                    <div class="prompt-box">
+                        <strong data-i18n="gal_prompt">Prompt :</strong>
+                        <span data-i18n="gal_prompt_placeholder">Le prompt sera ajoute prochainement</span>
+                    </div>
+                    <span class="card-tag ai">AI Generated</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="ai">
+                <div class="card-image">
+                    <img src="images/exemple_AI/deepSeek/callunaV2.svg" alt="Calluna V2 - DeepSeek">
+                </div>
+                <div class="card-body">
+                    <h4>Calluna V2 - DeepSeek</h4>
+                    <p>AI: DeepSeek</p>
+                    <div class="prompt-box">
+                        <strong data-i18n="gal_prompt">Prompt :</strong>
+                        <span data-i18n="gal_prompt_placeholder">Le prompt sera ajoute prochainement</span>
+                    </div>
+                    <span class="card-tag ai">AI Generated</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="ai">
+                <div class="card-image">
+                    <img src="images/exemple_AI/GPT/calluna.svg" alt="Calluna - GPT">
+                </div>
+                <div class="card-body">
+                    <h4>Calluna - GPT</h4>
+                    <p>AI: ChatGPT</p>
+                    <div class="prompt-box">
+                        <strong data-i18n="gal_prompt">Prompt :</strong>
+                        <span data-i18n="gal_prompt_placeholder">Le prompt sera ajoute prochainement</span>
+                    </div>
+                    <span class="card-tag ai">AI Generated</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="ai">
+                <div class="card-image">
+                    <img src="images/exemple_AI/GPT/callunaV2.svg" alt="Calluna V2 - GPT">
+                </div>
+                <div class="card-body">
+                    <h4>Calluna V2 - GPT</h4>
+                    <p>AI: ChatGPT</p>
+                    <div class="prompt-box">
+                        <strong data-i18n="gal_prompt">Prompt :</strong>
+                        <span data-i18n="gal_prompt_placeholder">Le prompt sera ajoute prochainement</span>
+                    </div>
+                    <span class="card-tag ai">AI Generated</span>
+                </div>
+            </div>
+
+            <!-- Bone - GPT generated -->
+            <div class="gallery-card" data-category="ai">
+                <div class="card-image">
+                    <img src="images/bones/boneV_GPT.svg" alt="Bone GPT">
+                </div>
+                <div class="card-body">
+                    <h4>Bone Tag - GPT</h4>
+                    <p>AI: ChatGPT - bone tag variant</p>
+                    <div class="prompt-box">
+                        <strong data-i18n="gal_prompt">Prompt :</strong>
+                        <span data-i18n="gal_prompt_placeholder">Le prompt sera ajoute prochainement</span>
+                    </div>
+                    <span class="card-tag ai">AI Generated</span>
+                </div>
+            </div>
+
+            <!-- Cheat Sheets -->
+            <div class="gallery-card" data-category="cheatsheet">
+                <div class="card-image">
+                    <img src="images/cheatSheets/cs_general.svg" alt="General Cheat Sheet">
+                </div>
+                <div class="card-body">
+                    <h4>SVG Cheat Sheet</h4>
+                    <p>Shapes, paths, styling, transforms, filters</p>
+                    <span class="card-tag cheatsheet">Cheat Sheet</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="cheatsheet">
+                <div class="card-image">
+                    <img src="images/cheatSheets/cs_bezier.svg" alt="Bezier Cheat Sheet">
+                </div>
+                <div class="card-body">
+                    <h4>Bezier Curves</h4>
+                    <p>Quadratic & cubic bezier reference</p>
+                    <span class="card-tag cheatsheet">Cheat Sheet</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="cheatsheet">
+                <div class="card-image">
+                    <img src="images/cheatSheets/cs_rotation.svg" alt="Rotation Cheat Sheet">
+                </div>
+                <div class="card-body">
+                    <h4>Rotations</h4>
+                    <p>Transform rotation demonstrations</p>
+                    <span class="card-tag cheatsheet">Cheat Sheet</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="cheatsheet">
+                <div class="card-image">
+                    <img src="images/cheatSheets/3D-Text.svg" alt="3D Text">
+                </div>
+                <div class="card-body">
+                    <h4>3D Text Effect</h4>
+                    <p>Advanced gradients for 3D text rendering</p>
+                    <span class="card-tag cheatsheet">Cheat Sheet</span>
+                </div>
+            </div>
+
+            <!-- Extra elements -->
+            <div class="gallery-card" data-category="flower">
+                <div class="card-image">
+                    <img src="images/elements/patte.svg" alt="Patte">
+                </div>
+                <div class="card-body">
+                    <h4>Patte</h4>
+                    <p>Simple reusable decorative element</p>
+                    <span class="card-tag flower">Element</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <a href="https://javakhanstudio.github.io/Shader_Demo_Conf/" target="_blank" title="Easter egg!">
+        <img src="QR_CODE.svg" class="qr-easter-egg" alt="QR Code">
+    </a>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Filter gallery
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const cards = document.querySelectorAll('.gallery-card[data-category]');
+        const boneSection = document.getElementById('bone-section');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.dataset.filter;
+
+                // Toggle bone step-by-step section
+                if (filter === 'all' || filter === 'bone') {
+                    boneSection.style.display = '';
+                } else {
+                    boneSection.style.display = 'none';
+                }
+
+                // Toggle gallery cards
+                cards.forEach(card => {
+                    if (filter === 'all' || card.dataset.category === filter) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

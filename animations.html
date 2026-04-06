@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animations SVG - Formation SVG</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" href="images/LogoHeaderSBP.png" type="image/png">
+    <style>
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+        @keyframes colorShift { 0% { fill: #BA0101; } 33% { fill: #0752CF; } 66% { fill: #2ecc71; } 100% { fill: #BA0101; } }
+        @keyframes dash { to { stroke-dashoffset: 0; } }
+        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        @keyframes fadeInOut { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+        .anim-svg { display: block; margin: 0 auto; }
+
+        .replay-btn {
+            display: inline-block; margin-top: 0.5rem; padding: 0.3rem 0.8rem;
+            background: var(--primary-blue); color: white; border: none; border-radius: 4px;
+            cursor: pointer; font-size: 0.85rem;
+        }
+        .replay-btn:hover { background: var(--primary-red); }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+        <div class="page-hero">
+            <h2 data-i18n="anim_title">Animations SVG</h2>
+            <p data-i18n="anim_subtitle">Decouvrez les differentes techniques d'animation SVG</p>
+        </div>
+
+        <div class="animation-showcase">
+
+            <!-- CSS Animation: Rotation -->
+            <div class="animation-card">
+                <h4 data-i18n="anim_css_title">Animation CSS</h4>
+                <p data-i18n="anim_css_desc" style="font-size:0.9rem; color:var(--text-light);">Les elements SVG peuvent etre animes avec les @keyframes CSS.</p>
+                <div class="anim-container">
+                    <svg viewBox="0 0 100 100" width="120" height="120" class="anim-svg" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="25" y="25" width="50" height="50" rx="8" fill="#0752CF" style="animation: spin 3s linear infinite; transform-origin: 50px 50px;"/>
+                    </svg>
+                </div>
+                <div class="code-block" style="font-size:0.75rem; padding:0.75rem; text-align:left;">
+                    <code><span class="attr">@keyframes</span> <span class="val">spin</span> {
+  <span class="attr">from</span> { transform: rotate(0deg); }
+  <span class="attr">to</span> { transform: rotate(360deg); }
+}
+<span class="tag">rect</span> {
+  <span class="attr">animation</span>: <span class="val">spin 3s linear infinite</span>;
+}</code>
+                </div>
+            </div>
+
+            <!-- CSS Animation: Pulse -->
+            <div class="animation-card">
+                <h4>Pulse</h4>
+                <p style="font-size:0.9rem; color:var(--text-light);">Scale + transform-origin</p>
+                <div class="anim-container">
+                    <svg viewBox="0 0 100 100" width="120" height="120" class="anim-svg" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="30" fill="#e74c3c" style="animation: pulse 1.5s ease-in-out infinite; transform-origin: 50px 50px;"/>
+                    </svg>
+                </div>
+                <div class="code-block" style="font-size:0.75rem; padding:0.75rem; text-align:left;">
+                    <code><span class="attr">@keyframes</span> <span class="val">pulse</span> {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}</code>
+                </div>
+            </div>
+
+            <!-- CSS Animation: Color -->
+            <div class="animation-card">
+                <h4 data-i18n="anim_css_title">Color shift</h4>
+                <p style="font-size:0.9rem; color:var(--text-light);">fill transition</p>
+                <div class="anim-container">
+                    <svg viewBox="0 0 100 100" width="120" height="120" class="anim-svg" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="50,10 90,90 10,90" style="animation: colorShift 3s ease infinite; transform-origin: 50px 63px;"/>
+                    </svg>
+                </div>
+                <div class="code-block" style="font-size:0.75rem; padding:0.75rem; text-align:left;">
+                    <code><span class="attr">@keyframes</span> <span class="val">colorShift</span> {
+  0% { fill: <span class="val">#BA0101</span>; }
+  33% { fill: <span class="val">#0752CF</span>; }
+  66% { fill: <span class="val">#2ecc71</span>; }
+}</code>
+                </div>
+            </div>
+
+            <!-- SMIL: animate -->
+            <div class="animation-card">
+                <h4 data-i18n="anim_smil_title">Animation SMIL</h4>
+                <p data-i18n="anim_smil_desc" style="font-size:0.9rem; color:var(--text-light);">Animer directement dans le SVG avec &lt;animate&gt;.</p>
+                <div class="anim-container">
+                    <svg viewBox="0 0 200 100" width="200" height="100" class="anim-svg" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="30" cy="50" r="15" fill="#0752CF">
+                            <animate attributeName="cx" from="30" to="170" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="30" cy="50" r="15" fill="#0752CF" opacity="0.2"/>
+                        <circle cx="170" cy="50" r="15" fill="#0752CF" opacity="0.2"/>
+                    </svg>
+                </div>
+                <div class="code-block" style="font-size:0.75rem; padding:0.75rem; text-align:left;">
+                    <code><span class="tag">&lt;circle</span> <span class="attr">cx</span>=<span class="val">"30"</span> <span class="attr">cy</span>=<span class="val">"50"</span> <span class="attr">r</span>=<span class="val">"15"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;animate</span>
+    <span class="attr">attributeName</span>=<span class="val">"cx"</span>
+    <span class="attr">from</span>=<span class="val">"30"</span> <span class="attr">to</span>=<span class="val">"170"</span>
+    <span class="attr">dur</span>=<span class="val">"2s"</span>
+    <span class="attr">repeatCount</span>=<span class="val">"indefinite"</span> <span class="tag">/&gt;</span>
+<span class="tag">&lt;/circle&gt;</span></code>
+                </div>
+            </div>
+
+            <!-- Stroke draw animation -->
+            <div class="animation-card">
+                <h4 data-i18n="anim_stroke_title">Animation de trait</h4>
+                <p data-i18n="anim_stroke_desc" style="font-size:0.9rem; color:var(--text-light);">Effet de dessin progressif avec stroke-dashoffset.</p>
+                <div class="anim-container">
+                    <svg id="stroke-anim-svg" viewBox="0 0 120 110" width="140" height="130" class="anim-svg" xmlns="http://www.w3.org/2000/svg">
+                        <path id="stroke-heart" d="M60,95 C60,95 15,65 15,38 C15,25 25,15 38,15 C48,15 55,22 60,28 C65,22 72,15 82,15 C95,15 105,25 105,38 C105,65 60,95 60,95 Z" fill="none" stroke="#e74c3c" stroke-width="3" stroke-dasharray="300" stroke-dashoffset="300" style="animation: dash 3s ease forwards;"/>
+                    </svg>
+                </div>
+                <button class="replay-btn" onclick="replayStroke()"><i class="fas fa-redo"></i> Replay</button>
+                <div class="code-block" style="font-size:0.75rem; padding:0.75rem; text-align:left;">
+                    <code><span class="attr">stroke-dasharray</span>: <span class="val">300</span>;
+<span class="attr">stroke-dashoffset</span>: <span class="val">300</span>;
+<span class="attr">animation</span>: <span class="val">dash 3s ease forwards</span>;
+
+<span class="attr">@keyframes</span> <span class="val">dash</span> {
+  to { stroke-dashoffset: 0; }
+}</code>
+                </div>
+            </div>
+
+            <!-- Shape morphing with SMIL -->
+            <div class="animation-card">
+                <h4 data-i18n="anim_morph_title">Morphing de forme</h4>
+                <p data-i18n="anim_morph_desc" style="font-size:0.9rem; color:var(--text-light);">Transformer une forme en une autre avec animate.</p>
+                <div class="anim-container">
+                    <svg viewBox="0 0 100 100" width="120" height="120" class="anim-svg" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#9b59b6">
+                            <animate attributeName="d" dur="4s" repeatCount="indefinite"
+                                values="M50,10 L90,90 L10,90 Z;
+                                        M10,10 L90,10 L90,90 L10,90 Z;
+                                        M50,5 A45,45 0 1,1 50,95 A45,45 0 1,1 50,5;
+                                        M50,10 L90,90 L10,90 Z"/>
+                        </path>
+                    </svg>
+                </div>
+                <div class="code-block" style="font-size:0.75rem; padding:0.75rem; text-align:left;">
+                    <code><span class="tag">&lt;path&gt;</span>
+  <span class="tag">&lt;animate</span>
+    <span class="attr">attributeName</span>=<span class="val">"d"</span>
+    <span class="attr">dur</span>=<span class="val">"4s"</span>
+    <span class="attr">values</span>=<span class="val">"triangle; square;
+            circle; triangle"</span>
+    <span class="attr">repeatCount</span>=<span class="val">"indefinite"</span> <span class="tag">/&gt;</span>
+<span class="tag">&lt;/path&gt;</span></code>
+                </div>
+            </div>
+
+            <!-- Transform animation -->
+            <div class="animation-card">
+                <h4 data-i18n="anim_transform_title">Transformations</h4>
+                <p data-i18n="anim_transform_desc" style="font-size:0.9rem; color:var(--text-light);">Rotation, scale, translate animees.</p>
+                <div class="anim-container">
+                    <svg viewBox="0 0 200 200" width="160" height="160" class="anim-svg" xmlns="http://www.w3.org/2000/svg">
+                        <g>
+                            <rect x="70" y="70" width="25" height="25" rx="3" fill="#BA0101" style="animation: spin 4s linear infinite; transform-origin: 82px 82px;"/>
+                            <rect x="105" y="70" width="25" height="25" rx="3" fill="#0752CF" style="animation: bounce 1.5s ease-in-out infinite; transform-origin: 117px 82px;"/>
+                            <rect x="70" y="105" width="25" height="25" rx="3" fill="#2ecc71" style="animation: pulse 2s ease-in-out infinite; transform-origin: 82px 117px;"/>
+                            <rect x="105" y="105" width="25" height="25" rx="3" fill="#f39c12" style="animation: fadeInOut 2s ease-in-out infinite;"/>
+                        </g>
+                    </svg>
+                </div>
+                <div class="code-block" style="font-size:0.75rem; padding:0.75rem; text-align:left;">
+                    <code><span class="comment">&lt;!-- Each square has a different animation --&gt;</span>
+<span class="tag">&lt;rect</span> <span class="attr">style</span>=<span class="val">"animation: spin 4s..."</span> <span class="tag">/&gt;</span>
+<span class="tag">&lt;rect</span> <span class="attr">style</span>=<span class="val">"animation: bounce 1.5s..."</span> <span class="tag">/&gt;</span>
+<span class="tag">&lt;rect</span> <span class="attr">style</span>=<span class="val">"animation: pulse 2s..."</span> <span class="tag">/&gt;</span>
+<span class="tag">&lt;rect</span> <span class="attr">style</span>=<span class="val">"animation: fadeInOut 2s..."</span> <span class="tag">/&gt;</span></code>
+                </div>
+            </div>
+
+            <!-- Interactive: hover -->
+            <div class="animation-card">
+                <h4 data-i18n="anim_interactive_title">Animation interactive</h4>
+                <p data-i18n="anim_interactive_desc" style="font-size:0.9rem; color:var(--text-light);">SVG + JavaScript pour des animations reactives.</p>
+                <div class="anim-container">
+                    <svg id="interactive-svg" viewBox="0 0 200 200" width="160" height="160" class="anim-svg" xmlns="http://www.w3.org/2000/svg" style="cursor:pointer;">
+                        <defs>
+                            <radialGradient id="interGrad">
+                                <stop offset="0%" stop-color="#0752CF"/>
+                                <stop offset="100%" stop-color="#BA0101"/>
+                            </radialGradient>
+                        </defs>
+                        <circle id="inter-circle" cx="100" cy="100" r="40" fill="url(#interGrad)" style="transition: r 0.3s, opacity 0.3s;"/>
+                        <text x="100" y="160" text-anchor="middle" font-size="12" fill="#666" font-family="Arial">Click / Tap me!</text>
+                    </svg>
+                </div>
+                <div class="code-block" style="font-size:0.75rem; padding:0.75rem; text-align:left;">
+                    <code><span class="tag">svg</span>.<span class="attr">addEventListener</span>(<span class="val">'click'</span>, () => {
+  circle.<span class="attr">setAttribute</span>(<span class="val">'r'</span>,
+    Math.random() * 50 + 20);
+});</code>
+                </div>
+            </div>
+
+            <!-- animateTransform SMIL -->
+            <div class="animation-card">
+                <h4>&lt;animateTransform&gt;</h4>
+                <p style="font-size:0.9rem; color:var(--text-light);">SMIL rotation native</p>
+                <div class="anim-container">
+                    <svg viewBox="0 0 100 100" width="120" height="120" class="anim-svg" xmlns="http://www.w3.org/2000/svg">
+                        <g>
+                            <polygon points="50,15 58,38 82,38 62,50 68,73 50,60 32,73 38,50 18,38 42,38" fill="#f39c12" stroke="#e67e22" stroke-width="1">
+                                <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="5s" repeatCount="indefinite"/>
+                            </polygon>
+                        </g>
+                    </svg>
+                </div>
+                <div class="code-block" style="font-size:0.75rem; padding:0.75rem; text-align:left;">
+                    <code><span class="tag">&lt;animateTransform</span>
+  <span class="attr">attributeName</span>=<span class="val">"transform"</span>
+  <span class="attr">type</span>=<span class="val">"rotate"</span>
+  <span class="attr">from</span>=<span class="val">"0 50 50"</span>
+  <span class="attr">to</span>=<span class="val">"360 50 50"</span>
+  <span class="attr">dur</span>=<span class="val">"5s"</span> <span class="tag">/&gt;</span></code>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <a href="https://javakhanstudio.github.io/Shader_Demo_Conf/" target="_blank" title="Easter egg!">
+        <img src="QR_CODE.svg" class="qr-easter-egg" alt="QR Code">
+    </a>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Replay stroke animation
+        function replayStroke() {
+            const path = document.getElementById('stroke-heart');
+            path.style.animation = 'none';
+            path.offsetHeight; // trigger reflow
+            path.style.animation = 'dash 3s ease forwards';
+        }
+
+        // Interactive circle
+        document.getElementById('interactive-svg').addEventListener('click', () => {
+            const circle = document.getElementById('inter-circle');
+            const newR = Math.random() * 50 + 20;
+            circle.setAttribute('r', newR.toFixed(0));
+            // Random gradient colors
+            const colors = ['#BA0101','#0752CF','#2ecc71','#9b59b6','#f39c12','#e74c3c','#1abc9c'];
+            const c1 = colors[Math.floor(Math.random() * colors.length)];
+            const c2 = colors[Math.floor(Math.random() * colors.length)];
+            document.querySelector('#interGrad stop:first-child').setAttribute('stop-color', c1);
+            document.querySelector('#interGrad stop:last-child').setAttribute('stop-color', c2);
+        });
+    </script>
+</body>
+</html>
