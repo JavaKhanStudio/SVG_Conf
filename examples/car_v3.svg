@@ -1,0 +1,200 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <style>
+    :root {
+      --bg: #f4f4f8;
+      --outline: #0a0a14;
+      --stroke-width: 3;            /* @ws number min=1 max=8 step=0.5 */
+      --detail-stroke: 2;           /* @ws number min=0.5 max=4 step=0.5 */
+      --body-fill: #2a4fbf;         /* Clio metallic blue */
+      --window-fill: #1b2436;
+      --wheel-fill: #141420;
+      --rim-fill: #2a2a34;
+      --grille-fill: #0a0a10;
+      --accent-fill: #c8c8cf;
+      --plate-fill: #f2f2ea;
+      --highlight: #6f8edd;
+    }
+    .body    { fill: var(--body-fill);   stroke: var(--outline); stroke-width: var(--stroke-width); stroke-linejoin: round; stroke-linecap: round; }
+    .window  { fill: var(--window-fill); stroke: var(--outline); stroke-width: var(--stroke-width); stroke-linejoin: round; stroke-linecap: round; }
+    .tire    { fill: var(--wheel-fill);  stroke: var(--outline); stroke-width: var(--stroke-width); }
+    .rim     { fill: var(--rim-fill);    stroke: var(--outline); stroke-width: var(--detail-stroke); }
+    .grille  { fill: var(--grille-fill); stroke: var(--outline); stroke-width: var(--detail-stroke); stroke-linejoin: round; }
+    .accent  { fill: var(--accent-fill); stroke: var(--outline); stroke-width: var(--detail-stroke); stroke-linejoin: round; stroke-linecap: round; }
+    .plate   { fill: var(--plate-fill);  stroke: var(--outline); stroke-width: var(--detail-stroke); }
+    .line    { fill: none; stroke: var(--outline); stroke-width: var(--detail-stroke); stroke-linecap: round; stroke-linejoin: round; }
+    .hi      { fill: none; stroke: var(--highlight); stroke-width: var(--detail-stroke); stroke-linecap: round; opacity: 0.6; }
+  </style>
+
+  <rect width="100%" height="100%" fill="var(--bg)" />
+
+  <!-- ===== BODY SILHOUETTE ===== -->
+  <!-- Low, wide 3/4 front-right Clio. Rear quarter on the left, raked windshield,
+       bulged front fender, forward-leaning nose. -->
+  <path class="body" d="
+    M 28 322
+    L 22 256
+    Q 24 228 38 204
+    Q 58 176 96 156
+    Q 142 132 200 122
+    Q 258 116 312 118
+    L 338 122
+    Q 360 132 376 158
+    Q 388 178 402 196
+    Q 432 208 468 214
+    Q 514 222 548 232
+    Q 566 240 572 258
+    L 576 292
+    Q 574 312 560 322
+    L 28 322
+    Z
+  " />
+
+  <!-- ===== GREENHOUSE ===== -->
+  <path class="window" d="
+    M 60 188
+    Q 74 160 110 140
+    Q 148 124 196 122
+    L 302 124
+    Q 322 132 342 160
+    L 374 198
+    L 316 200
+    L 206 196
+    L 108 196
+    Z
+  " />
+
+  <!-- A-pillar (steeply raked) -->
+  <path class="line" d="M 302 124 Q 322 160 342 198" />
+  <!-- B-pillar -->
+  <path class="line" d="M 206 124 L 206 196" />
+  <!-- C-pillar with rear quarter kink -->
+  <path class="line" d="M 110 140 L 108 196" />
+  <path class="line" d="M 130 132 L 130 196" />
+
+  <!-- ===== BODYLINE CREASES ===== -->
+  <!-- Shoulder / belt-line crease sweeping from rear to front fender -->
+  <path class="line" d="M 22 242 Q 180 220 360 226 Q 400 230 430 238" />
+  <!-- Lower body crease above rocker -->
+  <path class="line" d="M 28 288 Q 220 278 520 290" />
+  <!-- Hood crease following the fall of the bonnet -->
+  <path class="line" d="M 334 150 Q 372 178 410 208" />
+  <!-- Front fender arch highlight (bulged over front wheel) -->
+  <path class="line" d="M 372 262 Q 384 214 436 206" />
+  <!-- Rear fender arch highlight -->
+  <path class="line" d="M 58 302 Q 66 252 130 242" />
+
+  <!-- Door shutlines -->
+  <path class="line" d="M 214 196 Q 222 258 232 320" />
+  <path class="line" d="M 118 196 Q 128 258 138 320" />
+  <!-- Door handles -->
+  <path class="line" d="M 252 222 L 290 220" />
+  <path class="line" d="M 150 230 L 186 228" />
+
+  <!-- Side mirror on A-pillar base -->
+  <path class="accent" d="M 304 162 L 332 152 L 342 168 L 314 178 Z" />
+
+  <!-- ===== FRONT END ===== -->
+
+  <!-- Headlight: narrow wrap-around shape along the top of the fender -->
+  <path class="accent" d="
+    M 402 198
+    Q 448 204 490 214
+    Q 530 222 558 236
+    L 562 250
+    Q 530 238 488 230
+    Q 448 222 406 218
+    Z
+  " />
+  <!-- LED DRL bar inside the headlight -->
+  <path class="hi" d="M 420 210 Q 470 216 516 224" />
+  <!-- Signature C-hook DRL dropping from the headlight into the bumper.
+       This is the distinctive Clio element. -->
+  <path class="line" d="
+    M 530 228
+    Q 518 246 514 266
+    Q 514 278 524 286
+  " />
+  <path class="line" d="
+    M 542 232
+    Q 532 252 530 272
+  " />
+
+  <!-- Grille — wide low trapezoid, honeycomb hinted via vertical dividers -->
+  <path class="grille" d="
+    M 410 262
+    L 560 274
+    L 562 302
+    L 420 298
+    Z
+  " />
+  <!-- Honeycomb hint rows -->
+  <path class="line" d="M 416 276 L 561 284" />
+  <path class="line" d="M 418 288 L 561 294" />
+  <!-- Honeycomb hint columns -->
+  <path class="line" d="M 442 266 L 446 298" />
+  <path class="line" d="M 470 268 L 474 300" />
+  <path class="line" d="M 500 270 L 502 300" />
+  <path class="line" d="M 528 272 L 530 300" />
+
+  <!-- Renault diamond logo, prominent, centered on grille -->
+  <g>
+    <path class="accent" d="
+      M 486 266
+      L 508 285
+      L 486 304
+      L 464 285
+      Z
+    " />
+    <path class="line" d="M 486 274 L 486 298" />
+    <path class="line" d="M 470 285 L 502 285" />
+  </g>
+
+  <!-- License plate -->
+  <rect class="plate" x="454" y="308" width="96" height="14" rx="2" />
+
+  <!-- Lower bumper splitter / skid plate -->
+  <path class="accent" d="
+    M 408 318
+    Q 432 312 462 312
+    L 560 316
+    L 562 324
+    L 410 324
+    Z
+  " />
+  <!-- Bumper side intake vent -->
+  <path class="grille" d="M 392 306 L 416 308 L 416 318 L 390 316 Z" />
+
+  <!-- ===== WHEELS ===== -->
+
+  <!-- Rear wheel (smaller due to 3/4 perspective, partially hidden behind fender) -->
+  <g>
+    <circle class="tire" cx="124" cy="318" r="50" />
+    <circle class="rim"  cx="124" cy="318" r="32" />
+    <!-- 5-spoke alloy -->
+    <g stroke="var(--outline)" stroke-width="var(--detail-stroke)" stroke-linecap="round" fill="none">
+      <line x1="124" y1="286" x2="124" y2="350" />
+      <line x1="124" y1="318" x2="155" y2="300" />
+      <line x1="124" y1="318" x2="155" y2="336" />
+      <line x1="124" y1="318" x2="93"  y2="300" />
+      <line x1="124" y1="318" x2="93"  y2="336" />
+    </g>
+    <circle fill="var(--outline)" cx="124" cy="318" r="6" />
+  </g>
+
+  <!-- Front wheel (larger, prominent) -->
+  <g>
+    <circle class="tire" cx="444" cy="322" r="62" />
+    <circle class="rim"  cx="444" cy="322" r="40" />
+    <!-- 5-spoke alloy -->
+    <g stroke="var(--outline)" stroke-width="var(--detail-stroke)" stroke-linecap="round" fill="none">
+      <line x1="444" y1="282" x2="444" y2="362" />
+      <line x1="444" y1="322" x2="482" y2="300" />
+      <line x1="444" y1="322" x2="482" y2="344" />
+      <line x1="444" y1="322" x2="406" y2="300" />
+      <line x1="444" y1="322" x2="406" y2="344" />
+    </g>
+    <circle fill="var(--outline)" cx="444" cy="322" r="7" />
+    <!-- Brake caliper hint -->
+    <path class="hi" d="M 460 310 Q 470 322 460 334" />
+  </g>
+</svg>

@@ -1,0 +1,301 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <style>
+    :root {
+      --sky-top: #8a95a4;
+      --sky-bottom: #b8bec6;
+      --ground: #6a6a6e;
+      --ground-dark: #3a3a3e;
+      --body-light: #3a63d4;
+      --body-mid: #1d3aa0;
+      --body-dark: #0e1d60;
+      --body-shadow: #060f3a;
+      --glass: #0e1728;
+      --glass-hi: #2a3a58;
+      --chrome: #c6cdd6;
+      --tire: #0a0a10;
+      --rim: #17171e;
+      --rim-hi: #3a3a48;
+      --grille: #08080d;
+      --plate: #f2efe2;
+      --plate-eu: #0d3aa8;
+      --headlight: #e6e8ec;
+      --drl: #f4f5ef;
+    }
+  </style>
+
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="var(--sky-top)" />
+      <stop offset="1" stop-color="var(--sky-bottom)" />
+    </linearGradient>
+    <linearGradient id="ground-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="var(--ground)" />
+      <stop offset="1" stop-color="var(--ground-dark)" />
+    </linearGradient>
+    <linearGradient id="body-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="var(--body-light)" />
+      <stop offset="0.45" stop-color="var(--body-mid)" />
+      <stop offset="1" stop-color="var(--body-dark)" />
+    </linearGradient>
+    <linearGradient id="body-side" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="var(--body-mid)" />
+      <stop offset="1" stop-color="var(--body-shadow)" />
+    </linearGradient>
+    <linearGradient id="glass-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="var(--glass-hi)" />
+      <stop offset="1" stop-color="var(--glass)" />
+    </linearGradient>
+    <radialGradient id="rim-grad" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="var(--rim-hi)" />
+      <stop offset="1" stop-color="var(--rim)" />
+    </radialGradient>
+  </defs>
+
+  <!-- ===== BACKGROUND ===== -->
+  <rect width="600" height="240" fill="url(#sky)" />
+  <rect y="240" width="600" height="160" fill="url(#ground-grad)" />
+
+  <!-- Soft ground shadow under the car -->
+  <ellipse cx="300" cy="352" rx="280" ry="14" fill="#000" opacity="0.35" />
+
+  <!-- ===== BODY ===== -->
+  <!-- Main silhouette: rear quarter on the left, raked windshield, long hood,
+       forward-leaning nose on the right. -->
+  <path fill="url(#body-grad)" d="
+    M 40 340
+    L 32 272
+    Q 36 228 58 202
+    Q 96 162 158 138
+    Q 212 118 268 112
+    L 328 112
+    Q 354 118 372 140
+    Q 390 166 404 196
+    Q 436 208 478 216
+    Q 522 224 552 236
+    Q 572 246 576 266
+    L 580 320
+    Q 578 336 566 340
+    Z
+  " />
+
+  <!-- Lower body shadow band for depth -->
+  <path fill="url(#body-side)" opacity="0.85" d="
+    M 40 340
+    L 36 300
+    Q 200 282 560 296
+    L 576 300
+    L 580 320
+    Q 578 336 566 340
+    Z
+  " />
+
+  <!-- Hood highlight (subtle light catch along the top of the bonnet) -->
+  <path fill="#6f8fe6" opacity="0.45" d="
+    M 336 124
+    Q 358 140 382 178
+    Q 398 200 412 212
+    L 404 218
+    Q 386 196 368 170
+    Q 352 146 332 130
+    Z
+  " />
+
+  <!-- Roof highlight -->
+  <path fill="#6f8fe6" opacity="0.35" d="
+    M 168 142
+    Q 230 124 320 118
+    L 328 122
+    Q 240 128 178 148
+    Z
+  " />
+
+  <!-- ===== GLASS / GREENHOUSE ===== -->
+  <path fill="url(#glass-grad)" d="
+    M 70 196
+    Q 84 164 120 144
+    Q 160 126 204 122
+    L 296 122
+    Q 318 130 336 156
+    L 368 196
+    L 306 200
+    L 204 198
+    L 112 200
+    Z
+  " />
+
+  <!-- Chrome window trim (thin highlight around the glass) -->
+  <path fill="none" stroke="var(--chrome)" stroke-width="1.2" stroke-linejoin="round" d="
+    M 70 196
+    Q 84 164 120 144
+    Q 160 126 204 122
+    L 296 122
+    Q 318 130 336 156
+    L 368 196
+  " />
+
+  <!-- B-pillar (blacked out) -->
+  <path fill="var(--glass)" d="M 202 124 L 212 124 L 212 198 L 204 198 Z" />
+  <!-- Rear quarter kink -->
+  <path fill="var(--glass)" d="M 124 140 L 132 138 L 132 200 L 124 200 Z" />
+
+  <!-- ===== DOORS (subtle shutlines, very soft) ===== -->
+  <g opacity="0.5" stroke="#000" stroke-width="1" fill="none" stroke-linecap="round">
+    <path d="M 218 200 Q 224 260 232 318" />
+    <path d="M 128 202 Q 136 262 144 318" />
+  </g>
+
+  <!-- Door handles -->
+  <rect x="254" y="216" width="34" height="5" rx="1.5" fill="#0c1230" />
+  <rect x="152" y="224" width="30" height="5" rx="1.5" fill="#0c1230" />
+
+  <!-- Side mirror (body-coloured, on the A-pillar base) -->
+  <path fill="var(--body-dark)" d="M 298 160 Q 318 148 340 152 L 344 166 Q 320 176 300 176 Z" />
+  <path fill="var(--glass)" d="M 308 160 L 332 156 L 336 164 L 312 170 Z" />
+
+  <!-- ===== FRONT FACE ===== -->
+
+  <!-- Front bumper / lower fascia dark matte block -->
+  <path fill="#17192a" d="
+    M 390 256
+    Q 410 250 438 250
+    L 574 262
+    L 580 320
+    Q 578 336 566 340
+    L 398 340
+    Q 388 330 388 310
+    Z
+  " />
+
+  <!-- Main grille — wide trapezoid with honeycomb hint -->
+  <path fill="var(--grille)" d="
+    M 410 248
+    L 572 258
+    L 574 296
+    L 418 292
+    Z
+  " />
+  <!-- Honeycomb texture rows -->
+  <g stroke="#24242c" stroke-width="1.4" fill="none">
+    <path d="M 414 262 L 572 270" />
+    <path d="M 414 276 L 572 282" />
+    <path d="M 440 250 L 442 294" />
+    <path d="M 470 252 L 472 294" />
+    <path d="M 500 254 L 502 295" />
+    <path d="M 530 256 L 532 295" />
+    <path d="M 558 258 L 560 295" />
+  </g>
+
+  <!-- Renault diamond logo, chrome, large and centered -->
+  <path fill="var(--chrome)" stroke="#6a7280" stroke-width="1" stroke-linejoin="round" d="
+    M 490 254
+    L 516 276
+    L 490 298
+    L 464 276
+    Z
+  " />
+  <path fill="#8c93a0" d="M 490 260 L 510 276 L 490 292 L 470 276 Z" />
+  <path fill="none" stroke="#2a2e3a" stroke-width="0.8" d="M 490 260 L 490 292 M 470 276 L 510 276" />
+
+  <!-- Headlight: narrow horizontal slit at the top of the fender/front face -->
+  <path fill="var(--headlight)" d="
+    M 396 218
+    Q 436 222 478 230
+    Q 512 236 536 244
+    L 534 252
+    Q 508 244 478 238
+    Q 436 230 398 228
+    Z
+  " />
+  <!-- LED DRL strip inside the headlight -->
+  <path fill="var(--drl)" d="
+    M 410 224
+    Q 450 228 500 238
+    L 498 242
+    Q 450 234 410 230
+    Z
+  " />
+  <!-- Signature vertical DRL that drops from the headlight into the bumper -->
+  <path fill="var(--drl)" d="
+    M 388 232
+    Q 384 252 388 278
+    Q 390 296 398 308
+    L 392 312
+    Q 380 300 378 278
+    Q 376 254 382 232
+    Z
+  " />
+
+  <!-- License plate — white EU plate with blue left strip -->
+  <g>
+    <rect x="446" y="302" width="112" height="22" rx="2" fill="var(--plate)" stroke="#1a1a20" stroke-width="1" />
+    <rect x="446" y="302" width="14" height="22" rx="2" fill="var(--plate-eu)" />
+    <text x="504" y="319" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#0b0b14">GP-526-PE</text>
+    <text x="453" y="320" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#f4d84a">F</text>
+  </g>
+
+  <!-- Lower splitter highlight (silver lip under the bumper) -->
+  <path fill="#4a4d58" d="
+    M 402 332
+    Q 436 326 476 326
+    L 572 328
+    L 574 336
+    L 402 336
+    Z
+  " />
+
+  <!-- ===== WHEELS ===== -->
+
+  <!-- Rear wheel -->
+  <g>
+    <circle cx="148" cy="320" r="54" fill="var(--tire)" />
+    <circle cx="148" cy="320" r="38" fill="url(#rim-grad)" />
+    <g fill="none" stroke="#0a0a12" stroke-width="2.5" stroke-linecap="round">
+      <line x1="148" y1="284" x2="148" y2="356" />
+      <line x1="148" y1="320" x2="184" y2="300" />
+      <line x1="148" y1="320" x2="184" y2="340" />
+      <line x1="148" y1="320" x2="112" y2="300" />
+      <line x1="148" y1="320" x2="112" y2="340" />
+    </g>
+    <circle cx="148" cy="320" r="7" fill="#0a0a12" />
+    <!-- Tire highlight -->
+    <path fill="none" stroke="#3a3a44" stroke-width="1.5" opacity="0.7" d="M 108 304 A 54 54 0 0 1 148 272" />
+  </g>
+
+  <!-- Front wheel (larger) -->
+  <g>
+    <circle cx="432" cy="324" r="62" fill="var(--tire)" />
+    <circle cx="432" cy="324" r="44" fill="url(#rim-grad)" />
+    <g fill="none" stroke="#0a0a12" stroke-width="3" stroke-linecap="round">
+      <line x1="432" y1="280" x2="432" y2="368" />
+      <line x1="432" y1="324" x2="474" y2="300" />
+      <line x1="432" y1="324" x2="474" y2="348" />
+      <line x1="432" y1="324" x2="390" y2="300" />
+      <line x1="432" y1="324" x2="390" y2="348" />
+    </g>
+    <circle cx="432" cy="324" r="8" fill="#0a0a12" />
+    <!-- Brake caliper hint -->
+    <path fill="#2a4fbf" d="M 462 314 Q 472 324 462 334 L 456 332 Q 464 324 456 316 Z" />
+    <!-- Tire highlight -->
+    <path fill="none" stroke="#3a3a44" stroke-width="1.8" opacity="0.7" d="M 388 306 A 62 62 0 0 1 432 266" />
+  </g>
+
+  <!-- Wheel arch shadow insets to sit the wheels into the body -->
+  <path fill="#040818" opacity="0.8" d="
+    M 92 312
+    Q 96 266 148 258
+    Q 200 266 204 318
+    L 196 320
+    Q 192 280 148 272
+    Q 104 280 100 320
+    Z
+  " />
+  <path fill="#040818" opacity="0.85" d="
+    M 370 316
+    Q 376 262 432 254
+    Q 488 262 494 322
+    L 484 322
+    Q 480 276 432 268
+    Q 384 276 380 320
+    Z
+  " />
+</svg>

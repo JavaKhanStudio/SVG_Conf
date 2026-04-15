@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 480">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --outline: #0a0a14;
+      --stroke-width: 6;      /* @ws number min=1 max=12 step=0.5 */
+      --petal-fill: none;     /* set a color to tint the petals */
+      --center-fill: none;
+      --leaf-fill: none;
+      --petal-count: 8;
+    }
+    .outline { fill: none; stroke: var(--outline); stroke-width: var(--stroke-width); stroke-linejoin: round; stroke-linecap: round; }
+    .petal   { fill: var(--petal-fill);  stroke: var(--outline); stroke-width: var(--stroke-width); stroke-linejoin: round; stroke-linecap: round; }
+    .center  { fill: var(--center-fill); stroke: var(--outline); stroke-width: var(--stroke-width); stroke-linejoin: round; stroke-linecap: round; }
+    .leaf    { fill: var(--leaf-fill);   stroke: var(--outline); stroke-width: var(--stroke-width); stroke-linejoin: round; stroke-linecap: round; }
+  </style>
+
+  <rect width="100%" height="100%" fill="var(--bg)" />
+
+  <!-- ===== FLOWER HEAD ===== -->
+  <!-- 8 petals arranged around the center at (200,170). Each petal is a rounded
+       ellipse drawn along the +Y axis (pointing "down") then rotated into place. -->
+  <g transform="translate(200 170)">
+    <g transform="rotate(0)">  <ellipse class="petal" cx="0" cy="-82" rx="36" ry="48" /></g>
+    <g transform="rotate(45)"> <ellipse class="petal" cx="0" cy="-82" rx="36" ry="48" /></g>
+    <g transform="rotate(90)"> <ellipse class="petal" cx="0" cy="-82" rx="36" ry="48" /></g>
+    <g transform="rotate(135)"><ellipse class="petal" cx="0" cy="-82" rx="36" ry="48" /></g>
+    <g transform="rotate(180)"><ellipse class="petal" cx="0" cy="-82" rx="36" ry="48" /></g>
+    <g transform="rotate(225)"><ellipse class="petal" cx="0" cy="-82" rx="36" ry="48" /></g>
+    <g transform="rotate(270)"><ellipse class="petal" cx="0" cy="-82" rx="36" ry="48" /></g>
+    <g transform="rotate(315)"><ellipse class="petal" cx="0" cy="-82" rx="36" ry="48" /></g>
+
+    <!-- Central disc -->
+    <circle class="center" cx="0" cy="0" r="38" />
+
+    <!-- Radiating rays inside the central disc (stamen/pistil hint) -->
+    <g fill="none" stroke="var(--outline)" stroke-width="var(--stroke-width)" stroke-linecap="round">
+      <line x1="0"   y1="-26" x2="0"   y2="-10" />
+      <line x1="18"  y1="-18" x2="7"   y2="-7"  />
+      <line x1="26"  y1="0"   x2="10"  y2="0"   />
+      <line x1="18"  y1="18"  x2="7"   y2="7"   />
+      <line x1="0"   y1="26"  x2="0"   y2="10"  />
+      <line x1="-18" y1="18"  x2="-7"  y2="7"   />
+      <line x1="-26" y1="0"   x2="-10" y2="0"   />
+      <line x1="-18" y1="-18" x2="-7"  y2="-7"  />
+      <line x1="13"  y1="-22" x2="5"   y2="-9"  />
+      <line x1="22"  y1="-13" x2="9"   y2="-5"  />
+      <line x1="22"  y1="13"  x2="9"   y2="5"   />
+      <line x1="13"  y1="22"  x2="5"   y2="9"   />
+      <line x1="-13" y1="22"  x2="-5"  y2="9"   />
+      <line x1="-22" y1="13"  x2="-9"  y2="5"   />
+      <line x1="-22" y1="-13" x2="-9"  y2="-5"  />
+      <line x1="-13" y1="-22" x2="-5"  y2="-9"  />
+    </g>
+  </g>
+
+  <!-- ===== STEM ===== -->
+  <!-- Two parallel curves so the stem has thickness like the reference -->
+  <path class="outline" d="
+    M 194 268
+    Q 176 330 200 400
+    Q 206 430 200 456
+  " />
+  <path class="outline" d="
+    M 206 268
+    Q 220 330 212 400
+    Q 208 430 214 456
+  " />
+
+  <!-- ===== LEAVES ===== -->
+  <!-- Left leaf: sits on the stem around y=340, tilted -45°, pointing out-left -->
+  <g transform="translate(150 340) rotate(-35)">
+    <path class="leaf" d="
+      M 0 0
+      Q -60 -40 -120 0
+      Q -60 40 0 0
+      Z
+    " />
+    <!-- Central vein -->
+    <line class="outline" x1="0" y1="0" x2="-120" y2="0" />
+    <!-- Side veins -->
+    <path class="outline" d="M -28 -6 Q -40 -18 -58 -22" />
+    <path class="outline" d="M -28 6  Q -40 18  -58 22" />
+    <path class="outline" d="M -60 -10 Q -72 -20 -88 -20" />
+    <path class="outline" d="M -60 10  Q -72 20  -88 20" />
+  </g>
+
+  <!-- Right leaf: slightly lower, tilted +35° -->
+  <g transform="translate(252 360) rotate(35)">
+    <path class="leaf" d="
+      M 0 0
+      Q 60 -40 120 0
+      Q 60 40 0 0
+      Z
+    " />
+    <line class="outline" x1="0" y1="0" x2="120" y2="0" />
+    <path class="outline" d="M 28 -6 Q 40 -18 58 -22" />
+    <path class="outline" d="M 28 6  Q 40 18  58 22" />
+    <path class="outline" d="M 60 -10 Q 72 -20 88 -20" />
+    <path class="outline" d="M 60 10  Q 72 20  88 20" />
+  </g>
+</svg>

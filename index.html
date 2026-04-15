@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>SVG Workshop</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <aside id="files-pane">
+    <div id="drop-zone">
+      <span>Drop .svg here to upload</span>
+    </div>
+    <ul id="file-list"></ul>
+  </aside>
+
+  <main id="preview-pane">
+    <div id="preview-toolbar">
+      <label title="Show a reference image behind the SVG">
+        <input type="checkbox" id="ref-toggle" /> Reference
+      </label>
+      <input id="ref-opacity" type="range" min="0" max="100" value="50" title="Reference opacity" />
+      <button id="ref-clear" title="Clear reference image">×</button>
+    </div>
+    <div id="preview-wrap">
+      <img id="reference-img" alt="" hidden />
+      <div id="preview-host"></div>
+      <div id="point-overlay"></div>
+    </div>
+    <div id="preview-drop-hint">Drop an image here to set as reference</div>
+    <div id="empty-hint" hidden></div>
+  </main>
+
+  <aside id="right-pane">
+    <section id="controls-section">
+      <h2>Controls</h2>
+      <div id="controls"></div>
+      <div id="no-vars-hint" hidden>
+        No CSS variables declared. Add a <code>&lt;style&gt;</code> block with a
+        <code>:root { }</code> rule to enable controls. See <code>CLAUDE.md</code>.
+      </div>
+    </section>
+    <section id="snapshots-section">
+      <div id="snapshots-header">
+        <h2>Snapshots</h2>
+        <div id="snapshots-controls">
+          <button id="capture-btn" title="Capture snapshot">📸</button>
+          <label class="auto-snap" title="Auto-capture a snapshot every time the SVG file reloads">
+            <input type="checkbox" id="auto-snap" /> auto
+          </label>
+          <button id="slideshow-btn" title="Play slideshow">▶</button>
+          <input id="interval-input" type="number" min="100" step="100" value="1500" />
+          <span>ms</span>
+        </div>
+      </div>
+      <div id="snapshots-strip"></div>
+    </section>
+  </aside>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

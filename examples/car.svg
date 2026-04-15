@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <style>
+    :root {
+      --bg: #f4f4f8;
+      --outline: #0a0a14;
+      --stroke-width: 3;            /* @ws number min=1 max=8 step=0.5 */
+      --detail-stroke: 2;           /* @ws number min=0.5 max=4 step=0.5 */
+      --body-fill: none;            /* set to a color to tint the body */
+      --window-fill: none;
+      --wheel-fill: none;
+      --accent-fill: none;
+    }
+    .body    { fill: var(--body-fill);   stroke: var(--outline); stroke-width: var(--stroke-width); stroke-linejoin: round; stroke-linecap: round; }
+    .window  { fill: var(--window-fill); stroke: var(--outline); stroke-width: var(--stroke-width); stroke-linejoin: round; stroke-linecap: round; }
+    .wheel   { fill: var(--wheel-fill);  stroke: var(--outline); stroke-width: var(--stroke-width); }
+    .accent  { fill: var(--accent-fill); stroke: var(--outline); stroke-width: var(--detail-stroke); stroke-linejoin: round; stroke-linecap: round; }
+    .line    { fill: none; stroke: var(--outline); stroke-width: var(--detail-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  </style>
+
+  <rect width="100%" height="100%" fill="var(--bg)" />
+
+  <!-- =====================================================================
+       BODY SILHOUETTE — 3/4 front-right.
+       Longer wheelbase, shorter front overhang, front wheel sits directly
+       below the front face so the grille reads as "in front of the wheel".
+       ===================================================================== -->
+  <path class="body" d="
+    M 25 325
+    L 18 250
+    Q 22 210 44 178
+    Q 84 125 168 108
+    Q 258 96 338 102
+    Q 372 108 398 168
+    Q 455 182 530 205
+    Q 555 215 560 248
+    L 560 325
+  " />
+
+  <!-- Underbody line with wheel arches cut into it -->
+  <path class="line" d="
+    M 25 325
+    L 68 325
+    A 58 58 0 0 1 184 325
+    L 362 325
+    A 65 65 0 0 1 492 325
+    L 560 325
+  " />
+
+  <!-- =====================================================================
+       GREENHOUSE
+       ===================================================================== -->
+  <path class="window" d="
+    M 70 185
+    Q 95 128 185 105
+    L 325 100
+    Q 352 106 395 170
+    L 320 175
+    L 198 178
+    L 90 193
+    Z
+  " />
+
+  <!-- A-pillar -->
+  <path class="line" d="M 318 100 Q 326 133 334 175" />
+  <!-- B-pillar -->
+  <path class="line" d="M 196 105 L 198 178" />
+  <!-- C-pillar -->
+  <path class="line" d="M 92 130 L 90 193" />
+
+  <!-- Door cuts -->
+  <path class="line" d="M 210 178 Q 216 250 226 322" />
+  <path class="line" d="M 102 193 Q 110 255 120 322" />
+
+  <!-- Shoulder / belt-line crease -->
+  <path class="line" d="M 18 228 Q 210 202 400 208" />
+  <!-- Lower rocker crease -->
+  <path class="line" d="M 25 290 Q 230 280 470 290" />
+
+  <!-- =====================================================================
+       FRONT DETAILS — now sitting above and slightly forward of the front wheel
+       ===================================================================== -->
+
+  <!-- Headlight — wraps from the top of the fender across to the front.
+       Starts as a thin shape on the side then opens into a full lamp. -->
+  <path class="accent" d="
+    M 430 210
+    Q 470 215 500 222
+    Q 535 230 552 250
+    L 548 264
+    Q 520 246 485 238
+    Q 455 232 430 228
+    Z
+  " />
+  <!-- DRL C-curve -->
+  <path class="line" d="M 510 232 Q 498 244 512 254" />
+
+  <!-- Grille — trapezoid below the headlight -->
+  <path class="accent" d="
+    M 462 270
+    L 552 280
+    L 553 302
+    L 468 298
+    Z
+  " />
+  <path class="line" d="M 468 280 L 552 290" />
+  <path class="line" d="M 470 290 L 553 297" />
+
+  <!-- Renault rhombus logo, centered on grille -->
+  <path class="accent" d="
+    M 504 272
+    L 521 286
+    L 504 300
+    L 487 286
+    Z
+  " />
+  <path class="line" d="M 504 278 L 504 294" />
+  <path class="line" d="M 491 286 L 517 286" />
+
+  <!-- License plate -->
+  <rect class="accent" x="480" y="306" width="72" height="11" rx="1" />
+
+  <!-- Lower bumper intake -->
+  <path class="line" d="M 455 320 Q 510 322 558 320" />
+
+  <!-- Side mirror -->
+  <path class="line" d="M 322 165 L 344 157 L 352 170 L 330 178 Z" />
+
+  <!-- =====================================================================
+       WHEELS — rear at x=128, front moved to x=430 so it sits under the
+       front face (not to the left of it).
+       ===================================================================== -->
+
+  <!-- Rear wheel -->
+  <g>
+    <circle class="wheel" cx="128" cy="318" r="52" />
+    <circle class="line"  cx="128" cy="318" r="32" />
+    <line class="line" x1="128" y1="286" x2="128" y2="350" />
+    <line class="line" x1="96"  y1="318" x2="160" y2="318" />
+    <line class="line" x1="105" y1="295" x2="151" y2="341" />
+    <line class="line" x1="151" y1="295" x2="105" y2="341" />
+    <circle fill="var(--outline)" cx="128" cy="318" r="5" />
+  </g>
+
+  <!-- Front wheel (larger, sits beneath the front of the car) -->
+  <g>
+    <circle class="wheel" cx="430" cy="322" r="60" />
+    <circle class="line"  cx="430" cy="322" r="37" />
+    <line class="line" x1="430" y1="285" x2="430" y2="359" />
+    <line class="line" x1="393" y1="322" x2="467" y2="322" />
+    <line class="line" x1="404" y1="296" x2="456" y2="348" />
+    <line class="line" x1="456" y1="296" x2="404" y2="348" />
+    <circle fill="var(--outline)" cx="430" cy="322" r="6" />
+  </g>
+</svg>

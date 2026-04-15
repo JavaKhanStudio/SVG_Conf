@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <style>
+    :root {
+      --sky: #0a0a1a;
+      --ground: #1a2a1a;
+      --light-color: #ffeb99;
+      --light-x: 150;            /* @ws point2d=light */
+      --light-y: 80;             /* @ws point2d=light */
+      --light-radius: 60;        /* @ws number min=10 max=200 step=5 */
+      --mood: calm;              /* @ws select options=calm,stormy,dreamy */
+      --star-seed: 42;           /* @ws seed */
+      --show-moon: true;
+      --title: night;
+      --internal-helper: 0.7;    /* @ws ignore */
+    }
+  </style>
+  <rect width="100%" height="100%" fill="var(--sky)" />
+  <rect y="220" width="300" height="80" fill="var(--ground)" />
+  <circle cx="var(--light-x)" cy="var(--light-y)" r="var(--light-radius)"
+          fill="var(--light-color)" opacity="0.55" />
+  <circle cx="var(--light-x)" cy="var(--light-y)" r="12" fill="var(--light-color)" />
+</svg>

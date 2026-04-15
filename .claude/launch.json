@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "svg-workshop",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["server.js", "./examples"],
+      "port": 5173
+    }
+  ]
+}

@@ -1,0 +1,181 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <style>
+    :root {
+      --bg: #f4f4f8;
+      --outline: #0a0a14;
+      --stroke-width: 3;            /* @ws number min=1 max=8 step=0.5 */
+      --detail-stroke: 2;           /* @ws number min=0.5 max=4 step=0.5 */
+      --body-fill: none;            /* body tint */
+      --window-fill: none;
+      --wheel-fill: none;
+      --accent-fill: none;
+    }
+    .body    { fill: var(--body-fill);   stroke: var(--outline); stroke-width: var(--stroke-width); stroke-linejoin: round; stroke-linecap: round; }
+    .window  { fill: var(--window-fill); stroke: var(--outline); stroke-width: var(--stroke-width); stroke-linejoin: round; stroke-linecap: round; }
+    .wheel   { fill: var(--wheel-fill);  stroke: var(--outline); stroke-width: var(--stroke-width); }
+    .accent  { fill: var(--accent-fill); stroke: var(--outline); stroke-width: var(--detail-stroke); stroke-linejoin: round; stroke-linecap: round; }
+    .line    { fill: none; stroke: var(--outline); stroke-width: var(--detail-stroke); stroke-linecap: round; stroke-linejoin: round; }
+  </style>
+
+  <rect width="100%" height="100%" fill="var(--bg)" />
+
+  <!-- =====================================================================
+       Renault Clio — 3/4 front-right view.
+       Drawn over the voiture.jpg reference: steep windshield rake, low roof,
+       bulged front fender arch, wrap-around headlight with diagonal DRL,
+       prominent trapezoidal grille with diamond logo, black 5-spoke alloys.
+       ===================================================================== -->
+
+  <!-- ===== BODY SILHOUETTE ===== -->
+  <!-- Rear (left) → roof → hood → front bumper → lower → back to rear -->
+  <path class="body" d="
+    M 38 322
+    L 32 258
+    Q 36 232 50 208
+    Q 62 188 84 172
+    Q 120 148 170 132
+    Q 200 122 236 118
+    L 318 116
+    Q 346 118 368 148
+    Q 378 162 388 182
+    Q 402 198 420 206
+    Q 468 216 512 228
+    Q 548 238 560 258
+    L 564 300
+    Q 562 318 548 324
+    L 38 322
+    Z
+  " />
+
+  <!-- Underbody / rocker line with wheel arches cut out -->
+  <path class="line" d="
+    M 38 322
+    L 78 322
+    A 56 56 0 0 1 190 322
+    L 372 322
+    A 64 64 0 0 1 500 322
+    L 564 322
+  " />
+
+  <!-- ===== GREENHOUSE ===== -->
+  <!-- Side glass area: steep raked windshield, short rear glass -->
+  <path class="window" d="
+    M 66 182
+    Q 82 158 118 140
+    Q 160 124 208 122
+    L 310 122
+    Q 332 128 358 168
+    L 388 186
+    L 330 188
+    L 214 186
+    L 112 192
+    Z
+  " />
+
+  <!-- A-pillar (steeply raked, characteristic of Clio) -->
+  <path class="line" d="M 310 122 Q 330 150 358 186" />
+  <!-- B-pillar -->
+  <path class="line" d="M 214 124 L 214 186" />
+  <!-- C-pillar (hidden handle style, blacked out kink) -->
+  <path class="line" d="M 114 142 Q 112 168 112 192" />
+  <!-- Small rear quarter window kink -->
+  <path class="line" d="M 130 140 L 132 190" />
+
+  <!-- Door shutlines -->
+  <path class="line" d="M 220 186 Q 226 250 234 320" />
+  <path class="line" d="M 122 192 Q 130 252 138 320" />
+
+  <!-- Shoulder / belt-line crease running full length -->
+  <path class="line" d="M 32 234 Q 200 212 388 216 Q 420 220 434 228" />
+  <!-- Lower body crease above the rocker -->
+  <path class="line" d="M 38 286 Q 230 276 500 286" />
+  <!-- Hood crease -->
+  <path class="line" d="M 368 148 Q 388 168 412 194" />
+
+  <!-- ===== FRONT END ===== -->
+
+  <!-- Headlight: narrow wrap-around shape from the top of the fender,
+       extending across the front corner. -->
+  <path class="accent" d="
+    M 398 196
+    Q 440 202 478 212
+    Q 516 220 544 234
+    L 550 248
+    Q 520 236 482 228
+    Q 444 220 404 216
+    Z
+  " />
+  <!-- DRL — signature diagonal 'C' that drops into the bumper -->
+  <path class="line" d="M 510 220 Q 496 236 486 258 Q 482 270 492 282" />
+
+  <!-- Grille — wide trapezoid below the headlight, honeycomb hinted -->
+  <path class="accent" d="
+    M 420 266
+    L 554 276
+    L 556 304
+    L 428 298
+    Z
+  " />
+  <path class="line" d="M 426 278 L 555 286" />
+  <path class="line" d="M 426 290 L 555 296" />
+  <path class="line" d="M 460 268 L 462 300" />
+  <path class="line" d="M 498 270 L 500 302" />
+  <path class="line" d="M 528 272 L 530 302" />
+
+  <!-- Renault diamond logo, sitting proud on the grille -->
+  <path class="accent" d="
+    M 488 268
+    L 508 286
+    L 488 304
+    L 468 286
+    Z
+  " />
+  <path class="line" d="M 488 274 L 488 298" />
+  <path class="line" d="M 472 286 L 504 286" />
+
+  <!-- License plate -->
+  <rect class="accent" x="462" y="308" width="82" height="12" rx="1.5" />
+
+  <!-- Lower bumper air dam / splitter -->
+  <path class="line" d="M 410 320 Q 480 324 560 320" />
+  <path class="accent" d="M 396 314 Q 410 308 428 310 L 432 316 L 420 320 Q 406 320 396 316 Z" />
+
+  <!-- Side mirror on the A-pillar -->
+  <path class="accent" d="M 316 156 L 340 146 L 350 160 L 326 170 Z" />
+
+  <!-- Front door handle -->
+  <path class="line" d="M 248 212 L 282 210" />
+  <!-- Rear door handle -->
+  <path class="line" d="M 146 220 L 178 218" />
+
+  <!-- Fender arch highlight over front wheel (bulged wheel arch) -->
+  <path class="line" d="M 378 260 Q 390 226 432 218" />
+
+  <!-- ===== WHEELS ===== -->
+
+  <!-- Rear wheel -->
+  <g>
+    <circle class="wheel" cx="134" cy="320" r="54" />
+    <circle class="line"  cx="134" cy="320" r="34" />
+    <!-- 5-spoke alloy -->
+    <line class="line" x1="134" y1="286" x2="134" y2="354" />
+    <line class="line" x1="134" y1="320" x2="166" y2="300" />
+    <line class="line" x1="134" y1="320" x2="166" y2="340" />
+    <line class="line" x1="134" y1="320" x2="102" y2="300" />
+    <line class="line" x1="134" y1="320" x2="102" y2="340" />
+    <circle fill="var(--outline)" cx="134" cy="320" r="6" />
+  </g>
+
+  <!-- Front wheel (larger, prominent) -->
+  <g>
+    <circle class="wheel" cx="436" cy="322" r="62" />
+    <circle class="line"  cx="436" cy="322" r="40" />
+    <!-- 5-spoke alloy -->
+    <line class="line" x1="436" y1="282" x2="436" y2="362" />
+    <line class="line" x1="436" y1="322" x2="474" y2="300" />
+    <line class="line" x1="436" y1="322" x2="474" y2="344" />
+    <line class="line" x1="436" y1="322" x2="398" y2="300" />
+    <line class="line" x1="436" y1="322" x2="398" y2="344" />
+    <circle fill="var(--outline)" cx="436" cy="322" r="7" />
+  </g>
+</svg>

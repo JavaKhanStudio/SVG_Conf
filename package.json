@@ -1,0 +1,16 @@
+{
+  "name": "svg-workshop",
+  "version": "1.0.0",
+  "description": "Local browser-based tool for live-previewing SVGs with editable CSS variables.",
+  "type": "module",
+  "bin": {
+    "svg-workshop": "./server.js"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "chokidar": "^3.6.0",
+    "ws": "^8.16.0"
+  }
+}
