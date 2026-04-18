@@ -210,3 +210,29 @@ to step 4 (measure) until the metrics validate or improvement plateaus.
 - **Skill improvements** as more iterations surface new gotchas. The
   skill is the project's persistent memory — every session that finds a
   new failure mode should add a paragraph to it.
+
+- **Remote-access deployment story.** Tried a Cloudflare quick-tunnel
+  on the workshop (`cloudflared tunnel --url http://localhost:5173`)
+  and the tunnel itself came up clean (HTTP 200 at the trycloudflare
+  URL within seconds). Browsing it remotely failed in practice for
+  reasons I didn't fully diagnose — most likely culprits:
+  - The workshop's WebSocket connection for file-watching uses
+    `new WebSocket('ws://${location.host}')`. Cloudflare quick-tunnels
+    proxy WebSockets, but the upgrade handshake can fail silently if
+    headers aren't passed cleanly. The file list would stay empty.
+  - The backend health-check banner (`src/backend-status.js`) hits
+    `http://127.0.0.1:5174` from the user's browser — which is the
+    user's localhost, not the host's. So the banner permanently shows
+    "backend offline" remotely. Same issue would affect any other
+    direct backend call.
+  - The workshop has no auth on `/api/upload` or `/api/snapshots`, so
+    public exposure has real risk even if it worked.
+
+  Proper fix for next time: (a) add a `--public-url` arg to the workshop
+  server so it can advertise its own external base URL to the frontend,
+  (b) route the backend through the workshop's proxy endpoints
+  exclusively (no direct browser → backend calls), (c) put basic-auth
+  in front of the upload + snapshot routes, (d) verify the WS upgrade
+  works through the tunnel before claiming it's live. Two named tunnels
+  + a small `cloudflared` config file is probably cleaner than two
+  quick-tunnels with hard-coded URLs.
