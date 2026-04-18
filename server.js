@@ -12,9 +12,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const PORT = 5173;
+const BACKEND_URL = process.env.SVGW_BACKEND || 'http://127.0.0.1:5174';
 const folderArg = process.argv[2] || './';
 const WATCH_DIR = path.resolve(process.cwd(), folderArg);
 const WORKSHOP_DIR = path.join(WATCH_DIR, '.workshop');
+
+// Reference variants (must match backend/preprocess.py VARIANT_ORDER).
+const VARIANT_NAMES = new Set(['original', 'gray', 'otsu', 'adaptive', 'canny', 'bilateral', 'depth']);
+
+function refsDir(svgName) {
+  return path.join(WORKSHOP_DIR, `${svgName}.refs`);
+}
 
 if (!fs.existsSync(WATCH_DIR)) {
   console.error(`Folder does not exist: ${WATCH_DIR}`);
@@ -117,6 +125,13 @@ const server = http.createServer(async (req, res) => {
       return serveStatic(res, path.join(__dirname, pathname.slice(1)));
     }
 
+    // Shared frontend modules (used by both index.html and the future viewer.html).
+    if (req.method === 'GET' && pathname.startsWith('/src/')) {
+      const rel = pathname.slice(1);
+      if (rel.includes('..')) return send(res, 400, 'Bad path');
+      return serveStatic(res, path.join(__dirname, rel));
+    }
+
     // Watched SVG files
     if (req.method === 'GET' && pathname.startsWith('/files/')) {
       const name = safeName(decodeURIComponent(pathname.slice('/files/'.length)));
@@ -149,6 +164,96 @@ const server = http.createServer(async (req, res) => {
       const file = path.join(WORKSHOP_DIR, `${name}.snapshots.json`);
       await fsp.writeFile(file, JSON.stringify(parsed, null, 2), 'utf8');
       return send(res, 200, '{"ok":true}', { 'Content-Type': MIME['.json'] });
+    }
+
+    // Per-SVG metrics history.
+    if (req.method === 'GET' && pathname.startsWith('/api/metrics/')) {
+      const svgName = safeName(decodeURIComponent(pathname.slice('/api/metrics/'.length)));
+      if (!svgName) return send(res, 400, 'Bad name');
+      const file = path.join(WORKSHOP_DIR, `${svgName}.metrics.json`);
+      try {
+        const data = await fsp.readFile(file, 'utf8');
+        return send(res, 200, data, { 'Content-Type': MIME['.json'] });
+      } catch {
+        return send(res, 200, '[]', { 'Content-Type': MIME['.json'] });
+      }
+    }
+
+    // Trigger a measurement: candidate SVG vs the reference (default = the
+    // dropped-photo's original.png from .workshop/<svg>.refs/). Optionally
+    // override with ?ref=<absolute-path> in the query.
+    if (req.method === 'POST' && pathname === '/api/measure') {
+      const svgName = safeName(url.searchParams.get('for') || '');
+      if (!svgName) return send(res, 400, 'Bad ?for=<svg>');
+      const svgPath = path.join(WATCH_DIR, svgName);
+      const refOverride = url.searchParams.get('ref');
+      const refPath = refOverride
+        ? path.resolve(refOverride)
+        : path.join(refsDir(svgName), 'original.png');
+      if (!fs.existsSync(refPath)) {
+        return send(res, 400, JSON.stringify({ error: 'no reference', detail: `expected ${refPath}` }), { 'Content-Type': MIME['.json'] });
+      }
+      let body = {};
+      try {
+        const raw = await readBody(req, 10 * 1024);
+        if (raw.length) body = JSON.parse(raw.toString('utf8'));
+      } catch {}
+      const payload = JSON.stringify({ svg_path: svgPath, ref_path: refPath, label: body.label || null });
+      let backendRes;
+      try {
+        backendRes = await fetch(`${BACKEND_URL}/measure`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: payload,
+        });
+      } catch (e) {
+        return send(res, 502, JSON.stringify({ error: 'backend unreachable', detail: String(e) }), { 'Content-Type': MIME['.json'] });
+      }
+      const text = await backendRes.text();
+      return send(res, backendRes.status, text, { 'Content-Type': MIME['.json'] });
+    }
+
+    // Reference variant images (preprocessed PNGs in .workshop/<svg>.refs/).
+    if (req.method === 'GET' && pathname.startsWith('/refs/')) {
+      const rest = pathname.slice('/refs/'.length).split('/');
+      if (rest.length !== 2) return send(res, 400, 'Bad refs path');
+      const svgName = safeName(decodeURIComponent(rest[0]));
+      const variantFile = decodeURIComponent(rest[1]);
+      if (!svgName) return send(res, 400, 'Bad svg name');
+      const m = /^([a-z]+)\.png$/.exec(variantFile);
+      if (!m || !VARIANT_NAMES.has(m[1])) return send(res, 400, 'Bad variant');
+      return serveStatic(res, path.join(refsDir(svgName), variantFile));
+    }
+
+    // Preprocess a reference photo via the Python backend, save variants
+    // into .workshop/<svg>.refs/. Multipart in (single 'image' field), JSON out.
+    if (req.method === 'POST' && pathname === '/api/preprocess-ref') {
+      const svgName = safeName(url.searchParams.get('for') || '');
+      if (!svgName) return send(res, 400, 'Bad ?for=<svg>');
+
+      const ctype = req.headers['content-type'] || '';
+      const m = /boundary=(.+)$/.exec(ctype);
+      if (!m) return send(res, 400, 'Expected multipart');
+      const body = await readBody(req);
+      const file = parseMultipart(body, m[1]);
+      if (!file) return send(res, 400, 'No file');
+
+      const outDir = refsDir(svgName);
+      await fsp.mkdir(outDir, { recursive: true });
+
+      // Forward to backend as a fresh multipart request.
+      const fd = new FormData();
+      fd.append('image', new Blob([file.data]), file.filename || 'image.bin');
+      fd.append('out_dir', outDir);
+
+      let backendRes;
+      try {
+        backendRes = await fetch(`${BACKEND_URL}/preprocess`, { method: 'POST', body: fd });
+      } catch (e) {
+        return send(res, 502, JSON.stringify({ error: 'backend unreachable', detail: String(e) }), { 'Content-Type': MIME['.json'] });
+      }
+      const text = await backendRes.text();
+      return send(res, backendRes.status, text, { 'Content-Type': MIME['.json'] });
     }
 
     // Upload

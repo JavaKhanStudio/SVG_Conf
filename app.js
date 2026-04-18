@@ -56,6 +56,7 @@ async function selectFile(name) {
   await loadSvg(name);
   await loadSnapshots();
   loadReference(name);
+  loadMetrics(name);
 }
 
 // ---------- SVG loading / parsing ----------
@@ -92,6 +93,7 @@ async function loadSvg(name) {
   const imported = document.importNode(svgEl, true);
   host.appendChild(imported);
   state.svgEl = imported;
+  refreshTraceRefControl();
 
   // Build variable list, preserving existing in-memory values where possible
   const prevValues = state.values;
@@ -536,26 +538,84 @@ window.addEventListener('resize', () => {
 });
 
 // ---------- Reference image overlay ----------
-function referenceKey(file) { return `svgworkshop:${file}:reference`; }
+// State per SVG file lives at localStorage[svgworkshop:<file>:refstate] as JSON:
+//   { variants: ['original','gray',...], current: 'canny', sourceName: 'voiture.jpg' }
+// Image bytes themselves live on disk under .workshop/<file>.refs/<variant>.png
+// and are served by the workshop server at /refs/<file>/<variant>.png.
+
+const DEFAULT_VARIANT = 'canny';
+
+function refStateKey(file) { return `svgworkshop:${file}:refstate`; }
+
+function readRefState(file) {
+  if (!file) return null;
+  try {
+    const raw = localStorage.getItem(refStateKey(file));
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+
+function writeRefState(file, refState) {
+  if (!file) return;
+  try { localStorage.setItem(refStateKey(file), JSON.stringify(refState)); } catch {}
+}
+
+function clearRefState(file) {
+  if (!file) return;
+  try { localStorage.removeItem(refStateKey(file)); } catch {}
+}
+
+function refImageUrl(file, variant) {
+  // Cache-bust on every variant switch so reprocessed refs aren't stale.
+  return `/refs/${encodeURIComponent(file)}/${encodeURIComponent(variant)}.png?t=${Date.now()}`;
+}
+
+function renderVariantDropdown(refState) {
+  const sel = $('#ref-variant');
+  sel.innerHTML = '';
+  if (!refState || !refState.variants?.length) {
+    sel.hidden = true;
+    return;
+  }
+  for (const name of refState.variants) {
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = name;
+    if (name === refState.current) opt.selected = true;
+    sel.appendChild(opt);
+  }
+  sel.hidden = false;
+}
 
 function loadReference(file) {
   const img = $('#reference-img');
   img.removeAttribute('src');
   img.hidden = true;
   applyRefBgTransparency();
-  if (!file) return;
-  let data;
-  try { data = localStorage.getItem(referenceKey(file)); } catch { data = null; }
-  if (!data) return;
+
+  const refState = readRefState(file);
+  renderVariantDropdown(refState);
+  if (!refState) return;
+
   // Auto-enable the toggle when switching to a file that has a saved reference
-  // so the user actually sees it, instead of it being silently "present but hidden".
+  // so the user actually sees it.
   $('#ref-toggle').checked = true;
-  img.src = data;
+  img.src = refImageUrl(file, refState.current);
   img.onload = () => {
     positionReference();
     img.hidden = !$('#ref-toggle').checked;
     applyRefBgTransparency();
   };
+}
+
+function setVariant(file, variant) {
+  const refState = readRefState(file);
+  if (!refState || !refState.variants.includes(variant)) return;
+  refState.current = variant;
+  writeRefState(file, refState);
+  const img = $('#reference-img');
+  img.src = refImageUrl(file, variant);
+  img.onload = () => positionReference();
 }
 
 // When the reference is visible, force the SVG's --bg custom property to
@@ -568,7 +628,6 @@ function applyRefBgTransparency() {
   if (shouldHide) {
     state.svgEl.style.setProperty('--bg', 'transparent');
   } else {
-    // Restore: re-apply whatever value is in state.values, or clear the override.
     if (state.values['--bg'] !== undefined) {
       state.svgEl.style.setProperty('--bg', state.values['--bg']);
     } else {
@@ -577,23 +636,13 @@ function applyRefBgTransparency() {
   }
 }
 
-function saveReference(file, dataURL) {
-  try {
-    localStorage.setItem(referenceKey(file), dataURL);
-    return true;
-  } catch (e) {
-    alert('Reference image too large for browser storage (localStorage limit ~5MB). Try a smaller image.');
-    return false;
-  }
-}
-
 function clearReference(file) {
-  if (file) {
-    try { localStorage.removeItem(referenceKey(file)); } catch {}
-  }
+  clearRefState(file);
   const img = $('#reference-img');
   img.removeAttribute('src');
   img.hidden = true;
+  renderVariantDropdown(null);
+  applyRefBgTransparency();
 }
 
 function positionReference() {
@@ -623,8 +672,112 @@ $('#ref-clear').addEventListener('click', () => {
   clearReference(state.currentFile);
   $('#ref-toggle').checked = false;
 });
+$('#ref-variant').addEventListener('change', (e) => {
+  setVariant(state.currentFile, e.target.value);
+});
 
-// Drop any non-SVG image onto the preview pane to set it as the reference.
+// ---------- Trace-ref overlay toggle ----------
+// When an SVG file contains <g id="trace-ref" display="none"> (injected by
+// `svgw trace`), reveal a "Trace" toggle in the toolbar that flips its
+// display at runtime. Off by default whenever a fresh SVG is loaded.
+function refreshTraceRefControl() {
+  const wrap = $('#trace-ref-toggle-wrap');
+  const toggle = $('#trace-ref-toggle');
+  const group = state.svgEl?.querySelector('#trace-ref');
+  if (!group) {
+    wrap.hidden = true;
+    toggle.checked = false;
+    return;
+  }
+  wrap.hidden = false;
+  toggle.checked = false;
+  group.style.display = 'none';
+}
+
+$('#trace-ref-toggle').addEventListener('change', (e) => {
+  const group = state.svgEl?.querySelector('#trace-ref');
+  if (!group) return;
+  group.style.display = e.target.checked ? 'inline' : 'none';
+});
+
+// ---------- Metrics ----------
+const METRIC_ROWS = [
+  { key: 'outline_iou', label: 'outline IoU' },
+  { key: 'pixel_iou',   label: 'pixel IoU' },
+  { key: 'edge_ssim',   label: 'edge SSIM' },
+];
+
+function scoreClass(n) {
+  if (n >= 0.85) return 'score-good';
+  if (n >= 0.65) return 'score-mid';
+  return 'score-bad';
+}
+
+function renderMetrics(entry) {
+  const empty = $('#metrics-empty');
+  const scores = $('#metrics-scores');
+  if (!entry) {
+    empty.hidden = false;
+    scores.hidden = true;
+    scores.innerHTML = '';
+    return;
+  }
+  empty.hidden = true;
+  scores.hidden = false;
+  scores.innerHTML = '';
+  for (const { key, label } of METRIC_ROWS) {
+    const v = Number(entry[key] || 0);
+    const pct = Math.max(0, Math.min(100, v * 100));
+    const cls = scoreClass(v);
+    const labelEl = document.createElement('div'); labelEl.className = 'label'; labelEl.textContent = label;
+    const bar = document.createElement('div'); bar.className = `bar ${cls}`;
+    const fill = document.createElement('span'); fill.style.width = `${pct}%`; bar.appendChild(fill);
+    const score = document.createElement('div'); score.className = `score ${cls}`; score.textContent = v.toFixed(3);
+    scores.appendChild(labelEl); scores.appendChild(bar); scores.appendChild(score);
+  }
+  const meta = document.createElement('div');
+  meta.id = 'metrics-meta';
+  const ts = entry.ts ? new Date(entry.ts * 1000).toLocaleTimeString() : '?';
+  meta.textContent = `last run ${ts}${entry.label ? ` · ${entry.label}` : ''} · ${entry.target_size?.join('×') || ''}`;
+  scores.appendChild(meta);
+}
+
+async function loadMetrics(file) {
+  if (!file) return renderMetrics(null);
+  try {
+    const res = await fetch(`/api/metrics/${encodeURIComponent(file)}`);
+    const history = await res.json();
+    renderMetrics(history.length ? history[history.length - 1] : null);
+  } catch {
+    renderMetrics(null);
+  }
+}
+
+$('#measure-btn').addEventListener('click', async () => {
+  if (!state.currentFile) return;
+  const btn = $('#measure-btn');
+  btn.disabled = true; btn.textContent = '…';
+  try {
+    const res = await fetch(`/api/measure?for=${encodeURIComponent(state.currentFile)}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ label: 'manual' }),
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      alert(`Measure failed (${res.status}): ${text}`);
+      return;
+    }
+    const entry = await res.json();
+    renderMetrics(entry);
+  } catch (err) {
+    alert(`Measure failed: ${err.message}\n\nIs the Python backend running?`);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Measure';
+  }
+});
+
+// Drop any non-SVG image onto the preview pane → backend preprocess → variants saved.
 const previewPane = $('#preview-pane');
 ['dragenter', 'dragover'].forEach(ev => previewPane.addEventListener(ev, (e) => {
   const hasFiles = [...(e.dataTransfer?.types || [])].includes('Files');
@@ -636,7 +789,7 @@ const previewPane = $('#preview-pane');
 ['dragleave', 'drop'].forEach(ev => previewPane.addEventListener(ev, (e) => {
   previewPane.classList.remove('drag-over');
 }));
-previewPane.addEventListener('drop', (e) => {
+previewPane.addEventListener('drop', async (e) => {
   const file = e.dataTransfer?.files?.[0];
   if (!file) return;
   // SVGs are for the file-list drop zone (they become watched files).
@@ -648,21 +801,56 @@ previewPane.addEventListener('drop', (e) => {
     alert('Select an SVG file first, then drop a reference image.');
     return;
   }
-  const reader = new FileReader();
-  reader.onload = () => {
-    const dataURL = String(reader.result);
-    if (!saveReference(state.currentFile, dataURL)) return;
-    const img = $('#reference-img');
-    img.src = dataURL;
-    img.onload = () => {
-      $('#ref-toggle').checked = true;
-      img.hidden = false;
-      positionReference();
-      applyRefBgTransparency();
-    };
+
+  const fd = new FormData();
+  fd.append('image', file, file.name);
+  let res;
+  try {
+    res = await fetch(`/api/preprocess-ref?for=${encodeURIComponent(state.currentFile)}`, {
+      method: 'POST', body: fd,
+    });
+  } catch (err) {
+    alert(`Preprocess failed: ${err.message}\n\nIs the Python backend running?`);
+    return;
+  }
+  if (!res.ok) {
+    const text = await res.text();
+    alert(`Preprocess failed (${res.status}): ${text}`);
+    return;
+  }
+  const payload = await res.json();
+  const refState = {
+    variants: payload.variants.map(v => v.name),
+    current: payload.variants.some(v => v.name === DEFAULT_VARIANT) ? DEFAULT_VARIANT : payload.variants[0]?.name,
+    sourceName: file.name,
   };
-  reader.readAsDataURL(file);
+  writeRefState(state.currentFile, refState);
+  renderVariantDropdown(refState);
+  $('#ref-toggle').checked = true;
+  const img = $('#reference-img');
+  img.src = refImageUrl(state.currentFile, refState.current);
+  img.onload = () => {
+    img.hidden = false;
+    positionReference();
+    applyRefBgTransparency();
+  };
 });
+
+// One-time migration: nuke the old data-URL-based reference keys from when
+// references lived entirely in localStorage. Skipped on subsequent loads.
+(function migrateOldReferenceKeys() {
+  const FLAG = 'svgworkshop:migration:refs-v2';
+  try {
+    if (localStorage.getItem(FLAG)) return;
+    const toDelete = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && /^svgworkshop:.+:reference$/.test(k)) toDelete.push(k);
+    }
+    toDelete.forEach(k => localStorage.removeItem(k));
+    localStorage.setItem(FLAG, '1');
+  } catch {}
+})();
 
 // ---------- Snapshots ----------
 async function loadSnapshots() {

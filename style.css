@@ -131,6 +131,22 @@ code { background: #2a2a34; padding: 1px 4px; border-radius: 3px; }
 #controls .ctrl .p2d-xy input { flex: 1; }
 #no-vars-hint { color: #aab; font-size: 12px; }
 
+#metrics-section {
+  padding: 12px; flex: 0 0 auto; border-bottom: 1px solid #2a2a34;
+}
+#metrics-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+#metrics-header button { padding: 2px 8px; font-size: 11px; }
+#metrics-empty { color: #66667a; font-size: 11px; font-style: italic; }
+#metrics-scores { display: grid; grid-template-columns: 90px 1fr 60px; gap: 4px 8px; font-size: 11px; align-items: center; }
+#metrics-scores .label { color: #aab; font-family: ui-monospace, monospace; }
+#metrics-scores .bar { height: 8px; background: #1a1a22; border-radius: 2px; overflow: hidden; }
+#metrics-scores .bar > span { display: block; height: 100%; }
+#metrics-scores .score { font-family: ui-monospace, monospace; text-align: right; }
+.score-good { color: #6cd97e; } .bar.score-good > span { background: #6cd97e; }
+.score-mid  { color: #e4c768; } .bar.score-mid  > span { background: #e4c768; }
+.score-bad  { color: #e57373; } .bar.score-bad  > span { background: #e57373; }
+#metrics-meta { grid-column: 1 / -1; color: #66667a; font-size: 10px; margin-top: 6px; }
+
 #snapshots-section {
   padding: 12px; flex: 0 0 200px; display: flex; flex-direction: column; min-height: 200px;
 }
@@ -158,3 +174,27 @@ code { background: #2a2a34; padding: 1px 4px; border-radius: 3px; }
 /* Slideshow overlay */
 body.slideshow #right-pane,
 body.slideshow #files-pane { opacity: 0.2; pointer-events: none; }
+
+/* Backend-status banner (top of viewport when the Python backend is unreachable). */
+#backend-status {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 12px;
+  background: #4a1f24; color: #ffd9dc;
+  border-bottom: 1px solid #6b2b32;
+  font-size: 12px;
+}
+#backend-status .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #ff5b66; box-shadow: 0 0 6px #ff5b66;
+}
+#backend-status .msg { flex: 1; }
+#backend-status code {
+  background: #2a0f12; color: #ffd9dc;
+  border: 1px solid #6b2b32;
+  padding: 1px 6px; border-radius: 3px;
+  font-family: ui-monospace, monospace;
+}
+#backend-status .sep { color: #b08089; font-size: 11px; }
+body.backend-down { padding-top: 28px; }
+body.backend-down #backend-status { display: flex; }

@@ -18,15 +18,19 @@
       <label title="Show a reference image behind the SVG">
         <input type="checkbox" id="ref-toggle" /> Reference
       </label>
+      <select id="ref-variant" title="Which preprocessed variant to overlay" hidden></select>
       <input id="ref-opacity" type="range" min="0" max="100" value="50" title="Reference opacity" />
       <button id="ref-clear" title="Clear reference image">×</button>
+      <label id="trace-ref-toggle-wrap" title="Show the trace-ref overlay (hidden vector tracing baked into the SVG)" hidden>
+        <input type="checkbox" id="trace-ref-toggle" /> Trace
+      </label>
     </div>
     <div id="preview-wrap">
       <img id="reference-img" alt="" hidden />
       <div id="preview-host"></div>
       <div id="point-overlay"></div>
     </div>
-    <div id="preview-drop-hint">Drop an image here to set as reference</div>
+    <div id="preview-drop-hint">Drop an image here to preprocess it as reference (needs Python backend)</div>
     <div id="empty-hint" hidden></div>
   </main>
 
@@ -37,6 +41,16 @@
       <div id="no-vars-hint" hidden>
         No CSS variables declared. Add a <code>&lt;style&gt;</code> block with a
         <code>:root { }</code> rule to enable controls. See <code>CLAUDE.md</code>.
+      </div>
+    </section>
+    <section id="metrics-section">
+      <div id="metrics-header">
+        <h2>Metrics</h2>
+        <button id="measure-btn" title="Re-measure against the dropped reference photo">Measure</button>
+      </div>
+      <div id="metrics-body">
+        <div id="metrics-empty" class="metrics-empty">Drop a photo on the preview, then click Measure.</div>
+        <div id="metrics-scores" hidden></div>
       </div>
     </section>
     <section id="snapshots-section">
@@ -56,6 +70,7 @@
     </section>
   </aside>
 
+  <script type="module" src="/src/backend-status.js"></script>
   <script type="module" src="/app.js"></script>
 </body>
 </html>

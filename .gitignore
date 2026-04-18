@@ -1,0 +1,20 @@
+node_modules/
+.idea/
+.vscode/
+
+# Workshop runtime state.
+# Snapshots are committed (they're part of the showcase / agent output).
+# Preprocessed reference images and metrics history are local-only noise.
+.workshop/*
+!.workshop/*.snapshots.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Throwaway renders/diagnostics produced during agent runs
+*_render.png
+tmp_*.png
+test_*.png
