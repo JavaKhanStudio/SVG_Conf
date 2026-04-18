@@ -251,77 +251,110 @@
   <!-- palm/wrist at bottom, hand-shaped (not slab-shaped).          -->
   <!-- ============================================================ -->
 
-  <!-- Palm + wrist mass at bottom, slightly cupped so it cradles    -->
+  <!-- Palm + wrist mass. Subtle bulges at the thenar (thumb base) and  -->
+  <!-- hypothenar (pinky-side heel of palm) for anatomical shape.        -->
   <path class="skin" d="
     M 130 1280
-    L 130 1090
-    Q 150 990 250 970
-    Q 360 945 480 950
-    Q 600 945 700 970
-    Q 800 990 820 1090
+    L 130 1100
+    Q 138 1020 200 990
+    Q 230 970 280 968
+    L 460 952
+    Q 540 950 640 968
+    Q 730 985 790 1010
+    Q 820 1040 820 1100
     L 820 1280
     Z" />
 
-  <!-- Subtle palm shadow on the left (light from upper-right) -->
-  <path class="skin-shadow" d="M 130 1090 Q 145 1010 230 985 L 245 1010 Q 165 1030 150 1100 Z" opacity="0.55"/>
+  <!-- Knuckle row — darker arc just below where fingers attach,        -->
+  <!-- gives the palm a defined "top edge" instead of a flat slab.       -->
+  <path class="crease" d="M 270 990 Q 380 970 480 970 Q 580 968 700 990" stroke-width="2.5"/>
 
-  <!-- Palm creases — three darker fold lines  -->
+  <!-- Thenar bulge (muscle at base of thumb), left side highlight -->
+  <ellipse fill="var(--skin-highlight)" cx="220" cy="1030" rx="35" ry="55" opacity="0.4" transform="rotate(-15 220 1030)"/>
+  <!-- Hypothenar bulge (heel of palm at pinky side) -->
+  <ellipse fill="var(--skin-highlight)" cx="770" cy="1100" rx="40" ry="60" opacity="0.35"/>
+
+  <!-- Subtle palm shadow on the left (light from upper-right) -->
+  <path class="skin-shadow" d="M 130 1100 Q 145 1020 200 998 L 215 1020 Q 165 1040 150 1110 Z" opacity="0.55"/>
+
+  <!-- Palm creases — three darker fold lines, characteristic hand folds -->
   <path class="crease" d="M 200 1080 Q 380 1060 550 1075 Q 700 1080 760 1100" stroke-width="2.5"/>
   <path class="crease" d="M 250 1140 Q 400 1125 570 1140 Q 700 1150 770 1170" stroke-width="2"/>
   <path class="crease" d="M 290 1200 Q 450 1185 620 1200" stroke-width="1.5" opacity="0.7"/>
 
-  <!-- THUMB on the left, base at the palm, tip wrapping toward the
-       bottle. Curved like a real thumb in grip position. -->
+  <!-- THUMB — tapered with knuckle bulge at the IP joint (mid-thumb).  -->
+  <!-- Wider at base near the palm, narrower at the tip.                 -->
   <path class="skin" d="
-    M 145 980
-    Q 100 850 130 730
-    Q 165 700 220 725
-    Q 270 850 270 980
+    M 155 985
+    Q 105 920 110 850
+    Q 100 800 120 760
+    Q 135 720 165 715
+    Q 200 715 215 745
+    Q 230 790 235 850
+    Q 245 920 270 985
     Z" />
-  <path class="skin-shadow" d="M 130 730 Q 110 850 135 970 L 165 980 Q 145 870 155 770 Z" opacity="0.55"/>
-  <path class="skin-deep" d="M 145 770 Q 130 870 155 960 L 165 960 Q 150 870 160 800 Z" opacity="0.4"/>
-  <!-- Thumb knuckle crease + highlight + nail -->
-  <path class="crease" d="M 145 870 Q 200 855 260 870"/>
-  <ellipse fill="var(--skin-highlight)" cx="200" cy="850" rx="22" ry="10" opacity="0.55"/>
-  <ellipse class="nail" cx="170" cy="725" rx="18" ry="12" transform="rotate(-12 170 725)"/>
+  <!-- Lower-side cylinder shadow -->
+  <path class="skin-shadow" d="M 110 800 Q 115 880 145 970 L 175 985 Q 150 880 140 800 Z" opacity="0.55"/>
+  <!-- Deep crease along the inner edge -->
+  <path class="skin-deep" d="M 130 800 Q 130 880 155 965 L 165 965 Q 145 880 145 810 Z" opacity="0.4"/>
+  <!-- IP joint knuckle — slight bulge mid-thumb -->
+  <ellipse fill="var(--skin-mid)" cx="190" cy="855" rx="28" ry="22" stroke="var(--outline)" stroke-width="0.5" opacity="0.95"/>
+  <path class="crease" d="M 145 855 Q 195 838 240 858"/>
+  <ellipse fill="var(--skin-highlight)" cx="195" cy="845" rx="20" ry="9" opacity="0.6"/>
+  <!-- Tip + nail -->
+  <ellipse class="nail" cx="160" cy="730" rx="20" ry="13" transform="rotate(-15 160 730)"/>
 
-  <!-- INDEX FINGER — top one on the right, mostly extended -->
+  <!-- INDEX FINGER — tapered, with PIP knuckle bulge mid-finger.       -->
   <path class="skin" d="
     M 555 970
-    Q 565 830 640 770
-    Q 695 760 720 810
-    Q 715 895 685 970
+    Q 555 880 600 820
+    Q 645 770 695 770
+    Q 720 775 720 810
+    Q 720 850 695 880
+    Q 720 910 715 950
+    Q 705 985 685 980
     Z" />
-  <path class="skin-shadow" d="M 555 970 Q 570 870 640 805 L 680 830 Q 590 880 575 980 Z" opacity="0.55"/>
-  <path class="skin-deep" d="M 580 970 Q 600 890 645 830 L 660 845 Q 615 890 600 970 Z" opacity="0.35"/>
-  <path class="crease" d="M 580 880 Q 645 860 705 880"/>
-  <path class="crease" d="M 575 920 Q 640 900 700 920"/>
-  <ellipse class="nail" cx="690" cy="785" rx="16" ry="10" transform="rotate(40 690 785)"/>
-  <ellipse fill="var(--skin-highlight)" cx="660" cy="850" rx="18" ry="9" opacity="0.55"/>
+  <!-- Underside shadow -->
+  <path class="skin-shadow" d="M 555 970 Q 565 880 605 825 L 645 855 Q 595 900 580 980 Z" opacity="0.55"/>
+  <path class="skin-deep" d="M 580 970 Q 600 905 640 855 L 655 870 Q 615 905 605 970 Z" opacity="0.35"/>
+  <!-- PIP joint knuckle bulge -->
+  <ellipse fill="var(--skin-mid)" cx="685" cy="880" rx="32" ry="22" stroke="var(--outline)" stroke-width="0.5" opacity="0.95" transform="rotate(35 685 880)"/>
+  <path class="crease" d="M 645 870 Q 690 855 715 885"/>
+  <!-- DIP joint crease near tip -->
+  <path class="crease" d="M 655 815 Q 685 805 705 815"/>
+  <ellipse fill="var(--skin-highlight)" cx="660" cy="845" rx="20" ry="8" opacity="0.55"/>
+  <ellipse class="nail" cx="685" cy="780" rx="18" ry="11" transform="rotate(40 685 780)"/>
 
-  <!-- MIDDLE FINGER — slightly bent -->
+  <!-- MIDDLE FINGER — tapered, more bent, knuckle bulge -->
   <path class="skin" d="
-    M 640 980
-    Q 705 920 770 905
-    Q 805 915 805 965
-    Q 770 1000 660 1010
+    M 640 985
+    Q 660 940 720 915
+    Q 770 905 800 925
+    Q 815 950 800 970
+    Q 770 995 695 1010
+    Q 660 1010 640 985
     Z" />
-  <path class="skin-shadow" d="M 640 980 Q 705 925 765 910 L 785 940 Q 720 965 660 1000 Z" opacity="0.5"/>
-  <path class="skin-deep" d="M 670 1000 Q 720 960 770 935 L 780 950 Q 735 985 685 1010 Z" opacity="0.3"/>
-  <path class="crease" d="M 680 960 Q 730 945 790 955"/>
-  <ellipse class="nail" cx="790" cy="925" rx="14" ry="9" transform="rotate(60 790 925)"/>
-  <ellipse fill="var(--skin-highlight)" cx="745" cy="965" rx="16" ry="7" opacity="0.55"/>
+  <path class="skin-shadow" d="M 640 985 Q 670 940 720 920 L 745 945 Q 700 970 655 1000 Z" opacity="0.5"/>
+  <path class="skin-deep" d="M 670 1010 Q 720 970 765 945 L 775 957 Q 735 985 690 1015 Z" opacity="0.3"/>
+  <!-- PIP joint knuckle -->
+  <ellipse fill="var(--skin-mid)" cx="745" cy="950" rx="26" ry="20" stroke="var(--outline)" stroke-width="0.5" opacity="0.95" transform="rotate(15 745 950)"/>
+  <path class="crease" d="M 715 950 Q 745 940 775 955"/>
+  <ellipse fill="var(--skin-highlight)" cx="745" cy="940" rx="18" ry="7" opacity="0.55"/>
+  <ellipse class="nail" cx="790" cy="922" rx="15" ry="10" transform="rotate(60 790 922)"/>
 
-  <!-- RING FINGER — more bent -->
+  <!-- RING FINGER — tightly bent -->
   <path class="skin" d="
-    M 670 1015
-    Q 740 1010 800 1040
-    Q 810 1085 745 1095
-    Q 670 1075 660 1045
+    M 670 1018
+    Q 700 1015 760 1025
+    Q 800 1035 808 1060
+    Q 810 1090 760 1095
+    Q 700 1085 670 1055
     Z" />
-  <path class="skin-shadow" d="M 670 1015 Q 740 1015 800 1045 L 800 1062 Q 730 1045 670 1045 Z" opacity="0.45"/>
-  <path class="crease" d="M 685 1060 Q 745 1055 795 1075"/>
-  <ellipse class="nail" cx="800" cy="1037" rx="13" ry="8"/>
+  <path class="skin-shadow" d="M 670 1020 Q 740 1020 800 1045 L 800 1058 Q 730 1043 670 1048 Z" opacity="0.45"/>
+  <ellipse fill="var(--skin-mid)" cx="785" cy="1055" rx="22" ry="17" stroke="var(--outline)" stroke-width="0.5" opacity="0.95"/>
+  <path class="crease" d="M 760 1055 Q 785 1050 805 1062"/>
+  <ellipse fill="var(--skin-highlight)" cx="780" cy="1043" rx="13" ry="6" opacity="0.55"/>
+  <ellipse class="nail" cx="803" cy="1038" rx="12" ry="8" transform="rotate(75 803 1038)"/>
 
   <!-- PINKY tip peeking -->
   <path class="skin" d="
