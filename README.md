@@ -48,14 +48,25 @@ More subcommands (`preprocess`, `trace`, `measure`, `colors`) land as later phas
 
 ```
 project-root/
-  example.svg                  # SVG file (workshop's unit of work)
+  examples/                    # original demo SVGs that ship with the workshop
+    eye.svg, scene.svg, car.svg ...
+  gallery/                     # SVGs produced by the agent pipeline
+    coffee.svg, bundaberg.svg, puppy.svg ...
   sources/                     # reference photos for the pipeline
-    example.jpg
-  .workshop/
-    example.snapshots.json     # committed
-    example.metrics.json       # gitignored
-    example.refs/              # gitignored
-      gray.png
-      canny.png
-      ...
+    coffee.jpg, bundaberg.jpg, puppy.jpg ...
+  gallery/.workshop/           # per-SVG runtime state (auto-created)
+    coffee.svg.snapshots.json     # committed
+    coffee.svg.metrics.json       # gitignored
+    coffee.svg.refs/              # gitignored — preprocessed PNG variants
+      gray.png, canny.png, otsu.png ...
+  backend/                     # Python backend (FastAPI on :5174)
+  src/                         # shared frontend modules
+  .claude/skills/              # agent skills (svg-from-photo)
+```
+
+Run the workshop on whichever folder you want to browse:
+```
+node server.js ./gallery     # see the session results
+node server.js ./examples    # see the original demo SVGs
+node server.js ./            # watch everything at the project root
 ```
