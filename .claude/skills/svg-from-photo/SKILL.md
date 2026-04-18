@@ -74,6 +74,7 @@ Watch out:
 - CSS variable values that contain quotes (`--font: "Impact, Arial"`) become invalid XML when inlined into attributes. Use unquoted single names (`--font: Impact`) or use the variable only in CSS rules, never directly in attributes.
 - XML comments cannot contain `--` anywhere. A comment like `<!-- toggle off with --foo: none -->` silently breaks the SVG.
 - Cluster tolerance for Y-overlap is sensitive. Tolerance 10 merges "THE" (small) into "BOYSCAST" (big) below it. Tolerance 4 keeps them separate. Start at 4, tune up only if a known multi-line block fragments.
+- **Spatial filter on the bucket assignment, not just on clustering.** When the title text uses a colour that also appears elsewhere in the image (e.g. medium neutral greys appearing in skin shadows / glasses / lab equipment as well as in the title), the bucket will catch *all* of them and re-colour the whole image with the title's CSS variable. Restrict the bucket itself with a spatial guard: only assign `title-grey` to paths whose bbox falls within the top 25-30px text band; same RGB elsewhere stays in the literal-fill bucket. Same applies to footer text, sidebar text, etc. — bucket assignment should consider both colour AND position.
 
 Hand-draft when: the source is a phone photo with depth, lighting, shading, occlusion. The trace then becomes a *reference layer* (`<g id="trace-ref">`) instead of the geometry, and you draw parametric paths that approximate the photo's structure rather than copy its pixels.
 
