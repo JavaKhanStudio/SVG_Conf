@@ -191,21 +191,39 @@
 
   <text class="text-dark" x="408" y="608" font-size="9" text-anchor="middle" opacity="0.85">ALKOHOLFREI · SANS ALCOOL</text>
 
-  <!-- Three barrels — added shadow underneath for grounding -->
+  <!-- Three barrels — wood-stave detail + side shadow for dimension -->
   <ellipse cx="408" cy="700" rx="78" ry="6" fill="var(--barrel-shadow)" opacity="0.4"/>
   <g transform="translate(345 615)">
+    <!-- BACK CENTER barrel -->
     <ellipse class="barrel" cx="63" cy="12" rx="25" ry="6"/>
     <rect class="barrel" x="38" y="12" width="50" height="55" rx="4"/>
+    <!-- vertical wood staves -->
+    <line x1="48" y1="14" x2="48" y2="65" stroke="var(--barrel-shadow)" stroke-width="0.7" opacity="0.7"/>
+    <line x1="58" y1="14" x2="58" y2="65" stroke="var(--barrel-shadow)" stroke-width="0.7" opacity="0.7"/>
+    <line x1="68" y1="14" x2="68" y2="65" stroke="var(--barrel-shadow)" stroke-width="0.7" opacity="0.7"/>
+    <line x1="78" y1="14" x2="78" y2="65" stroke="var(--barrel-shadow)" stroke-width="0.7" opacity="0.7"/>
+    <!-- right-side shading (cylinder cue) -->
+    <rect x="78" y="14" width="10" height="51" fill="var(--barrel-shadow)" opacity="0.3" rx="2"/>
     <rect class="barrel-band" x="36" y="22" width="54" height="4"/>
     <rect class="barrel-band" x="36" y="55" width="54" height="4"/>
     <ellipse class="barrel" cx="63" cy="68" rx="25" ry="6"/>
+    <!-- LEFT barrel -->
     <ellipse class="barrel" cx="22" cy="22" rx="20" ry="5"/>
     <rect class="barrel" x="2" y="22" width="40" height="50" rx="3"/>
+    <line x1="11" y1="24" x2="11" y2="70" stroke="var(--barrel-shadow)" stroke-width="0.6" opacity="0.7"/>
+    <line x1="20" y1="24" x2="20" y2="70" stroke="var(--barrel-shadow)" stroke-width="0.6" opacity="0.7"/>
+    <line x1="29" y1="24" x2="29" y2="70" stroke="var(--barrel-shadow)" stroke-width="0.6" opacity="0.7"/>
+    <rect x="32" y="24" width="10" height="46" fill="var(--barrel-shadow)" opacity="0.35" rx="2"/>
     <rect class="barrel-band" x="0" y="32" width="44" height="3.5"/>
     <rect class="barrel-band" x="0" y="62" width="44" height="3.5"/>
     <ellipse class="barrel" cx="22" cy="73" rx="20" ry="5"/>
+    <!-- RIGHT barrel -->
     <ellipse class="barrel" cx="104" cy="22" rx="20" ry="5"/>
     <rect class="barrel" x="84" y="22" width="40" height="50" rx="3"/>
+    <line x1="93" y1="24" x2="93" y2="70" stroke="var(--barrel-shadow)" stroke-width="0.6" opacity="0.7"/>
+    <line x1="102" y1="24" x2="102" y2="70" stroke="var(--barrel-shadow)" stroke-width="0.6" opacity="0.7"/>
+    <line x1="111" y1="24" x2="111" y2="70" stroke="var(--barrel-shadow)" stroke-width="0.6" opacity="0.7"/>
+    <rect x="114" y="24" width="10" height="46" fill="var(--barrel-shadow)" opacity="0.4" rx="2"/>
     <rect class="barrel-band" x="82" y="32" width="44" height="3.5"/>
     <rect class="barrel-band" x="82" y="62" width="44" height="3.5"/>
     <ellipse class="barrel" cx="104" cy="73" rx="20" ry="5"/>
@@ -262,8 +280,10 @@
     Q 215 745 250 770
     Q 280 870 275 985
     Z" />
-  <!-- Thumb shadow strip on the underside -->
-  <path class="skin-shadow" d="M 195 770 Q 180 870 195 970 L 215 980 Q 210 880 215 800 Z" opacity="0.5"/>
+  <!-- Thumb shadow strip on the underside (broader for cylinder shading) -->
+  <path class="skin-shadow" d="M 195 770 Q 180 870 195 970 L 225 980 Q 220 880 220 800 Z" opacity="0.55"/>
+  <!-- Inner-edge stripe (deeper) -->
+  <path class="skin-deep" d="M 200 800 Q 195 880 210 960 L 220 960 Q 210 880 215 810 Z" opacity="0.4"/>
   <!-- Thumb knuckle crease -->
   <path class="crease" d="M 200 870 Q 240 860 270 870"/>
   <!-- Thumbnail at the tip -->
@@ -278,7 +298,9 @@
     Q 700 815 715 855
     Q 710 925 685 980
     Z" />
-  <path class="skin-shadow" d="M 590 985 Q 605 905 660 855 L 685 875 Q 620 920 605 990 Z" opacity="0.5"/>
+  <!-- Lower-side cylinder shading -->
+  <path class="skin-shadow" d="M 590 985 Q 605 905 660 855 L 690 880 Q 625 925 605 990 Z" opacity="0.55"/>
+  <path class="skin-deep" d="M 605 980 Q 615 920 660 870 L 670 882 Q 625 925 615 985 Z" opacity="0.35"/>
   <path class="crease" d="M 615 920 Q 660 905 700 920"/>
   <path class="crease" d="M 605 960 Q 650 945 690 960"/>
   <ellipse class="nail" cx="685" cy="833" rx="13" ry="9" transform="rotate(35 685 833)"/>
@@ -291,7 +313,8 @@
     Q 800 935 800 980
     Q 770 1010 695 1015
     Z" />
-  <path class="skin-shadow" d="M 670 990 Q 720 945 770 938 L 780 955 Q 720 970 685 1000 Z" opacity="0.45"/>
+  <path class="skin-shadow" d="M 670 990 Q 720 945 770 938 L 790 960 Q 730 980 685 1000 Z" opacity="0.5"/>
+  <path class="skin-deep" d="M 685 1005 Q 730 970 780 950 L 785 962 Q 740 985 695 1010 Z" opacity="0.3"/>
   <path class="crease" d="M 695 970 Q 740 955 785 965"/>
   <ellipse class="nail" cx="785" cy="945" rx="11" ry="8" transform="rotate(60 785 945)"/>
   <ellipse fill="var(--skin-highlight)" cx="745" cy="975" rx="13" ry="6" opacity="0.55"/>
