@@ -53,10 +53,14 @@ import vtracer
 vtracer.convert_image_to_svg_py(
     'sources/foo.png', 'tmp_color_trace.svg',
     colormode='color', mode='spline',
-    filter_speckle=8, color_precision=4, layer_difference=12,
+    filter_speckle=4, color_precision=6, layer_difference=8,
 )
 ```
 Then regex-parse the resulting `<path d="..." fill="..." transform="..."/>` lines, dedupe by fill, give each fill a CSS class, drop them into your workshop SVG.
+
+**Trace-settings calibration for line art / cartoons.** Default vtracer settings (filter_speckle=8, color_precision=4, layer_difference=12) merge adjacent regions too aggressively for illustrations: thin dark outlines get filtered as speckle, and adjacent colour regions (e.g. orange beard next to green coat) get averaged into a brown mid-tone. For cartoon line art use **filter_speckle=4, color_precision=6, layer_difference=8** — preserves outlines and keeps neighbouring colours separate. Cost: more paths (~hundreds vs ~tens), slightly larger SVG. Easily worth it for the visible quality lift (leprechaun outline_iou went 0.59 → 0.76 from this single change).
+
+**Bucketing strategy when there are many fills.** With finer trace settings you can end up with 1000+ distinct fills. Bucket each fill into a semantic CSS class via an RGB heuristic (e.g. greens with `g > r and g > b` go into `.clover-green`; warm peach into `.skin`; very dark into `.outline`). Major bucketed regions get tweakable `--<class>-color` CSS vars. **Don't force every fill into a bucket** — small detail fills that don't fit cleanly should be kept literal (`fill="#abc123"` on the path). Over-bucketing flattens the nuanced shading the trace gave you for free; under-bucketing means the workshop has nothing to tweak. Aim for ~6-10 named buckets covering the dominant regions, with the long tail of detail colours kept literal.
 
 Hand-draft when: the source is a phone photo with depth, lighting, shading, occlusion. The trace then becomes a *reference layer* (`<g id="trace-ref">`) instead of the geometry, and you draw parametric paths that approximate the photo's structure rather than copy its pixels.
 
