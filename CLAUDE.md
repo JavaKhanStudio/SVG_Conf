@@ -65,8 +65,29 @@ Add a trailing comment on the same line in the form `/* @ws <type> [key=value]..
 | `@ws color` | Force color picker (in case inference picked the wrong type). |
 | `@ws text` | Force text input. |
 | `@ws ignore` | Skip this variable — don't generate a control. Use for internal helpers that shouldn't be user-facing. |
+| `@ws mix=<base-var>:<amount>` | Mark this colour variable as **derived** from another. `<base-var>` is the other variable's name without the leading `--`. `<amount>` is a number in `[-1, 1]`: negative darkens (mix toward black), positive lightens (mix toward white), 0 = same as base. The workshop shows the derived variable as a read-only swatch next to the formula, and whenever the base changes, the derived colour recomputes live. Use for shade / tint pairs (orange → dark orange, skin → skin shadow) so the two stay visually linked. The declared value is used as a fallback if the base isn't a resolvable colour. |
 
 ## Worked examples
+
+### Example 0: Linked colour pair (shade of another colour)
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">
+  <style>
+    :root {
+      --orange: #f09040;
+      --orange-shadow: #7a4820;   /* @ws mix=orange:-0.55 */
+    }
+    .sun     { fill: var(--orange); }
+    .shadow  { fill: var(--orange-shadow); }
+  </style>
+  <circle class="sun"    cx="60"  cy="50" r="40"/>
+  <circle class="shadow" cx="140" cy="50" r="40"/>
+</svg>
+```
+
+Edit `--orange` in the workshop and `--orange-shadow` auto-updates to
+a 55%-darkened version of whatever you picked.
 
 ### Example 1: Eye with adjustable iris and pupil
 

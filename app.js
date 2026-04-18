@@ -248,6 +248,21 @@ function buildControl(v) {
   row.className = 'row';
   wrap.appendChild(row);
 
+  // Derived variables get a read-only swatch instead of an editor so the
+  // workshop doesn't pretend the user can set them directly.
+  if (isDerived(v)) {
+    const resolved = resolveDerived(state.values);
+    const swatch = document.createElement('div');
+    swatch.setAttribute('data-derived-swatch', v.name);
+    swatch.style.cssText = 'width: 36px; height: 24px; border: 1px solid #444; border-radius: 3px; background: ' + (resolved[v.name] || v.rawValue);
+    const info = document.createElement('span');
+    info.style.cssText = 'font-size: 10px; color: #88899a; margin-left: 6px; font-family: ui-monospace, monospace;';
+    info.textContent = '= ' + (v.hint.raw.match(/mix=[\w-]+:-?\d*\.?\d+/)?.[0] || 'derived');
+    row.appendChild(swatch);
+    row.appendChild(info);
+    return wrap;
+  }
+
   const current = state.values[v.name] ?? v.rawValue;
 
   const isSeed = v.hint?.type === 'seed';
@@ -401,16 +416,30 @@ function normalizeColorForPicker(val) {
 // ---------- Applying values ----------
 function setValue(name, val) {
   state.values[name] = val;
-  if (state.svgEl) state.svgEl.style.setProperty(name, val);
+  // Resolve derived colours and push everything to the rendered SVG so
+  // that editing a base colour immediately propagates to its shades.
+  if (state.svgEl) {
+    const resolved = resolveDerived(state.values);
+    for (const [k, v] of Object.entries(resolved)) {
+      state.svgEl.style.setProperty(k, v);
+    }
+    // Update any derived-colour swatches in the control panel.
+    refreshDerivedSwatches(resolved);
+  }
   saveStoredValues(state.currentFile, state.values);
-  // If this var is part of a point2d group, reposition the dot in place
-  // (never rebuild the overlay here — doing so mid-drag would destroy the
-  // element holding pointer capture and the drag would die instantly).
   for (const g of state.point2dGroups) {
     if (g.xVar.name === name || g.yVar.name === name) {
       positionPointDot(g);
       break;
     }
+  }
+}
+
+function refreshDerivedSwatches(resolved) {
+  for (const v of state.variables) {
+    if (!isDerived(v)) continue;
+    const el = document.querySelector(`[data-derived-swatch="${v.name}"]`);
+    if (el) el.style.background = resolved[v.name] || v.rawValue;
   }
 }
 
@@ -435,9 +464,79 @@ function positionPointDot(g) {
 
 function applyAllValues() {
   if (!state.svgEl) return;
-  for (const [k, v] of Object.entries(state.values)) {
+  const resolved = resolveDerived(state.values);
+  for (const [k, v] of Object.entries(resolved)) {
     state.svgEl.style.setProperty(k, v);
   }
+}
+
+// ---------- Derived (linked) colours ----------
+// Hint syntax: `/* @ws mix=<base-var-short-name>:<amount> */` on a colour
+// variable.  amount ∈ [-1, 1]: negative darkens (mix toward black),
+// positive lightens (mix toward white), 0 = base unchanged.
+//
+// Example:
+//   --fur-tan: #cb9464;
+//   --fur-brown: #55371a;   /* @ws mix=fur-tan:-0.4 */
+//
+// When the user tweaks --fur-tan in the workshop, --fur-brown is recomputed
+// as `mix(#cb9464, -0.4)` and applied as an inline style.  Because the
+// workshop resolves the derived value to a literal colour before applying,
+// the SVG still rasterises correctly in resvg (which doesn't understand
+// CSS color-mix()).
+function mixColor(baseHex, amount) {
+  const [r, g, b] = hexToRgbTriple(baseHex);
+  let r2, g2, b2;
+  if (amount < 0) {
+    const f = 1 + amount;                // -0.4 → 0.6
+    r2 = r * f; g2 = g * f; b2 = b * f;
+  } else {
+    const f = amount;                    // 0.4 → 0.4
+    r2 = r + (255 - r) * f;
+    g2 = g + (255 - g) * f;
+    b2 = b + (255 - b) * f;
+  }
+  const clamp = n => Math.max(0, Math.min(255, Math.round(n)));
+  return '#' + [r2, g2, b2].map(n => clamp(n).toString(16).padStart(2, '0')).join('');
+}
+
+function hexToRgbTriple(hex) {
+  const h = hex.replace('#', '');
+  const s = h.length === 3
+    ? h.split('').map(c => c + c).join('')
+    : h.slice(0, 6);
+  return [parseInt(s.slice(0, 2), 16), parseInt(s.slice(2, 4), 16), parseInt(s.slice(4, 6), 16)];
+}
+
+function resolveDerived(values) {
+  // Pass-through all non-derived values; replace derived ones with the
+  // computed mix.  A derived var that points at an unknown or
+  // non-colour base falls back to its rawValue.
+  const out = { ...values };
+  for (const v of state.variables) {
+    if (v.hint?.type === 'mix') continue;  // safety
+    if (!v.hint?.mix) continue;
+    // hint.mix is the raw "base:amount" string from parseHint's remainder,
+    // so we parse it here instead of in parseHint.
+  }
+  // Walk state.variables, looking at hint.raw for "mix=base:amount"
+  for (const v of state.variables) {
+    const raw = v.hint?.raw;
+    if (!raw) continue;
+    const m = /\bmix=([\w-]+):(-?\d*\.?\d+)/.exec(raw);
+    if (!m) continue;
+    const baseShort = m[1];
+    const amount = Number(m[2]);
+    const baseFullName = '--' + baseShort;
+    const baseValue = out[baseFullName];
+    if (!baseValue || !/^#[0-9a-f]{3,8}$/i.test(baseValue.trim())) continue;
+    out[v.name] = mixColor(baseValue.trim(), amount);
+  }
+  return out;
+}
+
+function isDerived(v) {
+  return !!(v.hint?.raw && /\bmix=[\w-]+:-?\d*\.?\d+/.test(v.hint.raw));
 }
 
 // Reset all variables to their source defaults: drop any inline overrides

@@ -4,7 +4,7 @@
       --wall-color: #b7b6b7;
       --fur-cream-color: #dedbdb;
       --fur-tan-color: #cb9464;
-      --fur-brown-color: #55371a;
+      --fur-brown-color: #55371a;      /* @ws mix=fur-tan-color:-0.55 */
       --feature-dark-color: #10100f;
       --couch-shadow-color: #303140;
       --couch-mid-color: #585664;
