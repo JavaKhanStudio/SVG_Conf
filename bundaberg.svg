@@ -77,6 +77,63 @@
   <rect class="background" x="0" y="0" width="960" height="1280"/>
 
   <!-- ============================================================ -->
+  <!-- HAND (BACK) — drawn first; the bottle will OCCLUDE the parts  -->
+  <!-- of the hand that the bottle is in front of. Only fragments    -->
+  <!-- that stick out beyond the bottle's silhouette will be visible. -->
+  <!-- ============================================================ -->
+
+  <!-- Palm + wrist mass at the bottom (mostly hidden by bottle) -->
+  <path class="skin" d="
+    M 130 1280
+    L 130 1100
+    Q 145 1010 230 990
+    Q 360 970 480 970
+    Q 600 970 740 990
+    Q 815 1010 820 1100
+    L 820 1280
+    Z" />
+
+  <!-- Visible-on-the-left thumb. Tip + knuckle are clear of bottle. -->
+  <path class="skin" d="
+    M 145 985
+    Q 88 920 95 840
+    Q 88 790 110 745
+    Q 130 705 170 700
+    Q 215 705 235 740
+    Q 250 790 252 850
+    Q 260 925 285 985
+    Z" />
+  <path class="skin-shadow" d="M 95 790 Q 100 880 140 975 L 180 985 Q 150 880 135 790 Z" opacity="0.55"/>
+  <path class="skin-deep" d="M 120 790 Q 122 880 155 970 L 168 970 Q 138 880 138 800 Z" opacity="0.4"/>
+  <ellipse fill="var(--skin-mid)" cx="195" cy="855" rx="35" ry="26" stroke="var(--outline)" stroke-width="0.5" opacity="0.95"/>
+  <path class="crease" d="M 138 855 Q 198 835 252 860" stroke-width="2"/>
+  <ellipse fill="var(--skin-highlight)" cx="200" cy="843" rx="24" ry="10" opacity="0.6"/>
+  <ellipse class="nail" cx="165" cy="720" rx="22" ry="14" transform="rotate(-15 165 720)"/>
+
+  <!-- Right side: stub of finger mass that the bottle will cover.    -->
+  <!-- Kept fully INSIDE the bottle silhouette so it shows only       -->
+  <!-- where the bottle widens slightly past the fingertips.          -->
+  <path class="skin" d="
+    M 700 1000
+    Q 770 985 800 1000
+    L 800 1080
+    Q 760 1075 700 1075
+    Z" />
+
+  <!-- Knuckle row hint — visible just above the bottle base on left+right -->
+  <path class="crease" d="M 200 1080 Q 240 1060 285 1065" stroke-width="2"/>
+  <path class="crease" d="M 720 1075 Q 770 1075 810 1095" stroke-width="2"/>
+
+  <!-- Palm creases — visible OUTSIDE bottle (mostly bottom edges) -->
+  <path class="crease" d="M 150 1140 Q 230 1135 285 1140" stroke-width="2"/>
+  <path class="crease" d="M 720 1145 Q 800 1150 805 1175" stroke-width="2"/>
+  <path class="crease" d="M 130 1200 Q 260 1180 350 1200" stroke-width="1.5" opacity="0.7"/>
+  <path class="crease" d="M 600 1200 Q 730 1180 820 1200" stroke-width="1.5" opacity="0.7"/>
+
+  <!-- Thenar bulge highlight (left of bottle) -->
+  <ellipse fill="var(--skin-highlight)" cx="170" cy="1050" rx="40" ry="60" opacity="0.4" transform="rotate(-15 170 1050)"/>
+
+  <!-- ============================================================ -->
   <!-- BOTTLE — corrected to the actual stocky proportions:          -->
   <!--   body width ~480px (50% canvas), aspect ~2:1.                -->
   <!--   Cap (140px wide) sits centered. Neck narrows briefly,       -->
@@ -247,9 +304,49 @@
   <text class="text-dark" x="668" y="809" font-size="18" text-anchor="middle" font-weight="bold">3</text>
 
   <!-- ============================================================ -->
-  <!-- HAND — wraps the wider bottle. Thumb left, 4 fingers right,   -->
-  <!-- palm/wrist at bottom, hand-shaped (not slab-shaped).          -->
+  <!-- FINGERTIPS (FRONT) — drawn AFTER the label so they sit in     -->
+  <!-- front of the bottle base, matching the photo's gripping pose. -->
+  <!-- Only the curl of each finger that wraps to the front is here. -->
   <!-- ============================================================ -->
+
+  <!-- Index fingertip curling around the front-right of bottle base -->
+  <path class="skin" d="
+    M 720 880
+    Q 760 870 790 905
+    Q 800 935 770 945
+    Q 740 940 720 920
+    Z" />
+  <path class="skin-shadow" d="M 720 920 Q 750 935 780 940 L 770 950 Q 740 945 725 935 Z" opacity="0.5"/>
+  <ellipse class="nail" cx="785" cy="900" rx="13" ry="9" transform="rotate(45 785 900)"/>
+
+  <!-- Middle fingertip slightly lower -->
+  <path class="skin" d="
+    M 700 925
+    Q 745 915 775 945
+    Q 785 975 750 985
+    Q 715 980 695 960
+    Z" />
+  <path class="skin-shadow" d="M 695 960 Q 730 975 765 980 L 760 990 Q 720 985 700 975 Z" opacity="0.5"/>
+  <ellipse class="nail" cx="775" cy="940" rx="12" ry="8" transform="rotate(60 775 940)"/>
+
+  <!-- Ring fingertip near the bottom of the bottle -->
+  <path class="skin" d="
+    M 690 970
+    Q 730 965 760 985
+    Q 770 1005 740 1010
+    Q 705 1005 685 990
+    Z" />
+  <ellipse class="nail" cx="760" cy="985" rx="11" ry="7" transform="rotate(75 760 985)"/>
+
+  <!-- Inter-finger seams between the front fingertips -->
+  <path class="crease" d="M 720 925 Q 720 935 700 945" stroke-width="2.5"/>
+  <path class="crease" d="M 700 970 Q 700 980 685 985" stroke-width="2.5"/>
+
+  <!-- (palm-front strip removed — was reading as a tongue across     -->
+  <!-- the bottle. The palm staying behind the bottle is more honest.) -->
+
+  <!-- Stub block to keep the rest of the file structure intact below -->
+  <g style="display:none">
 
   <!-- Palm + wrist mass. Subtle bulges at the thenar (thumb base) and  -->
   <!-- hypothenar (pinky-side heel of palm) for anatomical shape.        -->
@@ -387,6 +484,7 @@
   <!-- Tiny dark shadow inside each seam for depth -->
   <path d="M 655 985 Q 645 1005 630 1015" stroke="var(--bottle-rim)" stroke-width="1.5" fill="none" opacity="0.6"/>
   <path d="M 680 1020 Q 670 1042 660 1052" stroke="var(--bottle-rim)" stroke-width="1.5" fill="none" opacity="0.6"/>
+  </g>
 
   <g id="trace-ref" display="none" transform="scale(1 1)">
     <style>#trace-ref path { fill: none !important; stroke: #ff00ff; stroke-width: 0.5; vector-effect: non-scaling-stroke; opacity: 0.85; }</style>
