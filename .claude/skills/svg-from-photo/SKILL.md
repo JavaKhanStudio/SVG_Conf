@@ -64,12 +64,16 @@ Then regex-parse the resulting `<path d="..." fill="..." transform="..."/>` line
 
 **Real-text overlay (for designs containing text).** vtracer renders text as bezier paths, which are chunky at any zoom and impossible to re-edit. For images where text is a first-class element (podcast covers, posters, logos with wordmarks), add a real-text overlay layer:
 
-1. Bucket the white text fills into `.text-white`, red/coloured text fills into `.text-red`, etc. — be permissive on the threshold (`r > 180 and max-min < 35` catches anti-aliased white).
+1. Bucket the white text fills into `.text-white`, red/coloured text fills into `.text-red`, etc. — be permissive on the threshold (`r > 180 and max-min < 35` catches anti-aliased white) but **tight enough to exclude skin-shadow tones**. True text-red is `r > 140 and g < 60 and b < 60` (saturation > 75%); skin shadows are `r > 140 and g ~ 100 and b ~ 80` (saturation < 50%) and will land in your red bucket if you don't filter them out.
 2. Add a `--traced-text` CSS variable defaulting to `none`, and set the relevant text bucket classes to `display: var(--traced-text)`. This hides the chunky traced characters.
-3. Append a `<g id="text-overlay" style="display: var(--text-overlay)">` containing real `<text>` elements at the same positions. Position attributes (`x=`, `y=`) must be literal — resvg doesn't support `calc(var(...) * 1px)`. Font family / size / weight / colour can all be CSS-variable parametric.
-4. Default `--text-overlay: inline` and `--traced-text: none` — overlay on, traced off. Switching either via the workshop dropdown lets users see crisp editable text or the original traced version.
+3. Auto-derive text positions from the traced bboxes — don't eyeball coordinates. For each path in a text bucket, compute its world-coord bbox via `svgpathtools.parse_path(d).bbox()` and apply the path's `translate(...)`. Cluster paths whose Y-ranges overlap (tolerance ~4px) into discrete text "lines". Each line's union bbox gives `x = bbox.xmin, baseline_y = bbox.ymax, font-size = round(bbox.h / 0.72)` (cap-height ratio). Map clusters to text labels by Y order.
+4. Append a `<g id="text-overlay" style="display: var(--text-overlay)">` containing real `<text>` elements with the auto-derived `x=`, `y=`, `font-size=`. Font family / colour can be CSS-variable parametric; position attributes must be literal — resvg doesn't support `calc(var(...) * 1px)`.
+5. Default `--text-overlay: inline` and `--traced-text: none` — overlay on, traced off. Switching either via the workshop dropdown lets users see crisp editable text or the original traced version.
 
-Watch out: CSS variable values that contain quotes (`--font: "Impact, Arial"`) become invalid XML when inlined into attributes. Use unquoted single names (`--font: Impact`) or use the variable only in CSS rules, never directly in attributes.
+Watch out:
+- CSS variable values that contain quotes (`--font: "Impact, Arial"`) become invalid XML when inlined into attributes. Use unquoted single names (`--font: Impact`) or use the variable only in CSS rules, never directly in attributes.
+- XML comments cannot contain `--` anywhere. A comment like `<!-- toggle off with --foo: none -->` silently breaks the SVG.
+- Cluster tolerance for Y-overlap is sensitive. Tolerance 10 merges "THE" (small) into "BOYSCAST" (big) below it. Tolerance 4 keeps them separate. Start at 4, tune up only if a known multi-line block fragments.
 
 Hand-draft when: the source is a phone photo with depth, lighting, shading, occlusion. The trace then becomes a *reference layer* (`<g id="trace-ref">`) instead of the geometry, and you draw parametric paths that approximate the photo's structure rather than copy its pixels.
 
