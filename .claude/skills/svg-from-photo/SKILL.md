@@ -43,7 +43,24 @@ Injects `<g id="trace-ref" display="none">…</g>` as the last child of the targ
 
 If the SVG doesn't exist yet, create it first with the minimal workshop template (see CLAUDE.md), then trace into it.
 
-### 3. Draft parametric paths
+### 3a. Decide: trace-as-geometry, or hand-draft?
+
+**Look at the source.** If the source is clean line art, a logo, an icon, a screenshot, or any image with crisp edges and flat colour regions, **don't hand-draft**. Run `vtracer` directly in colour mode on the original PNG, extract the resulting paths (preserving their `transform` attributes!), drop them into your SVG as the geometry, and re-route their fills through CSS classes for parametric tuning. The trace IS the ground truth — your job is just to wrap it in the workshop variable convention. This is dramatically faster and produces dramatically better metrics than hand-drafting (goldenspring jumped from outline_iou 0.05 to 0.68 just by switching approach).
+
+How to do it from Python:
+```python
+import vtracer
+vtracer.convert_image_to_svg_py(
+    'sources/foo.png', 'tmp_color_trace.svg',
+    colormode='color', mode='spline',
+    filter_speckle=8, color_precision=4, layer_difference=12,
+)
+```
+Then regex-parse the resulting `<path d="..." fill="..." transform="..."/>` lines, dedupe by fill, give each fill a CSS class, drop them into your workshop SVG.
+
+Hand-draft when: the source is a phone photo with depth, lighting, shading, occlusion. The trace then becomes a *reference layer* (`<g id="trace-ref">`) instead of the geometry, and you draw parametric paths that approximate the photo's structure rather than copy its pixels.
+
+### 3b. Draft parametric paths (photo case)
 
 This is the part you actually do — read CLAUDE.md and existing examples (e.g. `examples/car.svg`) for the convention, then hand-build clean semantic paths over the trace reference. Open the workshop in a browser and toggle "Trace" on to see how the magenta hairlines line up with your work.
 
