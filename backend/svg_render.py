@@ -88,7 +88,29 @@ def rasterize_svg(
 
     png_bytes = bytes(resvg_py.svg_to_bytes(svg_string=inlined, **kwargs))
     arr = np.frombuffer(png_bytes, dtype=np.uint8)
-    img = cv2.imdecode(arr, cv2.IMREAD_COLOR)
+    img = cv2.imdecode(arr, cv2.IMREAD_UNCHANGED)
     if img is None:
         raise RuntimeError("resvg produced an undecodable image")
-    return img
+    return composite_on_white(img)
+
+
+def composite_on_white(img: np.ndarray) -> np.ndarray:
+    """Flatten an RGBA (or BGRA) image onto a white background.
+
+    cv2.IMREAD_COLOR strips alpha by treating it as black, which breaks
+    downstream metric comparisons (a transparent PNG ends up as a
+    black-background image, which Otsu thresholds completely differently
+    from a real white-background render). Compositing onto white before
+    measurement gives an apples-to-apples baseline.
+    """
+    if img.ndim == 2:
+        return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+    if img.shape[2] == 3:
+        return img  # already BGR, no alpha to flatten
+    if img.shape[2] == 4:
+        bgr = img[:, :, :3].astype(np.float32)
+        alpha = img[:, :, 3:4].astype(np.float32) / 255.0
+        white = np.full_like(bgr, 255.0)
+        out = bgr * alpha + white * (1.0 - alpha)
+        return out.astype(np.uint8)
+    raise ValueError(f"unsupported channel count: {img.shape[2]}")

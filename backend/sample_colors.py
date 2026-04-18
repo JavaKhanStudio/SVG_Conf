@@ -194,9 +194,14 @@ def sample_colors(svg_path: str, ref_path: str) -> list[ColorSuggestion]:
     root = tree.getroot()
     vb = _viewbox(root)
 
-    ref = cv2.imread(ref_path, cv2.IMREAD_COLOR)
+    # Same alpha handling as measure.py — composite transparent PNGs onto
+    # white so colour sampling sees the actual visual pixels rather than
+    # cv2's black-out-the-alpha default.
+    from svg_render import composite_on_white
+    ref = cv2.imread(ref_path, cv2.IMREAD_UNCHANGED)
     if ref is None:
         raise FileNotFoundError(f"could not read reference image: {ref_path}")
+    ref = composite_on_white(ref)
     rh, rw = ref.shape[:2]
 
     by_region = _collect_named_shapes(root)

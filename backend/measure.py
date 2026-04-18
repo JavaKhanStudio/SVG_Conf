@@ -42,7 +42,7 @@ import cv2
 import numpy as np
 from skimage.metrics import structural_similarity as ssim
 
-from svg_render import rasterize_svg
+from svg_render import composite_on_white, rasterize_svg
 
 # Comparison resolution. Big enough to keep edge detail meaningful, small
 # enough that metrics run in a fraction of a second on phone-sized photos.
@@ -124,9 +124,15 @@ def measure(svg_path: str, ref_path: str, passes: list[str] | None = None) -> Me
     module docstring for what each catches. Unknown pass names are silently
     skipped (forward-compatible with future additions).
     """
-    ref = cv2.imread(ref_path, cv2.IMREAD_COLOR)
+    # Read with alpha preserved so transparent PNGs (logos, icons, anything
+    # with a non-opaque background) get composited onto white instead of
+    # cv2's default behaviour of treating transparent as black. A black
+    # background completely breaks Otsu-based metric comparisons against
+    # a candidate render that uses any other background colour.
+    ref = cv2.imread(ref_path, cv2.IMREAD_UNCHANGED)
     if ref is None:
         raise FileNotFoundError(f"could not read reference image: {ref_path}")
+    ref = composite_on_white(ref)
 
     rh, rw = ref.shape[:2]
     if max(rw, rh) > TARGET_LONG_SIDE:

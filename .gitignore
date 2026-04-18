@@ -5,8 +5,10 @@ node_modules/
 # Workshop runtime state.
 # Snapshots are committed (they're part of the showcase / agent output).
 # Preprocessed reference images and metrics history are local-only noise.
-.workshop/*
+.workshop/
+.workshop/**
 !.workshop/*.snapshots.json
+!**/.workshop/*.snapshots.json
 
 # Python
 __pycache__/
