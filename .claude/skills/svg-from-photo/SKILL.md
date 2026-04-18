@@ -62,6 +62,15 @@ Then regex-parse the resulting `<path d="..." fill="..." transform="..."/>` line
 
 **Bucketing strategy when there are many fills.** With finer trace settings you can end up with 1000+ distinct fills. Bucket each fill into a semantic CSS class via an RGB heuristic (e.g. greens with `g > r and g > b` go into `.clover-green`; warm peach into `.skin`; very dark into `.outline`). Major bucketed regions get tweakable `--<class>-color` CSS vars. **Don't force every fill into a bucket** — small detail fills that don't fit cleanly should be kept literal (`fill="#abc123"` on the path). Over-bucketing flattens the nuanced shading the trace gave you for free; under-bucketing means the workshop has nothing to tweak. Aim for ~6-10 named buckets covering the dominant regions, with the long tail of detail colours kept literal.
 
+**Real-text overlay (for designs containing text).** vtracer renders text as bezier paths, which are chunky at any zoom and impossible to re-edit. For images where text is a first-class element (podcast covers, posters, logos with wordmarks), add a real-text overlay layer:
+
+1. Bucket the white text fills into `.text-white`, red/coloured text fills into `.text-red`, etc. — be permissive on the threshold (`r > 180 and max-min < 35` catches anti-aliased white).
+2. Add a `--traced-text` CSS variable defaulting to `none`, and set the relevant text bucket classes to `display: var(--traced-text)`. This hides the chunky traced characters.
+3. Append a `<g id="text-overlay" style="display: var(--text-overlay)">` containing real `<text>` elements at the same positions. Position attributes (`x=`, `y=`) must be literal — resvg doesn't support `calc(var(...) * 1px)`. Font family / size / weight / colour can all be CSS-variable parametric.
+4. Default `--text-overlay: inline` and `--traced-text: none` — overlay on, traced off. Switching either via the workshop dropdown lets users see crisp editable text or the original traced version.
+
+Watch out: CSS variable values that contain quotes (`--font: "Impact, Arial"`) become invalid XML when inlined into attributes. Use unquoted single names (`--font: Impact`) or use the variable only in CSS rules, never directly in attributes.
+
 Hand-draft when: the source is a phone photo with depth, lighting, shading, occlusion. The trace then becomes a *reference layer* (`<g id="trace-ref">`) instead of the geometry, and you draw parametric paths that approximate the photo's structure rather than copy its pixels.
 
 ### 3b. Draft parametric paths (photo case)
