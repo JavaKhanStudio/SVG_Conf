@@ -54,6 +54,10 @@ Naming guidance:
 
 Don't try to be pixel-perfect. Hit the major silhouette, the wheels, the lights, the windows. The metrics will tell you what to tighten next.
 
+**Embrace overlap.** If an object overlaps another in the photo (a hand gripping a bottle, a camera mounted in front of a wall, a coffee maker on top of a toaster), draw BOTH in the SVG and let document order handle the occlusion — earlier elements get covered by later ones. Default instinct may be to keep shapes adjacent and "clean" — that distorts the composition because real scenes are layered. Pattern: draw the back-most element first (e.g. palm + back of hand), then the foreground object (e.g. bottle), then any visible front elements (e.g. fingertips that wrap to the front of the bottle). Same applies to anything that sits on or in front of something else.
+
+**Proportions before details.** When the silhouette feels off, check actual photo dimensions BEFORE adding more detail. Open the otsu.png and canny.png variants and measure pixel widths/heights of the dominant objects. The biggest single-pass quality jump in agent runs has come from fixing slender-vs-stocky proportions, not from adding finger creases or bottle highlights. The `subject_bbox` diagnostic pass is the official measurement, but its current largest-component implementation can lie when the photo's tonal range breaks Otsu into pieces — fall back to eyeballing the otsu.png if subject_bbox numbers contradict your gut.
+
 ### 4. Measure
 
 ```
