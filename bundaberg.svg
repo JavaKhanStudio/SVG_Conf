@@ -121,6 +121,17 @@
   <!-- Embossed manufacturer text near base (just curve hints) -->
   <path class="bottle-emboss" d="M 320 905 L 495 905"/>
   <path class="bottle-emboss" d="M 340 925 L 475 925"/>
+  <path class="bottle-emboss" d="M 360 945 L 455 945"/>
+
+  <!-- Strong glass highlight: thin curved white line near the right edge,
+       suggests light catching the cylinder. -->
+  <path d="M 502 250 Q 510 280 510 350 L 510 880 Q 506 920 498 935"
+        fill="none" stroke="#f5e0c8" stroke-width="3" opacity="0.5" stroke-linecap="round"/>
+
+  <!-- Soft reflection blob in the upper bottle (left side, simulates a
+       soft window highlight). -->
+  <ellipse cx="345" cy="340" rx="22" ry="55" fill="#a05a30" opacity="0.5"/>
+  <ellipse cx="345" cy="340" rx="10" ry="35" fill="#e0a880" opacity="0.4"/>
 
   <!-- Curved ellipse where cap meets neck (perspective rim) -->
   <ellipse cx="407.5" cy="100" rx="50" ry="6" fill="var(--cap-shadow)" stroke="var(--outline)" stroke-width="var(--stroke-thin)"/>
@@ -237,6 +248,12 @@
   <!-- Subtle palm shadow on the left edge -->
   <path class="skin-shadow" d="M 200 1100 Q 215 1000 290 980 L 290 1010 Q 230 1030 220 1110 Z" opacity="0.55"/>
 
+  <!-- Palm creases — three darker lines suggesting the natural folds where
+       the hand grips. Adds organic detail and lifts .crease density. -->
+  <path class="crease" d="M 250 1090 Q 380 1075 510 1085" stroke-width="2.5"/>
+  <path class="crease" d="M 280 1140 Q 400 1125 540 1140" stroke-width="2"/>
+  <path class="crease" d="M 320 1190 Q 430 1180 580 1200" stroke-width="1.5" opacity="0.7"/>
+
   <!-- THUMB: wrapping the left side of the bottle, base at palm     -->
   <!-- going up-and-around toward the bottle. Knuckle bend midway.   -->
   <path class="skin" d="
@@ -251,6 +268,8 @@
   <path class="crease" d="M 200 870 Q 240 860 270 870"/>
   <!-- Thumbnail at the tip -->
   <ellipse class="nail" cx="222" cy="765" rx="14" ry="10" transform="rotate(-15 222 765)"/>
+  <!-- Thumb knuckle highlight (lighter spot on top of bend) -->
+  <ellipse fill="var(--skin-highlight)" cx="240" cy="855" rx="14" ry="8" opacity="0.6"/>
 
   <!-- INDEX FINGER: top, mostly extended, visible from base to tip -->
   <path class="skin" d="
@@ -263,6 +282,7 @@
   <path class="crease" d="M 615 920 Q 660 905 700 920"/>
   <path class="crease" d="M 605 960 Q 650 945 690 960"/>
   <ellipse class="nail" cx="685" cy="833" rx="13" ry="9" transform="rotate(35 685 833)"/>
+  <ellipse fill="var(--skin-highlight)" cx="675" cy="900" rx="14" ry="8" opacity="0.55" transform="rotate(20 675 900)"/>
 
   <!-- MIDDLE FINGER: slightly bent -->
   <path class="skin" d="
@@ -274,6 +294,7 @@
   <path class="skin-shadow" d="M 670 990 Q 720 945 770 938 L 780 955 Q 720 970 685 1000 Z" opacity="0.45"/>
   <path class="crease" d="M 695 970 Q 740 955 785 965"/>
   <ellipse class="nail" cx="785" cy="945" rx="11" ry="8" transform="rotate(60 785 945)"/>
+  <ellipse fill="var(--skin-highlight)" cx="745" cy="975" rx="13" ry="6" opacity="0.55"/>
 
   <!-- RING FINGER: more bent -->
   <path class="skin" d="
