@@ -499,13 +499,13 @@
   <path class="title-grey" d="M0 0 C1.3200000000000003 0.33000000000000007 2.6400000000000006 0.6600000000000001 4 1 C3.5050000000000026 1.495000000000001 3.5050000000000026 1.495000000000001 1 4 C1.6599999999999966 4.33 2.3200000000000003 4.66 3 5 C0 5 0 5 -2 4 C-1.3400000000000034 2.6799999999999997 -0.6799999999999997 1.3599999999999994 0 0 Z " transform="translate(44,10)"/>
   <path class="title-grey" d="M0 0 C1.9800000000000004 0 3.960000000000001 0 6 0 C6 2.3100000000000005 6 4.620000000000001 6 7 C5.938124999999999 6.38125 5.876249999999999 5.762499999999999 5.8125 5.125 C5 3 5 3 2.4375 1.75 C1.6331249999999997 1.5024999999999995 0.8287499999999994 1.254999999999999 0 1 C0 0.6699999999999999 0 0.33999999999999986 0 0 Z " transform="translate(14,8)"/>
 
-  <!-- Real-text overlay. Positions auto-derived; font-size from median letter height. -->
+  <!-- Real-text overlay. Auto-positioned + auto-sized from trace bboxes. -->
   <g id="text-overlay" style="display: var(--text-overlay)">
-    <text x="10" y="24" fill="var(--title-grey-color)"
+    <text x="10" y="16" fill="var(--title-grey-color)"
           font-family="var(--title-font)" font-size="10" >Chief Scientist</text>
     <text x="11" y="183" fill="var(--text-white-color)"
           font-family="var(--logo-font)" font-size="25" font-weight="bold" font-style="italic">XENONAUTS</text>
     <text x="141" y="183" fill="var(--text-yellow-color)"
-          font-family="var(--logo-font)" font-size="15" font-weight="bold" font-style="italic">-2</text>
+          font-family="var(--logo-font)" font-size="25" font-weight="bold" font-style="italic">-2</text>
   </g>
 </svg>
