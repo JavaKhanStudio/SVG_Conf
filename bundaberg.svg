@@ -282,27 +282,40 @@
   <path class="crease" d="M 250 1140 Q 400 1125 570 1140 Q 700 1150 770 1170" stroke-width="2"/>
   <path class="crease" d="M 290 1200 Q 450 1185 620 1200" stroke-width="1.5" opacity="0.7"/>
 
-  <!-- THUMB — tapered with knuckle bulge at the IP joint (mid-thumb).  -->
-  <!-- Wider at base near the palm, narrower at the tip.                 -->
+  <!-- THUMB — stockier than v8. Real thumbs are noticeably thicker      -->
+  <!-- than the other fingers; widened the base + mid-section here.      -->
   <path class="skin" d="
-    M 155 985
-    Q 105 920 110 850
-    Q 100 800 120 760
-    Q 135 720 165 715
-    Q 200 715 215 745
-    Q 230 790 235 850
-    Q 245 920 270 985
+    M 145 985
+    Q 88 920 95 840
+    Q 88 790 110 745
+    Q 130 705 170 700
+    Q 215 705 235 740
+    Q 250 790 252 850
+    Q 260 925 285 985
     Z" />
-  <!-- Lower-side cylinder shadow -->
-  <path class="skin-shadow" d="M 110 800 Q 115 880 145 970 L 175 985 Q 150 880 140 800 Z" opacity="0.55"/>
+  <!-- Lower-side cylinder shadow (broader to match thicker thumb) -->
+  <path class="skin-shadow" d="M 95 790 Q 100 880 140 975 L 180 985 Q 150 880 135 790 Z" opacity="0.55"/>
   <!-- Deep crease along the inner edge -->
-  <path class="skin-deep" d="M 130 800 Q 130 880 155 965 L 165 965 Q 145 880 145 810 Z" opacity="0.4"/>
-  <!-- IP joint knuckle — slight bulge mid-thumb -->
-  <ellipse fill="var(--skin-mid)" cx="190" cy="855" rx="28" ry="22" stroke="var(--outline)" stroke-width="0.5" opacity="0.95"/>
-  <path class="crease" d="M 145 855 Q 195 838 240 858"/>
-  <ellipse fill="var(--skin-highlight)" cx="195" cy="845" rx="20" ry="9" opacity="0.6"/>
+  <path class="skin-deep" d="M 120 790 Q 122 880 155 970 L 168 970 Q 138 880 138 800 Z" opacity="0.4"/>
+  <!-- IP joint knuckle — bigger now -->
+  <ellipse fill="var(--skin-mid)" cx="195" cy="855" rx="35" ry="26" stroke="var(--outline)" stroke-width="0.5" opacity="0.95"/>
+  <path class="crease" d="M 138 855 Q 198 835 252 860" stroke-width="2"/>
+  <ellipse fill="var(--skin-highlight)" cx="200" cy="843" rx="24" ry="10" opacity="0.6"/>
   <!-- Tip + nail -->
-  <ellipse class="nail" cx="160" cy="730" rx="20" ry="13" transform="rotate(-15 160 730)"/>
+  <ellipse class="nail" cx="165" cy="720" rx="22" ry="14" transform="rotate(-15 165 720)"/>
+
+  <!-- THUMB-TO-PALM ATTACHMENT — the curved "valley" between the base   -->
+  <!-- of the thumb and the index finger. Visually the most under-       -->
+  <!-- developed part of v8.                                              -->
+  <path class="crease" d="M 240 970 Q 270 960 300 985" stroke-width="3"/>
+  <!-- Web of skin between thumb and palm (slight bulge of the thenar) -->
+  <path class="skin" d="
+    M 245 985
+    Q 280 960 320 970
+    L 350 985
+    Q 305 990 270 990
+    Z" opacity="0.95"/>
+  <path class="skin-deep" d="M 250 985 Q 285 970 315 980 L 325 990 Q 290 985 260 990 Z" opacity="0.5"/>
 
   <!-- INDEX FINGER — tapered, with PIP knuckle bulge mid-finger.       -->
   <path class="skin" d="
@@ -365,10 +378,15 @@
     Z" />
   <path class="crease" d="M 715 1145 Q 760 1140 785 1158"/>
 
-  <!-- Inter-finger seams (deeper crease lines) -->
-  <path class="crease" d="M 660 980 Q 660 998 645 1010" stroke-width="2"/>
-  <path class="crease" d="M 685 1015 Q 685 1030 678 1045" stroke-width="2"/>
-  <path class="crease" d="M 705 1090 Q 707 1105 700 1115" stroke-width="2"/>
+  <!-- Inter-finger seams — deeper, more visible. These are the dark    -->
+  <!-- valleys between adjacent fingers and they read as "this is two   -->
+  <!-- separate fingers" rather than "one big shape with lines on it".   -->
+  <path class="crease" d="M 655 970 Q 655 1000 635 1015" stroke-width="3.5"/>
+  <path class="crease" d="M 680 1010 Q 682 1035 670 1052" stroke-width="3.5"/>
+  <path class="crease" d="M 700 1085 Q 705 1110 695 1120" stroke-width="3"/>
+  <!-- Tiny dark shadow inside each seam for depth -->
+  <path d="M 655 985 Q 645 1005 630 1015" stroke="var(--bottle-rim)" stroke-width="1.5" fill="none" opacity="0.6"/>
+  <path d="M 680 1020 Q 670 1042 660 1052" stroke="var(--bottle-rim)" stroke-width="1.5" fill="none" opacity="0.6"/>
 
   <g id="trace-ref" display="none" transform="scale(1 1)">
     <style>#trace-ref path { fill: none !important; stroke: #ff00ff; stroke-width: 0.5; vector-effect: non-scaling-stroke; opacity: 0.85; }</style>
