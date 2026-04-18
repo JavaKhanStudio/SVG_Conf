@@ -116,6 +116,9 @@ code { background: #2a2a34; padding: 1px 4px; border-radius: 3px; }
 #controls-section {
   padding: 12px; overflow: auto; flex: 1; border-bottom: 1px solid #2a2a34;
 }
+#controls-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+#controls-header h2 { margin: 0; }
+#controls-header #reset-btn { padding: 2px 8px; font-size: 11px; }
 #controls .ctrl { margin-bottom: 10px; }
 #controls .ctrl label {
   display: block; font-size: 11px; color: #aab;
@@ -178,7 +181,8 @@ body.slideshow #files-pane { opacity: 0.2; pointer-events: none; }
 /* Backend-status banner (top of viewport when the Python backend is unreachable). */
 #backend-status {
   position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-  display: flex; align-items: center; gap: 8px;
+  display: none;                /* hidden until body.backend-down is set */
+  align-items: center; gap: 8px;
   padding: 6px 12px;
   background: #4a1f24; color: #ffd9dc;
   border-bottom: 1px solid #6b2b32;

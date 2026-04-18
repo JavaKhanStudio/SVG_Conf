@@ -440,6 +440,30 @@ function applyAllValues() {
   }
 }
 
+// Reset all variables to their source defaults: drop any inline overrides
+// on the rendered SVG, clear the stored values for this file, reload the
+// in-memory state from the source CSS, re-render controls.
+function resetToDefaults() {
+  if (!state.currentFile) return;
+  // 1. Remove inline-style overrides from the rendered SVG so the source
+  //    defaults take effect again.
+  if (state.svgEl) {
+    for (const k of Object.keys(state.values)) {
+      state.svgEl.style.removeProperty(k);
+    }
+  }
+  // 2. Clear stored values for this file.
+  try { localStorage.removeItem(storageKey(state.currentFile)); } catch {}
+  // 3. Reset the in-memory values to the source rawValues.
+  state.values = {};
+  for (const v of state.variables) state.values[v.name] = v.rawValue;
+  // 4. Re-render controls + point overlay.
+  renderControls();
+  renderPointOverlay();
+}
+
+$('#reset-btn').addEventListener('click', resetToDefaults);
+
 // ---------- localStorage ----------
 function storageKey(file) { return `svgworkshop:${file}:values`; }
 function saveStoredValues(file, values) {
