@@ -15,18 +15,18 @@
       --bottle-shadow: #2a1208;       /* left-side shadow band */
       --bottle-rim: #1b0a04;
       --bottle-tint: 0.95;            /* @ws number min=0.5 max=1 step=0.05 */
-      --bottle-emboss: #361608;       /* embossed text/ridge near base */
+      --bottle-emboss: #361608;
 
-      --cap-color: #f4ad21;           /* orange-yellow cap */
-      --cap-top: #ffc94a;             /* lighter ellipse on cap top */
+      --cap-color: #f4ad21;
+      --cap-top: #ffc94a;
       --cap-shadow: #b87a13;
 
-      --label-yellow: #f9b323;        /* main label color */
+      --label-yellow: #f9b323;
       --label-edge: #e07a1c;
-      --label-cream: #f7d97c;         /* lighter inner highlight */
-      --label-border: #b8651a;        /* decorative border line */
+      --label-cream: #f7d97c;
+      --label-border: #b8651a;
 
-      --banner-red: #a02320;          /* GINGER BEER banner */
+      --banner-red: #a02320;
       --banner-shadow: #6b1413;
       --barrel-wood: #b9742a;
       --barrel-band: #3a1f0e;
@@ -36,7 +36,7 @@
       --text-cream: #f7e2a8;
       --outline: #1b0a04;
       --stroke-thin: 1;               /* @ws number min=0.3 max=3 step=0.2 */
-      --stroke-mid: 2;                /* @ws number min=0.5 max=4 step=0.5 */
+      --stroke-mid: 2.5;              /* @ws number min=0.5 max=4 step=0.5 */
     }
     .background     { fill: url(#bg-grad); }
     .skin           { fill: var(--skin-mid); stroke: var(--outline); stroke-width: var(--stroke-thin); stroke-linejoin: round; }
@@ -69,280 +69,273 @@
       <stop offset="0" stop-color="var(--bg-glow)"/>
       <stop offset="1" stop-color="var(--bg-color)"/>
     </radialGradient>
-    <path id="bundaberg-arc" d="M 332 580 Q 408 545 484 580" fill="none"/>
+    <!-- Wider arc for the new wider label -->
+    <path id="bundaberg-arc" d="M 290 580 Q 480 530 670 580" fill="none"/>
   </defs>
 
   <!-- Background -->
   <rect class="background" x="0" y="0" width="960" height="1280"/>
 
   <!-- ============================================================ -->
-  <!-- BOTTLE: cylindrical body extends INTO the palm grip below.    -->
-  <!-- Drawn before hand fingers so the curling fingers occlude it.  -->
+  <!-- BOTTLE — corrected to the actual stocky proportions:          -->
+  <!--   body width ~480px (50% canvas), aspect ~2:1.                -->
+  <!--   Cap (140px wide) sits centered. Neck narrows briefly,       -->
+  <!--   then the shoulder widens dramatically into the body.        -->
   <!-- ============================================================ -->
   <path class="bottle" d="
-    M 358 100
-    L 358 180
-    Q 355 200 332 215
-    Q 290 250 285 320
-    L 285 940
-    Q 285 980 322 980
-    L 493 980
-    Q 530 980 530 940
-    L 530 320
-    Q 525 250 483 215
-    Q 460 200 457 180
-    L 457 100
+    M 400 110
+    L 400 170
+    Q 395 200 360 230
+    Q 270 290 240 360
+    L 240 905
+    Q 240 945 285 945
+    L 675 945
+    Q 720 945 720 905
+    L 720 360
+    Q 690 290 600 230
+    Q 565 200 560 170
+    L 560 110
     Z" />
 
-  <!-- Left-side shadow band -->
+  <!-- Left-side shadow band (cylinder cue) -->
   <path class="bottle-shade" d="
-    M 285 320
-    Q 290 250 332 215
-    L 348 215
-    Q 312 250 308 320
-    L 308 940
-    Q 308 968 322 978
-    L 295 978
-    Q 285 968 285 940
+    M 240 360
+    Q 270 290 360 230
+    L 380 250
+    Q 295 305 270 365
+    L 270 905
+    Q 270 935 290 945
+    L 250 945
+    Q 240 935 240 905
     Z" opacity="0.5"/>
 
   <!-- Right-side cylindrical highlight -->
   <path class="bottle-shine" d="
-    M 510 320
-    Q 510 250 480 220
-    L 472 220
-    Q 502 250 502 320
-    L 502 950
-    Q 500 970 488 978
-    L 510 978
-    Q 510 970 510 950
+    M 720 360
+    Q 690 290 600 230
+    L 580 250
+    Q 665 305 690 365
+    L 690 905
+    Q 690 932 670 942
+    L 705 942
+    Q 720 935 720 905
     Z" opacity="0.45"/>
 
-  <!-- Embossed manufacturer text near base (just curve hints) -->
-  <path class="bottle-emboss" d="M 320 905 L 495 905"/>
-  <path class="bottle-emboss" d="M 340 925 L 475 925"/>
-  <path class="bottle-emboss" d="M 360 945 L 455 945"/>
+  <!-- Embossed lines near the base -->
+  <path class="bottle-emboss" d="M 280 880 L 680 880"/>
+  <path class="bottle-emboss" d="M 300 905 L 660 905"/>
+  <path class="bottle-emboss" d="M 330 928 L 630 928"/>
 
-  <!-- Strong glass highlight: thin curved white line near the right edge,
-       suggests light catching the cylinder. -->
-  <path d="M 502 250 Q 510 280 510 350 L 510 880 Q 506 920 498 935"
-        fill="none" stroke="#f5e0c8" stroke-width="3" opacity="0.5" stroke-linecap="round"/>
+  <!-- Strong glass highlight on the right -->
+  <path d="M 690 290 Q 700 320 700 380 L 700 880 Q 695 920 685 935"
+        fill="none" stroke="#f5e0c8" stroke-width="3.5" opacity="0.5" stroke-linecap="round"/>
 
-  <!-- Soft reflection blob in the upper bottle (left side, simulates a
-       soft window highlight). -->
-  <ellipse cx="345" cy="340" rx="22" ry="55" fill="#a05a30" opacity="0.5"/>
-  <ellipse cx="345" cy="340" rx="10" ry="35" fill="#e0a880" opacity="0.4"/>
+  <!-- Soft window-reflection on the upper-left of the body -->
+  <ellipse cx="320" cy="370" rx="28" ry="65" fill="#a05a30" opacity="0.5"/>
+  <ellipse cx="320" cy="370" rx="14" ry="42" fill="#e0a880" opacity="0.4"/>
 
-  <!-- Curved ellipse where cap meets neck (perspective rim) -->
-  <ellipse cx="407.5" cy="100" rx="50" ry="6" fill="var(--cap-shadow)" stroke="var(--outline)" stroke-width="var(--stroke-thin)"/>
+  <!-- Curved ellipse where cap meets neck -->
+  <ellipse cx="480" cy="110" rx="80" ry="8" fill="var(--cap-shadow)" stroke="var(--outline)" stroke-width="var(--stroke-thin)"/>
 
   <!-- ============================================================ -->
-  <!-- CAP                                                            -->
+  <!-- CAP — wider to match real bottle (~160px)                     -->
   <!-- ============================================================ -->
   <path class="cap" d="
-    M 358 100
-    L 358 50
-    Q 358 35 370 32
-    L 445 32
-    Q 457 35 457 50
-    L 457 100
+    M 400 110
+    L 400 50
+    Q 400 30 415 28
+    L 545 28
+    Q 560 30 560 50
+    L 560 110
     Z" />
-  <ellipse class="cap-top" cx="407.5" cy="35" rx="49" ry="9"/>
-  <path d="M 410 38 Q 425 50 415 70 Q 405 80 410 95" fill="none" stroke="#d44818" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
-  <path d="M 405 38 Q 390 55 400 75 Q 408 85 405 95" fill="none" stroke="#d44818" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+  <ellipse class="cap-top" cx="480" cy="32" rx="80" ry="11"/>
+  <!-- Carry-string remnant -->
+  <path d="M 484 35 Q 502 50 492 75 Q 482 88 488 105" fill="none" stroke="#d44818" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+  <path d="M 478 35 Q 460 55 470 80 Q 482 92 478 105" fill="none" stroke="#d44818" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
 
   <!-- ============================================================ -->
-  <!-- LABEL: yellow rounded panel with decorative borders            -->
+  <!-- LABEL — wider to match new bottle body (415px wide)            -->
   <!-- ============================================================ -->
   <path class="label" d="
-    M 305 470
-    Q 305 460 315 460
-    L 500 460
-    Q 510 460 510 470
-    L 510 870
-    Q 510 880 500 880
-    L 315 880
-    Q 305 880 305 870
+    M 275 470
+    Q 275 460 285 460
+    L 675 460
+    Q 685 460 685 470
+    L 685 870
+    Q 685 880 675 880
+    L 285 880
+    Q 275 880 275 870
     Z" />
 
-  <!-- Decorative inner border (frames the entire label content) -->
-  <path class="label-border" d="
-    M 313 472
-    L 502 472
-    L 502 868
-    L 313 868
-    Z"/>
-  <!-- Top arching decorative line -->
-  <path d="M 320 480 Q 408 466 495 480" fill="none" stroke="var(--text-dark)" stroke-width="1.5"/>
-  <path d="M 320 484 Q 408 470 495 484" fill="none" stroke="var(--label-border)" stroke-width="0.7" opacity="0.6"/>
+  <!-- Decorative inner border -->
+  <path class="label-border" d="M 285 472 L 678 472 L 678 868 L 285 868 Z"/>
 
-  <!-- Inner cream highlight band at top -->
-  <path class="label-inner" d="M 320 492 L 495 492 L 495 540 L 320 540 Z" opacity="0.35"/>
-  <path d="M 320 492 L 495 492" stroke="var(--label-border)" stroke-width="0.6" opacity="0.5"/>
-  <path d="M 320 540 L 495 540" stroke="var(--label-border)" stroke-width="0.6" opacity="0.5"/>
+  <!-- Top arching decorative line + small text -->
+  <path d="M 295 482 Q 480 466 670 482" fill="none" stroke="var(--text-dark)" stroke-width="1.5"/>
+  <path d="M 295 487 Q 480 471 670 487" fill="none" stroke="var(--label-border)" stroke-width="0.7" opacity="0.6"/>
+  <path class="label-inner" d="M 295 494 L 670 494 L 670 542 L 295 542 Z" opacity="0.35"/>
+  <path d="M 295 494 L 670 494" stroke="var(--label-border)" stroke-width="0.6" opacity="0.5"/>
+  <path d="M 295 542 L 670 542" stroke="var(--label-border)" stroke-width="0.6" opacity="0.5"/>
 
-  <text class="text-dark" x="408" y="506" font-size="9" text-anchor="middle" opacity="0.8">FLASCHE VOR DEM ÖFFNEN</text>
-  <text class="text-dark" x="408" y="518" font-size="8" text-anchor="middle" opacity="0.7">RETOURNER LA BOUTEILLE</text>
+  <text class="text-dark" x="480" y="510" font-size="11" text-anchor="middle" opacity="0.8">FLASCHE VOR DEM ÖFFNEN AUF DEN KOPF DREHEN</text>
+  <text class="text-dark" x="480" y="525" font-size="10" text-anchor="middle" opacity="0.7">RETOURNER LA BOUTEILLE AVANT L'OUVERTURE</text>
 
-  <!-- BUNDABERG arching text -->
-  <text class="text-dark" font-size="26" text-anchor="middle" letter-spacing="0.5">
+  <!-- BUNDABERG arching text — wider arc matches new label -->
+  <text class="text-dark" font-size="38" text-anchor="middle" letter-spacing="0.5">
     <textPath href="#bundaberg-arc" startOffset="50%">BUNDABERG</textPath>
   </text>
 
-  <text class="text-dark" x="408" y="608" font-size="9" text-anchor="middle" opacity="0.85">ALKOHOLFREI · SANS ALCOOL</text>
+  <text class="text-dark" x="480" y="615" font-size="11" text-anchor="middle" opacity="0.85">ALKOHOLFREI · SANS ALCOOL</text>
 
-  <!-- Three barrels — wood-stave detail + side shadow for dimension -->
-  <ellipse cx="408" cy="700" rx="78" ry="6" fill="var(--barrel-shadow)" opacity="0.4"/>
-  <g transform="translate(345 615)">
+  <!-- Three barrels with wood-stave detail -->
+  <ellipse cx="480" cy="715" rx="115" ry="7" fill="var(--barrel-shadow)" opacity="0.4"/>
+  <g transform="translate(390 625)">
     <!-- BACK CENTER barrel -->
-    <ellipse class="barrel" cx="63" cy="12" rx="25" ry="6"/>
-    <rect class="barrel" x="38" y="12" width="50" height="55" rx="4"/>
-    <!-- vertical wood staves -->
-    <line x1="48" y1="14" x2="48" y2="65" stroke="var(--barrel-shadow)" stroke-width="0.7" opacity="0.7"/>
-    <line x1="58" y1="14" x2="58" y2="65" stroke="var(--barrel-shadow)" stroke-width="0.7" opacity="0.7"/>
-    <line x1="68" y1="14" x2="68" y2="65" stroke="var(--barrel-shadow)" stroke-width="0.7" opacity="0.7"/>
-    <line x1="78" y1="14" x2="78" y2="65" stroke="var(--barrel-shadow)" stroke-width="0.7" opacity="0.7"/>
-    <!-- right-side shading (cylinder cue) -->
-    <rect x="78" y="14" width="10" height="51" fill="var(--barrel-shadow)" opacity="0.3" rx="2"/>
-    <rect class="barrel-band" x="36" y="22" width="54" height="4"/>
-    <rect class="barrel-band" x="36" y="55" width="54" height="4"/>
-    <ellipse class="barrel" cx="63" cy="68" rx="25" ry="6"/>
+    <ellipse class="barrel" cx="90" cy="14" rx="36" ry="8"/>
+    <rect class="barrel" x="54" y="14" width="72" height="76" rx="5"/>
+    <line x1="68" y1="16" x2="68" y2="88" stroke="var(--barrel-shadow)" stroke-width="0.8" opacity="0.7"/>
+    <line x1="80" y1="16" x2="80" y2="88" stroke="var(--barrel-shadow)" stroke-width="0.8" opacity="0.7"/>
+    <line x1="92" y1="16" x2="92" y2="88" stroke="var(--barrel-shadow)" stroke-width="0.8" opacity="0.7"/>
+    <line x1="104" y1="16" x2="104" y2="88" stroke="var(--barrel-shadow)" stroke-width="0.8" opacity="0.7"/>
+    <line x1="116" y1="16" x2="116" y2="88" stroke="var(--barrel-shadow)" stroke-width="0.8" opacity="0.7"/>
+    <rect x="112" y="16" width="14" height="72" fill="var(--barrel-shadow)" opacity="0.3" rx="2"/>
+    <rect class="barrel-band" x="51" y="28" width="78" height="5"/>
+    <rect class="barrel-band" x="51" y="76" width="78" height="5"/>
+    <ellipse class="barrel" cx="90" cy="92" rx="36" ry="8"/>
     <!-- LEFT barrel -->
-    <ellipse class="barrel" cx="22" cy="22" rx="20" ry="5"/>
-    <rect class="barrel" x="2" y="22" width="40" height="50" rx="3"/>
-    <line x1="11" y1="24" x2="11" y2="70" stroke="var(--barrel-shadow)" stroke-width="0.6" opacity="0.7"/>
-    <line x1="20" y1="24" x2="20" y2="70" stroke="var(--barrel-shadow)" stroke-width="0.6" opacity="0.7"/>
-    <line x1="29" y1="24" x2="29" y2="70" stroke="var(--barrel-shadow)" stroke-width="0.6" opacity="0.7"/>
-    <rect x="32" y="24" width="10" height="46" fill="var(--barrel-shadow)" opacity="0.35" rx="2"/>
-    <rect class="barrel-band" x="0" y="32" width="44" height="3.5"/>
-    <rect class="barrel-band" x="0" y="62" width="44" height="3.5"/>
-    <ellipse class="barrel" cx="22" cy="73" rx="20" ry="5"/>
+    <ellipse class="barrel" cx="32" cy="30" rx="28" ry="7"/>
+    <rect class="barrel" x="4" y="30" width="56" height="68" rx="4"/>
+    <line x1="16" y1="32" x2="16" y2="96" stroke="var(--barrel-shadow)" stroke-width="0.7" opacity="0.7"/>
+    <line x1="28" y1="32" x2="28" y2="96" stroke="var(--barrel-shadow)" stroke-width="0.7" opacity="0.7"/>
+    <line x1="40" y1="32" x2="40" y2="96" stroke="var(--barrel-shadow)" stroke-width="0.7" opacity="0.7"/>
+    <rect x="48" y="32" width="12" height="64" fill="var(--barrel-shadow)" opacity="0.35" rx="2"/>
+    <rect class="barrel-band" x="0" y="42" width="64" height="4.5"/>
+    <rect class="barrel-band" x="0" y="86" width="64" height="4.5"/>
+    <ellipse class="barrel" cx="32" cy="100" rx="28" ry="7"/>
     <!-- RIGHT barrel -->
-    <ellipse class="barrel" cx="104" cy="22" rx="20" ry="5"/>
-    <rect class="barrel" x="84" y="22" width="40" height="50" rx="3"/>
-    <line x1="93" y1="24" x2="93" y2="70" stroke="var(--barrel-shadow)" stroke-width="0.6" opacity="0.7"/>
-    <line x1="102" y1="24" x2="102" y2="70" stroke="var(--barrel-shadow)" stroke-width="0.6" opacity="0.7"/>
-    <line x1="111" y1="24" x2="111" y2="70" stroke="var(--barrel-shadow)" stroke-width="0.6" opacity="0.7"/>
-    <rect x="114" y="24" width="10" height="46" fill="var(--barrel-shadow)" opacity="0.4" rx="2"/>
-    <rect class="barrel-band" x="82" y="32" width="44" height="3.5"/>
-    <rect class="barrel-band" x="82" y="62" width="44" height="3.5"/>
-    <ellipse class="barrel" cx="104" cy="73" rx="20" ry="5"/>
+    <ellipse class="barrel" cx="148" cy="30" rx="28" ry="7"/>
+    <rect class="barrel" x="120" y="30" width="56" height="68" rx="4"/>
+    <line x1="132" y1="32" x2="132" y2="96" stroke="var(--barrel-shadow)" stroke-width="0.7" opacity="0.7"/>
+    <line x1="144" y1="32" x2="144" y2="96" stroke="var(--barrel-shadow)" stroke-width="0.7" opacity="0.7"/>
+    <line x1="156" y1="32" x2="156" y2="96" stroke="var(--barrel-shadow)" stroke-width="0.7" opacity="0.7"/>
+    <rect x="164" y="32" width="12" height="64" fill="var(--barrel-shadow)" opacity="0.4" rx="2"/>
+    <rect class="barrel-band" x="116" y="42" width="64" height="4.5"/>
+    <rect class="barrel-band" x="116" y="86" width="64" height="4.5"/>
+    <ellipse class="barrel" cx="148" cy="100" rx="28" ry="7"/>
   </g>
 
   <!-- GINGER BEER banner -->
-  <path class="banner-shadow" d="M 295 720 L 320 712 L 320 758 L 295 750 Z"/>
-  <path class="banner-shadow" d="M 520 720 L 495 712 L 495 758 L 520 750 Z"/>
-  <path class="banner" d="M 320 712 L 495 712 L 495 758 L 320 758 Z" />
-  <text class="text-cream" x="408" y="744" font-size="20" text-anchor="middle">GINGER BEER</text>
+  <path class="banner-shadow" d="M 260 740 L 290 730 L 290 780 L 260 770 Z"/>
+  <path class="banner-shadow" d="M 700 740 L 670 730 L 670 780 L 700 770 Z"/>
+  <path class="banner" d="M 290 730 L 670 730 L 670 780 L 290 780 Z" />
+  <text class="text-cream" x="480" y="765" font-size="26" text-anchor="middle">GINGER BEER</text>
 
-  <text class="text-dark" x="408" y="788" font-size="11" text-anchor="middle" opacity="0.85">AUSTRALISCHES</text>
-  <text class="text-dark" x="408" y="800" font-size="11" text-anchor="middle" opacity="0.85">FAMILIENUNTERNEHMEN</text>
-  <text class="text-dark" x="408" y="820" font-size="11" text-anchor="middle" opacity="0.85">SOCIÉTÉ FAMILIALE D'ORIGINE</text>
-  <text class="text-dark" x="408" y="832" font-size="11" text-anchor="middle" opacity="0.85">AUSTRALIENNE</text>
+  <!-- Sub-text below banner -->
+  <text class="text-dark" x="480" y="810" font-size="13" text-anchor="middle" opacity="0.85">AUSTRALISCHES</text>
+  <text class="text-dark" x="480" y="825" font-size="13" text-anchor="middle" opacity="0.85">FAMILIENUNTERNEHMEN</text>
+  <text class="text-dark" x="480" y="845" font-size="13" text-anchor="middle" opacity="0.85">SOCIÉTÉ FAMILIALE D'ORIGINE</text>
+  <text class="text-dark" x="480" y="858" font-size="13" text-anchor="middle" opacity="0.85">AUSTRALIENNE</text>
 
-  <path d="M 415 855 q 4 -3 6 -7 q 1 4 4 5 q 2 1 4 -1 q 1 4 -1 7 q -2 2 -7 1 q -2 -1 -6 -5 z" fill="var(--text-dark)" opacity="0.85"/>
+  <!-- Tiny kangaroo silhouette -->
+  <path d="M 488 870 q 4 -3 6 -7 q 1 4 4 5 q 2 1 4 -1 q 1 4 -1 7 q -2 2 -7 1 q -2 -1 -6 -5 z" fill="var(--text-dark)" opacity="0.85"/>
 
-  <text class="text-dark" x="320" y="690" font-size="10" opacity="0.85">375 mL e</text>
+  <!-- 375 mL volume -->
+  <text class="text-dark" x="295" y="700" font-size="11" opacity="0.85">375 mL e</text>
 
-  <circle cx="495" cy="775" r="22" fill="var(--label-yellow)" stroke="var(--outline)" stroke-width="var(--stroke-thin)"/>
-  <text class="text-dark" x="495" y="781" font-size="14" text-anchor="middle" font-weight="bold">3</text>
+  <!-- Yellow "3" seal on the right -->
+  <circle cx="668" cy="800" r="26" fill="var(--label-yellow)" stroke="var(--outline)" stroke-width="var(--stroke-thin)"/>
+  <text class="text-dark" x="668" y="809" font-size="18" text-anchor="middle" font-weight="bold">3</text>
 
   <!-- ============================================================ -->
-  <!-- HAND: a "C" shape gripping the bottle. Palm at bottom +       -->
-  <!-- thumb wrapping the left + 4 fingers curling around the right. -->
-  <!-- Designed so the diagnostic .skin density lifts off 0.03.      -->
+  <!-- HAND — wraps the wider bottle. Thumb left, 4 fingers right,   -->
+  <!-- palm/wrist at bottom, hand-shaped (not slab-shaped).          -->
   <!-- ============================================================ -->
 
-  <!-- Palm + back of hand, narrow vertical mass at the bottom. -->
+  <!-- Palm + wrist mass at bottom, slightly cupped so it cradles    -->
   <path class="skin" d="
-    M 200 1280
-    L 200 1100
-    Q 215 990 290 970
-    L 540 970
-    Q 690 985 740 1060
-    L 760 1280
+    M 130 1280
+    L 130 1090
+    Q 150 990 250 970
+    Q 360 945 480 950
+    Q 600 945 700 970
+    Q 800 990 820 1090
+    L 820 1280
     Z" />
 
-  <!-- Subtle palm shadow on the left edge -->
-  <path class="skin-shadow" d="M 200 1100 Q 215 1000 290 980 L 290 1010 Q 230 1030 220 1110 Z" opacity="0.55"/>
+  <!-- Subtle palm shadow on the left (light from upper-right) -->
+  <path class="skin-shadow" d="M 130 1090 Q 145 1010 230 985 L 245 1010 Q 165 1030 150 1100 Z" opacity="0.55"/>
 
-  <!-- Palm creases — three darker lines suggesting the natural folds where
-       the hand grips. Adds organic detail and lifts .crease density. -->
-  <path class="crease" d="M 250 1090 Q 380 1075 510 1085" stroke-width="2.5"/>
-  <path class="crease" d="M 280 1140 Q 400 1125 540 1140" stroke-width="2"/>
-  <path class="crease" d="M 320 1190 Q 430 1180 580 1200" stroke-width="1.5" opacity="0.7"/>
+  <!-- Palm creases — three darker fold lines  -->
+  <path class="crease" d="M 200 1080 Q 380 1060 550 1075 Q 700 1080 760 1100" stroke-width="2.5"/>
+  <path class="crease" d="M 250 1140 Q 400 1125 570 1140 Q 700 1150 770 1170" stroke-width="2"/>
+  <path class="crease" d="M 290 1200 Q 450 1185 620 1200" stroke-width="1.5" opacity="0.7"/>
 
-  <!-- THUMB: wrapping the left side of the bottle, base at palm     -->
-  <!-- going up-and-around toward the bottle. Knuckle bend midway.   -->
+  <!-- THUMB on the left, base at the palm, tip wrapping toward the
+       bottle. Curved like a real thumb in grip position. -->
   <path class="skin" d="
-    M 215 990
-    Q 175 870 195 770
-    Q 215 745 250 770
-    Q 280 870 275 985
+    M 145 980
+    Q 100 850 130 730
+    Q 165 700 220 725
+    Q 270 850 270 980
     Z" />
-  <!-- Thumb shadow strip on the underside (broader for cylinder shading) -->
-  <path class="skin-shadow" d="M 195 770 Q 180 870 195 970 L 225 980 Q 220 880 220 800 Z" opacity="0.55"/>
-  <!-- Inner-edge stripe (deeper) -->
-  <path class="skin-deep" d="M 200 800 Q 195 880 210 960 L 220 960 Q 210 880 215 810 Z" opacity="0.4"/>
-  <!-- Thumb knuckle crease -->
-  <path class="crease" d="M 200 870 Q 240 860 270 870"/>
-  <!-- Thumbnail at the tip -->
-  <ellipse class="nail" cx="222" cy="765" rx="14" ry="10" transform="rotate(-15 222 765)"/>
-  <!-- Thumb knuckle highlight (lighter spot on top of bend) -->
-  <ellipse fill="var(--skin-highlight)" cx="240" cy="855" rx="14" ry="8" opacity="0.6"/>
+  <path class="skin-shadow" d="M 130 730 Q 110 850 135 970 L 165 980 Q 145 870 155 770 Z" opacity="0.55"/>
+  <path class="skin-deep" d="M 145 770 Q 130 870 155 960 L 165 960 Q 150 870 160 800 Z" opacity="0.4"/>
+  <!-- Thumb knuckle crease + highlight + nail -->
+  <path class="crease" d="M 145 870 Q 200 855 260 870"/>
+  <ellipse fill="var(--skin-highlight)" cx="200" cy="850" rx="22" ry="10" opacity="0.55"/>
+  <ellipse class="nail" cx="170" cy="725" rx="18" ry="12" transform="rotate(-12 170 725)"/>
 
-  <!-- INDEX FINGER: top, mostly extended, visible from base to tip -->
+  <!-- INDEX FINGER — top one on the right, mostly extended -->
   <path class="skin" d="
-    M 590 985
-    Q 600 870 660 820
-    Q 700 815 715 855
-    Q 710 925 685 980
+    M 555 970
+    Q 565 830 640 770
+    Q 695 760 720 810
+    Q 715 895 685 970
     Z" />
-  <!-- Lower-side cylinder shading -->
-  <path class="skin-shadow" d="M 590 985 Q 605 905 660 855 L 690 880 Q 625 925 605 990 Z" opacity="0.55"/>
-  <path class="skin-deep" d="M 605 980 Q 615 920 660 870 L 670 882 Q 625 925 615 985 Z" opacity="0.35"/>
-  <path class="crease" d="M 615 920 Q 660 905 700 920"/>
-  <path class="crease" d="M 605 960 Q 650 945 690 960"/>
-  <ellipse class="nail" cx="685" cy="833" rx="13" ry="9" transform="rotate(35 685 833)"/>
-  <ellipse fill="var(--skin-highlight)" cx="675" cy="900" rx="14" ry="8" opacity="0.55" transform="rotate(20 675 900)"/>
+  <path class="skin-shadow" d="M 555 970 Q 570 870 640 805 L 680 830 Q 590 880 575 980 Z" opacity="0.55"/>
+  <path class="skin-deep" d="M 580 970 Q 600 890 645 830 L 660 845 Q 615 890 600 970 Z" opacity="0.35"/>
+  <path class="crease" d="M 580 880 Q 645 860 705 880"/>
+  <path class="crease" d="M 575 920 Q 640 900 700 920"/>
+  <ellipse class="nail" cx="690" cy="785" rx="16" ry="10" transform="rotate(40 690 785)"/>
+  <ellipse fill="var(--skin-highlight)" cx="660" cy="850" rx="18" ry="9" opacity="0.55"/>
 
-  <!-- MIDDLE FINGER: slightly bent -->
+  <!-- MIDDLE FINGER — slightly bent -->
   <path class="skin" d="
-    M 670 990
-    Q 720 935 770 925
-    Q 800 935 800 980
-    Q 770 1010 695 1015
+    M 640 980
+    Q 705 920 770 905
+    Q 805 915 805 965
+    Q 770 1000 660 1010
     Z" />
-  <path class="skin-shadow" d="M 670 990 Q 720 945 770 938 L 790 960 Q 730 980 685 1000 Z" opacity="0.5"/>
-  <path class="skin-deep" d="M 685 1005 Q 730 970 780 950 L 785 962 Q 740 985 695 1010 Z" opacity="0.3"/>
-  <path class="crease" d="M 695 970 Q 740 955 785 965"/>
-  <ellipse class="nail" cx="785" cy="945" rx="11" ry="8" transform="rotate(60 785 945)"/>
-  <ellipse fill="var(--skin-highlight)" cx="745" cy="975" rx="13" ry="6" opacity="0.55"/>
+  <path class="skin-shadow" d="M 640 980 Q 705 925 765 910 L 785 940 Q 720 965 660 1000 Z" opacity="0.5"/>
+  <path class="skin-deep" d="M 670 1000 Q 720 960 770 935 L 780 950 Q 735 985 685 1010 Z" opacity="0.3"/>
+  <path class="crease" d="M 680 960 Q 730 945 790 955"/>
+  <ellipse class="nail" cx="790" cy="925" rx="14" ry="9" transform="rotate(60 790 925)"/>
+  <ellipse fill="var(--skin-highlight)" cx="745" cy="965" rx="16" ry="7" opacity="0.55"/>
 
-  <!-- RING FINGER: more bent -->
+  <!-- RING FINGER — more bent -->
   <path class="skin" d="
-    M 700 1020
-    Q 760 1015 810 1045
-    Q 815 1090 760 1095
-    Q 700 1080 690 1050
+    M 670 1015
+    Q 740 1010 800 1040
+    Q 810 1085 745 1095
+    Q 670 1075 660 1045
     Z" />
-  <path class="skin-shadow" d="M 700 1020 Q 760 1020 810 1050 L 810 1065 Q 750 1050 700 1050 Z" opacity="0.4"/>
-  <path class="crease" d="M 720 1060 Q 770 1055 805 1075"/>
-  <ellipse class="nail" cx="800" cy="1042" rx="10" ry="7"/>
+  <path class="skin-shadow" d="M 670 1015 Q 740 1015 800 1045 L 800 1062 Q 730 1045 670 1045 Z" opacity="0.45"/>
+  <path class="crease" d="M 685 1060 Q 745 1055 795 1075"/>
+  <ellipse class="nail" cx="800" cy="1037" rx="13" ry="8"/>
 
   <!-- PINKY tip peeking -->
   <path class="skin" d="
-    M 720 1110
-    Q 770 1108 798 1135
-    Q 790 1170 750 1170
-    Q 720 1150 715 1130
+    M 700 1110
+    Q 760 1108 790 1140
+    Q 780 1175 740 1175
+    Q 700 1155 695 1135
     Z" />
-  <path class="crease" d="M 730 1145 Q 770 1140 790 1155"/>
+  <path class="crease" d="M 715 1145 Q 760 1140 785 1158"/>
 
-  <!-- Inter-finger seams (deeper crease between adjacent fingers) -->
-  <path class="crease" d="M 700 990 Q 700 1010 690 1020" stroke-width="2"/>
-  <path class="crease" d="M 720 1015 Q 720 1030 712 1045" stroke-width="2"/>
-  <path class="crease" d="M 728 1090 Q 730 1100 725 1112" stroke-width="2"/>
+  <!-- Inter-finger seams (deeper crease lines) -->
+  <path class="crease" d="M 660 980 Q 660 998 645 1010" stroke-width="2"/>
+  <path class="crease" d="M 685 1015 Q 685 1030 678 1045" stroke-width="2"/>
+  <path class="crease" d="M 705 1090 Q 707 1105 700 1115" stroke-width="2"/>
 
   <g id="trace-ref" display="none" transform="scale(1 1)">
     <style>#trace-ref path { fill: none !important; stroke: #ff00ff; stroke-width: 0.5; vector-effect: non-scaling-stroke; opacity: 0.85; }</style>
