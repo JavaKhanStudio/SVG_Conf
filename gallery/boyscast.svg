@@ -4,9 +4,9 @@
       --background-dark-color: #1a1a1a;
       --text-white-color: #ffffff;
       --text-red-color: #d63a2a;
-      --skin-light-color: #e6c0a3;
+      --skin-light-color: #e6c0a3;      /* @ws mix=skin-mid-color:0.48 */
       --skin-mid-color: #c08a6a;
-      --skin-shadow-color: #8e5a40;
+      --skin-shadow-color: #8e5a40;      /* @ws mix=skin-mid-color:-0.33 */
       --hair-brown-color: #5a4030;
       --bg-color: #000000;
 

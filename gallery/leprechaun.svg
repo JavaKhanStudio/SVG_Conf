@@ -6,7 +6,7 @@
       --hat-green-color: #1d5d24;
       --skin-color: #F1C39A;
       --beard-orange-color: #D65D23;
-      --beard-brown-color: #7a4a20;
+      --beard-brown-color: #7a4a20;      /* @ws mix=beard-orange-color:-0.24 */
       --gold-color: #ECC329;
       --outline-color: #1a1a1a;
       --highlight-color: #FDFDFD;

@@ -4,11 +4,11 @@
       --wall-color: #b7b6b7;
       --fur-cream-color: #dedbdb;
       --fur-tan-color: #cb9464;
-      --fur-brown-color: #55371a;      /* @ws mix=fur-tan-color:-0.55 */
+      --fur-brown-color: #55371a;      /* @ws mix=fur-tan-color:-0.65 */
       --feature-dark-color: #10100f;
-      --couch-shadow-color: #303140;
+      --couch-shadow-color: #303140;      /* @ws mix=couch-mid-color:-0.41 */
       --couch-mid-color: #585664;
-      --couch-light-color: #7e7f90;
+      --couch-light-color: #7e7f90;      /* @ws mix=couch-mid-color:0.25 */
       --bg-color: #ffffff;
     }
     .background { fill: var(--bg-color); }
