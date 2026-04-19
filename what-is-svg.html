@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,15 +9,46 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="icon" href="images/LogoHeaderSBP.png" type="image/png">
     <style>
-        .zoom-target { transition: transform 0.3s ease; transform-origin: center center; }
-        .pixelated { image-rendering: pixelated; }
-        .feature-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .feature-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 1rem; background: #f8f9fa; border-radius: 8px; }
-        .feature-icon { font-size: 1.5rem; flex-shrink: 0; }
-        .feature-icon.blue { color: var(--primary-blue); }
-        .feature-icon.red { color: var(--primary-red); }
+        .zoom-target {
+            transition: transform 0.3s ease;
+            transform-origin: center center;
+        }
+
+        .pixelated {
+            image-rendering: pixelated;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .feature-icon.blue {
+            color: var(--primary-blue);
+        }
+
+        .feature-icon.red {
+            color: var(--primary-red);
+        }
     </style>
 </head>
+
 <body>
     <div id="header-placeholder"></div>
 
@@ -33,10 +65,12 @@
                 <div class="comparison-side vector">
                     <h4 data-i18n="what_vector_title">Image Vectorielle (SVG)</h4>
                     <div class="comparison-box" id="vector-box">
-                        <svg id="vector-demo" viewBox="0 0 100 100" width="180" height="180" xmlns="http://www.w3.org/2000/svg" class="zoom-target">
-                            <circle cx="50" cy="50" r="40" fill="#0752CF" opacity="0.9"/>
-                            <circle cx="50" cy="50" r="28" fill="none" stroke="white" stroke-width="2"/>
-                            <polygon points="50,22 55,40 73,40 58,50 63,68 50,57 37,68 42,50 27,40 45,40" fill="white" opacity="0.9"/>
+                        <svg id="vector-demo" viewBox="0 0 100 100" width="180" height="180"
+                            xmlns="http://www.w3.org/2000/svg" class="zoom-target">
+                            <circle cx="50" cy="50" r="40" fill="#0752CF" opacity="0.9" />
+                            <circle cx="50" cy="50" r="28" fill="none" stroke="white" stroke-width="2" />
+                            <polygon points="50,22 55,40 73,40 58,50 63,68 50,57 37,68 42,50 27,40 45,40" fill="white"
+                                opacity="0.9" />
                         </svg>
                     </div>
                     <div class="zoom-controls">
@@ -65,7 +99,8 @@
         <div class="split-layout">
             <div class="content-block">
                 <h3 data-i18n="what_vector_title">Image Vectorielle (SVG)</h3>
-                <p data-i18n="what_vector_desc">Definie par des formules mathematiques. Chaque forme est decrite par des equations, ce qui permet un redimensionnement infini sans perte de qualite.</p>
+                <p data-i18n="what_vector_desc">Definie par des formules mathematiques. Chaque forme est decrite par des
+                    equations, ce qui permet un redimensionnement infini sans perte de qualite.</p>
                 <div class="code-block">
                     <span class="code-label">SVG</span>
                     <code><span class="tag">&lt;circle</span> <span class="attr">cx</span>=<span class="val">"50"</span> <span class="attr">cy</span>=<span class="val">"50"</span> <span class="attr">r</span>=<span class="val">"40"</span><span class="tag">/&gt;</span>
@@ -74,7 +109,8 @@
             </div>
             <div class="content-block">
                 <h3 data-i18n="what_raster_title">Image Matricielle (PNG/JPG)</h3>
-                <p data-i18n="what_raster_desc">Composee d'une grille de pixels. Chaque pixel a une couleur fixe. En zoomant, les pixels deviennent visibles et l'image parait floue.</p>
+                <p data-i18n="what_raster_desc">Composee d'une grille de pixels. Chaque pixel a une couleur fixe. En
+                    zoomant, les pixels deviennent visibles et l'image parait floue.</p>
                 <div class="code-block">
                     <span class="code-label">Pixel Grid</span>
                     <code>[#0752CF] [#0752CF] [#0752CF] [#fff]
@@ -116,15 +152,25 @@
             </div>
         </div>
 
+        <!-- Why AI loves SVG -->
+        <div class="content-block" style="border-left: 4px solid #9b59b6; background: linear-gradient(135deg, rgba(155, 89, 182, 0.04), rgba(186, 1, 1, 0.04));">
+            <h3 data-i18n="what_ai_title"><i class="fa-solid fa-robot" style="color:#9b59b6; margin-right:0.5rem;"></i>Pourquoi le SVG plait a l'IA</h3>
+            <p data-i18n="what_ai_p1">Un SVG, c'est du texte. Du XML lisible, structure, avec des noms d'attributs explicites (<code>cx</code>, <code>fill</code>, <code>d</code>...). Pour un grand modele de langage, c'est exactement le terrain ou il excelle : il manipule des tokens, pas des pixels.</p>
+            <p data-i18n-html="what_ai_p2">La meme image en PNG ne serait qu'un tableau opaque de pixels. Une IA peut <em>reconnaitre</em> ce qu'elle voit, mais ne peut pas la modifier de maniere precise. En SVG, elle peut ajouter une forme, changer une couleur, ajuster une <a class="inline-link" href="bezier.html">courbe</a>, ou meme generer toute l'image a partir d'une description.</p>
+            <p data-i18n-html="what_ai_p3">Toutes les illustrations IA de la <a class="inline-link" href="gallery.html">galerie</a> ont ete produites de cette facon : un prompt, une reponse en texte SVG, directement utilisable dans le navigateur.</p>
+        </div>
+
         <!-- When to use -->
         <div class="content-block">
             <h3 data-i18n="what_when_title">Quand utiliser le SVG ?</h3>
             <div class="split-layout">
-                <div style="padding:1rem; background:#e8f0fe; border-radius:8px; border-left: 4px solid var(--primary-blue);">
+                <div
+                    style="padding:1rem; background:#e8f0fe; border-radius:8px; border-left: 4px solid var(--primary-blue);">
                     <p><strong>SVG</strong></p>
                     <p data-i18n="what_when_svg">SVG : icones, logos, illustrations, graphiques, animations</p>
                 </div>
-                <div style="padding:1rem; background:#fce8e8; border-radius:8px; border-left: 4px solid var(--primary-red);">
+                <div
+                    style="padding:1rem; background:#fce8e8; border-radius:8px; border-left: 4px solid var(--primary-red);">
                     <p><strong>PNG / JPG</strong></p>
                     <p data-i18n="what_when_raster">PNG/JPG : photos, images complexes avec beaucoup de couleurs</p>
                 </div>
@@ -140,46 +186,40 @@
 
     <script src="js/main.js"></script>
     <script>
-        // Draw the low-res raster version
+        // Render the raster demo at the canvas's native resolution so it
+        // looks sharp at 1x — the pixel grid only becomes visible once the
+        // user zooms in (CSS scale + image-rendering: pixelated).
         function drawRaster() {
             const canvas = document.getElementById('raster-demo');
             const ctx = canvas.getContext('2d');
-            // Draw at low resolution to simulate raster
-            const size = 24;
-            const offscreen = document.createElement('canvas');
-            offscreen.width = size;
-            offscreen.height = size;
-            const octx = offscreen.getContext('2d');
+            const w = canvas.width, h = canvas.height;
+            ctx.clearRect(0, 0, w, h);
 
-            // Draw same design as SVG but at low res
-            octx.fillStyle = '#0752CF';
-            octx.beginPath();
-            octx.arc(size/2, size/2, size*0.4, 0, Math.PI*2);
-            octx.fill();
+            const cx = w / 2, cy = h / 2;
 
-            octx.strokeStyle = 'white';
-            octx.lineWidth = 1;
-            octx.beginPath();
-            octx.arc(size/2, size/2, size*0.28, 0, Math.PI*2);
-            octx.stroke();
+            ctx.fillStyle = '#0752CF';
+            ctx.beginPath();
+            ctx.arc(cx, cy, w * 0.4, 0, Math.PI * 2);
+            ctx.fill();
 
-            // Star
-            octx.fillStyle = 'white';
-            octx.beginPath();
-            const cx = size/2, cy = size/2, spikes = 5, outerR = size*0.28, innerR = size*0.14;
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(cx, cy, w * 0.28, 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            const spikes = 5, outerR = w * 0.28, innerR = w * 0.14;
             for (let i = 0; i < spikes * 2; i++) {
                 const r = i % 2 === 0 ? outerR : innerR;
                 const angle = (i * Math.PI / spikes) - Math.PI / 2;
                 const x = cx + Math.cos(angle) * r;
                 const y = cy + Math.sin(angle) * r;
-                i === 0 ? octx.moveTo(x, y) : octx.lineTo(x, y);
+                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
             }
-            octx.closePath();
-            octx.fill();
-
-            // Draw to visible canvas with pixelation
-            ctx.imageSmoothingEnabled = false;
-            ctx.drawImage(offscreen, 0, 0, canvas.width, canvas.height);
+            ctx.closePath();
+            ctx.fill();
         }
 
         let vectorScale = 1, rasterScale = 1;
@@ -200,4 +240,5 @@
         drawRaster();
     </script>
 </body>
+
 </html>

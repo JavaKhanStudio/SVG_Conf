@@ -177,7 +177,8 @@
         <div class="content-block">
             <h3 data-i18n="anat_path_title">La balise Path</h3>
             <p data-i18n="anat_path_desc">L'element &lt;path&gt; est le plus puissant du SVG. Il peut dessiner n'importe quelle forme avec des commandes de deplacement.</p>
-            <p data-i18n="anat_path_commands" style="font-style:italic; color: var(--text-light);">Commandes principales : M (deplacer), L (ligne), H (horizontal), V (vertical), C (courbe cubique), Q (courbe quadratique), A (arc), Z (fermer)</p>
+            <p data-i18n-html="anat_path_commands" style="font-style:italic; color: var(--text-light);">Commandes principales : M (deplacer), L (ligne), H (horizontal), V (vertical), <a class="inline-link" href="bezier.html">C (courbe cubique), Q (courbe quadratique)</a>, A (arc), Z (fermer)</p>
+            <p data-i18n-html="anat_path_ai" style="margin-top:1rem; padding:0.75rem 1rem; background:rgba(155, 89, 182, 0.06); border-left:3px solid #9b59b6; border-radius:0 6px 6px 0;"><i class="fa-solid fa-robot" style="color:#9b59b6; margin-right:0.4rem;"></i><strong>Cote IA :</strong> ces commandes (<code>M</code>, <code>C</code>, <code>Q</code>, <code>L</code>...) sont exactement ce qu'un LLM ecrit quand on lui demande de dessiner. Une fleur, un coeur, un logo : tout devient une chaine de caracteres comme <code>d="M30,45 C30,45 10,30 10,18..."</code>. Pour aller plus loin, voir les <a class="inline-link" href="bezier.html">courbes de Bezier</a>.</p>
 
             <div class="svg-display" style="margin-top:1.5rem;">
                 <svg viewBox="0 0 500 200" width="100%" xmlns="http://www.w3.org/2000/svg" style="max-width:500px;">
@@ -233,7 +234,7 @@
         <!-- Styling -->
         <div class="content-block">
             <h3 data-i18n="anat_styling_title">Stylisation</h3>
-            <p data-i18n="anat_styling_desc">Les elements SVG peuvent etre styles avec des attributs, du CSS inline, ou des feuilles de style externes.</p>
+            <p data-i18n-html="anat_styling_desc">Les elements SVG peuvent etre styles avec des attributs, du CSS inline, ou des feuilles de style externes. Combine avec des <strong>variables CSS</strong>, le meme SVG devient parametrable a la volee — c'est exactement ce que fait <a class="inline-link" href="workshop.html">l'atelier</a>.</p>
             <div class="split-layout">
                 <div class="code-block">
                     <span class="code-label">Attributes</span>

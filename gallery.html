@@ -35,6 +35,10 @@
             <p data-i18n="gal_subtitle">Une collection d'exemples SVG, des fleurs aux os en passant par l'IA</p>
         </div>
 
+        <div class="content-block" style="text-align:center; background:rgba(7,82,207,0.04); border:1px dashed var(--border-color);">
+            <p data-i18n-html="gal_techniques">Les exemples ci-dessous combinent des techniques vues ailleurs dans le parcours : <a class="inline-link" href="svg-anatomy.html">anatomie</a> et formes de base, <a class="inline-link" href="bezier.html">courbes de Bezier</a> pour les paths, <a class="inline-link" href="animations.html">animations</a> pour le mouvement, et <a class="inline-link" href="live-demo.html">defs/use + variables CSS</a> pour les composants reutilisables comme l'os ci-dessous.</p>
+        </div>
+
         <!-- Filter tabs -->
         <div class="filter-tabs">
             <button class="filter-btn active" data-filter="all" data-i18n="gal_tab_all">Tout</button>
@@ -47,6 +51,7 @@
         <!-- Bone Step-by-step (shown only in bone or all filter) -->
         <div class="content-block gallery-section" data-category="bone" id="bone-section">
             <h3 data-i18n="gal_tab_bones">Os - Construction etape par etape</h3>
+            <p data-i18n-html="gal_bone_techniques" style="font-size:0.9rem; color:var(--text-light); margin-bottom:0.5rem;">Chaque etape ajoute une technique : <a class="inline-link" href="svg-anatomy.html">viewBox</a>, transforms, gradients, filters. Le passage d'icone plate a os 3D illustre comment quelques attributs SVG bien choisis suffisent a creer de la profondeur.</p>
             <p class="arrow-hint">&larr; scroll &rarr;</p>
             <div class="step-scroll">
                 <div class="step-item">

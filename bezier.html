@@ -108,6 +108,40 @@
             </div>
         </div>
 
+        <!-- Real LLM-generated path -->
+        <div class="content-block" style="border-left: 4px solid #9b59b6; background: linear-gradient(135deg, rgba(155, 89, 182, 0.04), rgba(7, 82, 207, 0.04));">
+            <h3 data-i18n="bez_ai_title"><i class="fa-solid fa-robot" style="color:#9b59b6; margin-right:0.5rem;"></i>Une courbe ecrite par une IA</h3>
+            <p data-i18n-html="bez_ai_desc">Voici la fleur en cloche d'une heather, dessinee par Claude. Toute la corolle est un seul <code>&lt;path&gt;</code> compose de <strong>commandes Q (quadratiques)</strong> chainees — exactement ce que tu as appris a manipuler plus haut.</p>
+
+            <div class="split-layout" style="margin-top:1.5rem;">
+                <div class="svg-display" style="background:#fafafa;">
+                    <svg viewBox="0 0 100 100" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50 80 Q50 70 50 60" fill="none" stroke="#7A8C38" stroke-width="1.5"/>
+                        <path d="M50 60 Q55 60 58 55 Q60 50 58 45 Q55 40 50 40 Q45 40 42 45 Q40 50 42 55 Q45 60 50 60"
+                              fill="#E6A5B9" stroke="#D4879C" stroke-width="0.8"/>
+                        <path d="M50 60 Q50 55 50 40" fill="none" stroke="#D4879C" stroke-width="0.3" opacity="0.7"/>
+                        <path d="M55 58 Q55 50 55 42" fill="none" stroke="#D4879C" stroke-width="0.3" opacity="0.7"/>
+                        <path d="M45 58 Q45 50 45 42" fill="none" stroke="#D4879C" stroke-width="0.3" opacity="0.7"/>
+                        <circle cx="50" cy="45" r="0.8" fill="#FFD700"/>
+                        <circle cx="48" cy="47" r="0.6" fill="#FFD700"/>
+                        <circle cx="52" cy="47" r="0.6" fill="#FFD700"/>
+                    </svg>
+                </div>
+                <div class="code-block">
+                    <span class="code-label">d</span>
+                    <code><span class="tag">M</span> 50 60
+<span class="tag">Q</span> 55 60 58 55
+<span class="tag">Q</span> 60 50 58 45
+<span class="tag">Q</span> 55 40 50 40
+<span class="tag">Q</span> 45 40 42 45
+<span class="tag">Q</span> 40 50 42 55
+<span class="tag">Q</span> 45 60 50 60</code>
+                </div>
+            </div>
+
+            <p data-i18n-html="bez_ai_takeaway" style="margin-top:1rem;">Chaque <code>Q</code> = un point de controle + un point d'arrivee. Sept commandes, une fleur. C'est ca qui rend les SVGs si interessants pour l'IA : <strong>sortie courte, structure claire, modifiable a la main</strong>. Tu pourrais ouvrir ce fichier et changer une couleur, deplacer un petale, ou ajouter une etamine — sans regenerer quoi que ce soit. Voir d'autres exemples dans la <a class="inline-link" href="gallery.html">galerie</a>.</p>
+        </div>
+
         <!-- Cheatsheet reference -->
         <div class="content-block" style="text-align:center;">
             <h3 data-i18n="anat_cheatsheet">Aide-memoire Bezier</h3>
