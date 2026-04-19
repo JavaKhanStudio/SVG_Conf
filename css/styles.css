@@ -125,6 +125,13 @@ nav a.active {
     color: white;
 }
 
+/* Header right-side cluster (lang + hamburger) */
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 /* Mobile hamburger */
 .hamburger {
     display: none;
