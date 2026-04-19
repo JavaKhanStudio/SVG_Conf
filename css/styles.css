@@ -616,6 +616,19 @@ footer .social-links a:hover {
     margin: 1rem 0;
 }
 
+/* Inline contextual links inside content prose */
+.content-block a.inline-link {
+    color: var(--primary-blue);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--primary-blue);
+    transition: color var(--transition), border-color var(--transition);
+}
+
+.content-block a.inline-link:hover {
+    color: var(--primary-red);
+    border-bottom-color: var(--primary-red);
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 900px) {
     .split-layout {

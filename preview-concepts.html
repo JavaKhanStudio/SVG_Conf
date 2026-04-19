@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview — Concepts grid (mockup)</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" href="images/LogoHeaderSBP.png" type="image/png">
+    <style>
+        /* Grid styles live here so they don't pollute the real stylesheet
+           until this proposal is approved. */
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+        }
+        .concept-card {
+            display: flex;
+            flex-direction: column;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.25rem;
+            text-decoration: none;
+            color: inherit;
+            border-top: 3px solid transparent;
+            transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+        }
+        .concept-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-top-color: var(--primary-blue);
+        }
+        .concept-card .concept-icon {
+            font-size: 1.6rem;
+            color: var(--primary-blue);
+            margin-bottom: 0.6rem;
+        }
+        .concept-card h4 {
+            font-size: 1.05rem;
+            color: var(--primary-blue);
+            margin-bottom: 0.35rem;
+        }
+        .concept-card p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            flex: 1;
+        }
+        .concept-card .concept-arrow {
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--primary-red);
+            font-weight: 600;
+        }
+        .preview-banner {
+            background: linear-gradient(135deg, #fff3cd, #ffeeba);
+            border-left: 4px solid #f0a500;
+            padding: 1rem 1.25rem;
+            margin: 1rem 0 1.5rem;
+            border-radius: var(--radius);
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+        <div class="page-hero">
+            <h2>Preview — grille de concepts</h2>
+            <p>Maquette d'une option de navigation pour la page d'accueil</p>
+        </div>
+
+        <div class="preview-banner">
+            <strong>Note :</strong> cette page est un mockup. Elle montre a quoi ressemblerait une "table des matieres" sous forme de cartes, en complement (ou en remplacement) de la liste de liens dans le texte. Aucune autre page n'est touchee.
+        </div>
+
+        <div class="content-block">
+            <h3>Explorer les concepts</h3>
+            <p>Chaque carte mene a la page qui developpe le sujet.</p>
+
+            <div class="concept-grid">
+                <a class="concept-card" href="what-is-svg.html">
+                    <div class="concept-icon"><i class="fa-solid fa-circle-question"></i></div>
+                    <h4>C'est quoi, un SVG ?</h4>
+                    <p>Vectoriel vs matriciel, et pourquoi ca change tout au zoom.</p>
+                    <span class="concept-arrow">Decouvrir &rarr;</span>
+                </a>
+                <a class="concept-card" href="svg-anatomy.html">
+                    <div class="concept-icon"><i class="fa-solid fa-code"></i></div>
+                    <h4>Anatomie d'un SVG</h4>
+                    <p>ViewBox, formes primitives, balise &lt;path&gt;, stylisation.</p>
+                    <span class="concept-arrow">Demonter &rarr;</span>
+                </a>
+                <a class="concept-card" href="live-demo.html">
+                    <div class="concept-icon"><i class="fa-solid fa-sliders"></i></div>
+                    <h4>Modification Live</h4>
+                    <p>Tweaker remplissage, contour, rotation et voir le code mis a jour.</p>
+                    <span class="concept-arrow">Essayer &rarr;</span>
+                </a>
+                <a class="concept-card" href="animations.html">
+                    <div class="concept-icon"><i class="fa-solid fa-play"></i></div>
+                    <h4>Animations</h4>
+                    <p>CSS keyframes, SMIL, stroke-dashoffset, morphing de path.</p>
+                    <span class="concept-arrow">Animer &rarr;</span>
+                </a>
+                <a class="concept-card" href="bezier.html">
+                    <div class="concept-icon"><i class="fa-solid fa-bezier-curve"></i></div>
+                    <h4>Courbes de Bezier</h4>
+                    <p>Quadratiques, cubiques, points de controle a glisser.</p>
+                    <span class="concept-arrow">Plier &rarr;</span>
+                </a>
+                <a class="concept-card" href="workshop.html">
+                    <div class="concept-icon"><i class="fa-solid fa-flask"></i></div>
+                    <h4>Atelier</h4>
+                    <p>SVGs parametriques avec controles live (couleurs, tailles, modes).</p>
+                    <span class="concept-arrow">Bricoler &rarr;</span>
+                </a>
+                <a class="concept-card" href="gallery.html">
+                    <div class="concept-icon"><i class="fa-solid fa-images"></i></div>
+                    <h4>Galerie</h4>
+                    <p>Exemples : fleurs, os pas-a-pas, generations IA, aide-memoires.</p>
+                    <span class="concept-arrow">Feuilleter &rarr;</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="content-block" style="text-align:center;">
+            <p style="color: var(--text-light); font-size: 0.9rem;">
+                Pour comparer : la page d'accueil actuelle utilise des liens en ligne dans le texte (option deja deployee).
+                <br>
+                <a class="inline-link" href="index.html">Voir l'index avec les liens en ligne</a>
+            </p>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
