@@ -13,8 +13,9 @@
 //   - no point2d controls         (none of the gallery SVGs use them)
 //
 // Reference photos: each manifest entry can carry a `reference` path
-// (relative to the workshop folder).  A toggle button swaps the SVG
-// preview for the source photo so visitors can compare the two.
+// (relative to the workshop folder).  A 3-state segmented control
+// (SVG / Compare / Photo) lets the visitor view the SVG alone, the
+// source photo alone, or both side-by-side in the preview pane.
 
 const $ = sel => document.querySelector(sel);
 
@@ -29,7 +30,7 @@ const state = {
   svgEl: null,
   variables: [],
   values: {},
-  showRef: false,
+  viewMode: 'svg',  // 'svg' | 'compare' | 'ref'
 };
 
 // ============================================================ boot
@@ -39,18 +40,9 @@ async function init() {
   renderFileList();
   if (state.files.length) selectFile(state.files[0].name);
   $('#reset-btn').addEventListener('click', resetToDefaults);
-  $('#ref-btn').addEventListener('click', toggleReference);
   $('#download-btn').addEventListener('click', downloadCurrentSvg);
-
-  // The language toggle in main.js calls translatePage(), which would
-  // overwrite our dynamically-set button label.  Re-apply after every
-  // language flip so the toggle text stays in sync with state.showRef.
-  const origToggle = window.toggleLanguage;
-  if (typeof origToggle === 'function') {
-    window.toggleLanguage = function() {
-      origToggle.apply(this, arguments);
-      applyRefVisibility();
-    };
+  for (const btn of document.querySelectorAll('.view-btn')) {
+    btn.addEventListener('click', () => setViewMode(btn.dataset.view));
   }
 }
 
@@ -73,7 +65,7 @@ async function selectFile(name) {
   state.currentRef = meta?.reference ? BASE + meta.reference : null;
   renderFileList();
   await loadSvg(name);
-  applyRefVisibility();
+  applyViewMode();
 }
 
 // ============================================================ SVG load + parse
@@ -309,34 +301,33 @@ function downloadCurrentSvg() {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-// ============================================================ reference photo toggle
-function toggleReference() {
-  state.showRef = !state.showRef;
-  applyRefVisibility();
+// ============================================================ view mode (SVG / Compare / Photo)
+function setViewMode(mode) {
+  // Fall back to 'svg' if the requested mode needs a reference but
+  // the current file has none.
+  if ((mode === 'compare' || mode === 'ref') && !state.currentRef) mode = 'svg';
+  state.viewMode = mode;
+  applyViewMode();
 }
 
-function refButtonLabel() {
-  // Pull the label from main.js's translations table if available.
-  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'fr';
-  const dict = (typeof translations !== 'undefined') ? translations[lang] : null;
-  const key = state.showRef ? 'workshop_show_svg' : 'workshop_show_ref';
-  const fallback = state.showRef ? 'Voir le SVG' : 'Voir la photo';
-  return (dict && dict[key]) || fallback;
-}
-
-function applyRefVisibility() {
+function applyViewMode() {
   const host = $('#preview-host');
-  const btn = $('#ref-btn');
   if (!host) return;
 
   // Drop any previously-mounted reference image
   const stale = host.querySelector('img.reference');
   if (stale) stale.remove();
 
-  // Hide the SVG when in reference mode
-  if (state.svgEl) state.svgEl.style.display = state.showRef ? 'none' : '';
+  // Tag the host with the active mode for CSS targeting
+  host.dataset.viewMode = state.viewMode;
 
-  if (state.showRef && state.currentRef) {
+  // Show / hide the SVG
+  if (state.svgEl) {
+    state.svgEl.style.display = state.viewMode === 'ref' ? 'none' : '';
+  }
+
+  // Mount the reference image when needed
+  if ((state.viewMode === 'ref' || state.viewMode === 'compare') && state.currentRef) {
     const img = document.createElement('img');
     img.className = 'reference';
     img.src = state.currentRef;
@@ -344,10 +335,12 @@ function applyRefVisibility() {
     host.appendChild(img);
   }
 
-  if (btn) {
-    btn.textContent = refButtonLabel();
-    btn.classList.toggle('active', state.showRef);
-    btn.disabled = !state.currentRef;
+  // Update segmented control highlights + disabled state for files without a reference
+  for (const btn of document.querySelectorAll('.view-btn')) {
+    btn.classList.toggle('active', btn.dataset.view === state.viewMode);
+    if (btn.dataset.view !== 'svg') {
+      btn.disabled = !state.currentRef;
+    }
   }
 }
 

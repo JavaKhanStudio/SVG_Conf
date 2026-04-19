@@ -45,6 +45,19 @@
   border-radius: 4px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.4);
 }
+/* Side-by-side compare: split the host into two equal cells */
+.workshop-viewer #preview-host[data-view-mode="compare"] {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: center;
+  justify-items: center;
+}
+.workshop-viewer #preview-host[data-view-mode="compare"] svg,
+.workshop-viewer #preview-host[data-view-mode="compare"] img.reference {
+  max-width: 100%; max-height: 100%;
+  width: auto; height: auto;
+}
 
 .workshop-viewer #right-pane {
   background: #16161c;
@@ -62,24 +75,37 @@
   margin: 0; font-size: 12px; text-transform: uppercase;
   letter-spacing: 0.08em; color: #aab; font-weight: 600;
 }
-.workshop-viewer .header-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
+.workshop-viewer .header-buttons { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 .workshop-viewer #reset-btn,
-.workshop-viewer #ref-btn,
 .workshop-viewer #download-btn {
   background: #2e2e38; color: #e6e6ec; border: 1px solid #444;
   border-radius: 4px; padding: 2px 8px; cursor: pointer; font-size: 11px;
 }
 .workshop-viewer #reset-btn:hover,
-.workshop-viewer #ref-btn:hover,
 .workshop-viewer #download-btn:hover { background: #3a3a46; }
 .workshop-viewer #download-btn {
   border-color: #5872e0; color: #b6c6ff;
 }
-.workshop-viewer #ref-btn.active {
-  background: #3b5bdb; border-color: #5872e0; color: #fff;
+
+/* Segmented view-mode toggle */
+.workshop-viewer .view-toggle {
+  display: inline-flex;
+  border: 1px solid #444;
+  border-radius: 4px;
+  overflow: hidden;
 }
-.workshop-viewer #ref-btn:disabled {
-  opacity: 0.4; cursor: not-allowed;
+.workshop-viewer .view-btn {
+  background: #2e2e38; color: #e6e6ec; border: none;
+  border-right: 1px solid #444;
+  padding: 2px 8px; cursor: pointer; font-size: 11px;
+}
+.workshop-viewer .view-btn:last-child { border-right: none; }
+.workshop-viewer .view-btn:hover:not(:disabled) { background: #3a3a46; }
+.workshop-viewer .view-btn.active {
+  background: #3b5bdb; color: #fff;
+}
+.workshop-viewer .view-btn:disabled {
+  opacity: 0.35; cursor: not-allowed;
 }
 
 .workshop-viewer #controls .ctrl { margin-bottom: 10px; }
