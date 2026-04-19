@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concepts - Formation SVG</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" href="images/LogoHeaderSBP.png" type="image/png">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+        <div class="page-hero">
+            <h2 data-i18n="concepts_title">Carte des concepts</h2>
+            <p data-i18n="concepts_subtitle">Une vue d'ensemble du parcours, chapitre par chapitre</p>
+        </div>
+
+        <div class="content-block">
+            <h3 data-i18n="concepts_explore">Explorer</h3>
+            <p data-i18n="concepts_intro">Chaque carte mene a la page qui developpe le sujet. Tu peux y aller dans l'ordre, ou piocher selon ce qui t'intrigue.</p>
+
+            <div class="concept-grid">
+                <a class="concept-card" href="what-is-svg.html">
+                    <div class="concept-icon"><i class="fa-solid fa-circle-question"></i></div>
+                    <h4 data-i18n="nav_what">C'est quoi ?</h4>
+                    <p data-i18n="concepts_what_desc">Vectoriel vs matriciel, et pourquoi ca change tout au zoom.</p>
+                    <span class="concept-arrow" data-i18n="concepts_cta_what">Decouvrir &rarr;</span>
+                </a>
+                <a class="concept-card" href="svg-anatomy.html">
+                    <div class="concept-icon"><i class="fa-solid fa-code"></i></div>
+                    <h4 data-i18n="nav_anatomy">Anatomie</h4>
+                    <p data-i18n="concepts_anatomy_desc">ViewBox, formes primitives, balise &lt;path&gt;, stylisation.</p>
+                    <span class="concept-arrow" data-i18n="concepts_cta_anatomy">Demonter &rarr;</span>
+                </a>
+                <a class="concept-card" href="live-demo.html">
+                    <div class="concept-icon"><i class="fa-solid fa-sliders"></i></div>
+                    <h4 data-i18n="nav_live">Modification Live</h4>
+                    <p data-i18n="concepts_live_desc">Tweaker remplissage, contour, rotation et voir le code mis a jour.</p>
+                    <span class="concept-arrow" data-i18n="concepts_cta_live">Essayer &rarr;</span>
+                </a>
+                <a class="concept-card" href="animations.html">
+                    <div class="concept-icon"><i class="fa-solid fa-play"></i></div>
+                    <h4 data-i18n="nav_animations">Animations</h4>
+                    <p data-i18n="concepts_anim_desc">CSS keyframes, SMIL, stroke-dashoffset, morphing de path.</p>
+                    <span class="concept-arrow" data-i18n="concepts_cta_anim">Animer &rarr;</span>
+                </a>
+                <a class="concept-card" href="bezier.html">
+                    <div class="concept-icon"><i class="fa-solid fa-bezier-curve"></i></div>
+                    <h4 data-i18n="nav_bezier">Courbes de Bezier</h4>
+                    <p data-i18n="concepts_bezier_desc">Quadratiques, cubiques, points de controle a glisser.</p>
+                    <span class="concept-arrow" data-i18n="concepts_cta_bezier">Plier &rarr;</span>
+                </a>
+                <a class="concept-card" href="workshop.html">
+                    <div class="concept-icon"><i class="fa-solid fa-flask"></i></div>
+                    <h4 data-i18n="nav_workshop">Atelier</h4>
+                    <p data-i18n="concepts_workshop_desc">SVGs parametriques avec controles live (couleurs, tailles, modes).</p>
+                    <span class="concept-arrow" data-i18n="concepts_cta_workshop">Bricoler &rarr;</span>
+                </a>
+                <a class="concept-card" href="gallery.html">
+                    <div class="concept-icon"><i class="fa-solid fa-images"></i></div>
+                    <h4 data-i18n="nav_gallery">Galerie</h4>
+                    <p data-i18n="concepts_gallery_desc">Exemples : fleurs, os pas-a-pas, generations IA, aide-memoires.</p>
+                    <span class="concept-arrow" data-i18n="concepts_cta_gallery">Feuilleter &rarr;</span>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -616,6 +616,83 @@ footer .social-links a:hover {
     margin: 1rem 0;
 }
 
+/* ===== Concepts grid (table-of-contents page) ===== */
+.concept-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+
+.concept-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 1.25rem;
+    text-decoration: none;
+    color: inherit;
+    border-top: 3px solid transparent;
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+
+.concept-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-top-color: var(--primary-blue);
+}
+
+.concept-card .concept-icon {
+    font-size: 1.6rem;
+    color: var(--primary-blue);
+    margin-bottom: 0.6rem;
+}
+
+.concept-card h4 {
+    font-size: 1.05rem;
+    color: var(--primary-blue);
+    margin-bottom: 0.35rem;
+}
+
+.concept-card p {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    flex: 1;
+}
+
+.concept-card .concept-arrow {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--primary-red);
+    font-weight: 600;
+}
+
+/* "See the map" reference block on the homepage */
+.concepts-link-block {
+    text-align: center;
+    background: linear-gradient(135deg, rgba(186, 1, 1, 0.04), rgba(7, 82, 207, 0.04));
+    border: 1px dashed var(--border-color);
+}
+
+.concepts-link-block a {
+    display: inline-block;
+    padding: 0.65rem 1.5rem;
+    margin-top: 0.5rem;
+    background: var(--card-bg);
+    color: var(--primary-blue);
+    border: 1px solid var(--primary-blue);
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background var(--transition), color var(--transition);
+}
+
+.concepts-link-block a:hover {
+    background: var(--primary-blue);
+    color: #fff;
+}
+
 /* Inline contextual links inside content prose */
 .content-block a.inline-link {
     color: var(--primary-blue);
