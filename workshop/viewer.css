@@ -62,14 +62,19 @@
   margin: 0; font-size: 12px; text-transform: uppercase;
   letter-spacing: 0.08em; color: #aab; font-weight: 600;
 }
-.workshop-viewer .header-buttons { display: flex; gap: 6px; }
+.workshop-viewer .header-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
 .workshop-viewer #reset-btn,
-.workshop-viewer #ref-btn {
+.workshop-viewer #ref-btn,
+.workshop-viewer #download-btn {
   background: #2e2e38; color: #e6e6ec; border: 1px solid #444;
   border-radius: 4px; padding: 2px 8px; cursor: pointer; font-size: 11px;
 }
 .workshop-viewer #reset-btn:hover,
-.workshop-viewer #ref-btn:hover { background: #3a3a46; }
+.workshop-viewer #ref-btn:hover,
+.workshop-viewer #download-btn:hover { background: #3a3a46; }
+.workshop-viewer #download-btn {
+  border-color: #5872e0; color: #b6c6ff;
+}
 .workshop-viewer #ref-btn.active {
   background: #3b5bdb; border-color: #5872e0; color: #fff;
 }

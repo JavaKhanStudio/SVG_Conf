@@ -40,6 +40,7 @@ async function init() {
   if (state.files.length) selectFile(state.files[0].name);
   $('#reset-btn').addEventListener('click', resetToDefaults);
   $('#ref-btn').addEventListener('click', toggleReference);
+  $('#download-btn').addEventListener('click', downloadCurrentSvg);
 
   // The language toggle in main.js calls translatePage(), which would
   // overwrite our dynamically-set button label.  Re-apply after every
@@ -277,6 +278,35 @@ function resetToDefaults() {
   state.values = {};
   for (const v of state.variables) state.values[v.name] = v.rawValue;
   renderControls();
+}
+
+// ============================================================ download
+// Bakes the user's current variable overrides into a standalone .svg
+// file. The live SVG root already has inline `style="--var: value"`
+// declarations set by setValue/applyAllValues — those declarations
+// take precedence over the file's internal `:root { ... }` defaults
+// when the file is opened directly, so the visitor's tweaks survive.
+function downloadCurrentSvg() {
+  if (!state.svgEl || !state.currentFile) return;
+  const clone = state.svgEl.cloneNode(true);
+  // Strip our display:none toggle (only used for the reference-photo view)
+  clone.style.removeProperty('display');
+  if (!clone.getAttribute('xmlns')) {
+    clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+  }
+  const xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+            + new XMLSerializer().serializeToString(clone);
+  const blob = new Blob([xml], { type: 'image/svg+xml;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const stem = state.currentFile.replace(/\.svg$/i, '');
+  const stamp = new Date().toISOString().slice(0, 10);
+  a.href = url;
+  a.download = `${stem}-${stamp}.svg`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 // ============================================================ reference photo toggle

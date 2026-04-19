@@ -21,6 +21,7 @@ const translations = {
         workshop_empty: "Ce SVG n'expose aucune variable.",
         workshop_show_ref: "Voir la photo",
         workshop_show_svg: "Voir le SVG",
+        workshop_download: "Telecharger",
         // Footer
         footer_made: "Fait par",
         // Home
@@ -173,6 +174,7 @@ const translations = {
         workshop_empty: "This SVG does not expose any variables.",
         workshop_show_ref: "Show photo",
         workshop_show_svg: "Show SVG",
+        workshop_download: "Download",
         footer_made: "Made by",
         home_title: "SVG Workshop",
         home_subtitle: "Discover the power of SVG for the web",
