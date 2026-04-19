@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atelier SVG - Formation SVG</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="workshop/viewer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" href="images/LogoHeaderSBP.png" type="image/png">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+        <div class="page-hero">
+            <h2 data-i18n="workshop_title">Atelier SVG</h2>
+            <p data-i18n="workshop_subtitle">Choisissez une illustration et modifiez ses variables CSS en direct</p>
+        </div>
+
+        <div class="content-block">
+            <h3 data-i18n="workshop_how_title">Comment ca marche</h3>
+            <p data-i18n="workshop_how_desc">Chaque SVG de la galerie expose ses parametres sous forme de variables CSS dans une regle <code>:root</code>. L'atelier les detecte et genere les controles correspondants. Vos modifications sont sauvegardees dans le navigateur.</p>
+
+            <div class="workshop-viewer">
+                <aside id="files-pane">
+                    <ul id="file-list"></ul>
+                </aside>
+                <main id="preview-pane">
+                    <div id="preview-host"></div>
+                </main>
+                <aside id="right-pane">
+                    <section id="controls-section">
+                        <div id="controls-header">
+                            <h2 data-i18n="workshop_controls">Controles</h2>
+                            <button id="reset-btn" data-i18n="workshop_reset">Reinitialiser</button>
+                        </div>
+                        <div id="controls"></div>
+                        <div id="empty-hint" data-i18n="workshop_empty" hidden>Ce SVG n'expose aucune variable.</div>
+                    </section>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="js/main.js"></script>
+    <script src="workshop/viewer.js"></script>
+</body>
+</html>

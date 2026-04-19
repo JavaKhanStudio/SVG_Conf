@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 1280"><style>:root {
+      --bg-color: #c8d3df;            /* light blue wall behind */
+      --bg-glow: #d8e2ec;             /* soft brighter spot top-right */
+
+      --skin-mid: #b58469;            /* hand mid-tone */
+      --skin-shadow: #7d5238;         /* shadow side of fingers */
+      --skin-deep: #543320;           /* crease/seam between fingers */
+      --skin-highlight: #d4a387;      /* highlight rim */
+      --nail-color: #e8c4a4;          /* fingernail */
+
+      --bottle-glass: #4d2410;        /* dark amber bottle body */
+      --bottle-highlight: #c9744e;    /* right-side cylindrical highlight */
+      --bottle-shadow: #2a1208;       /* left-side shadow band */
+      --bottle-rim: #1b0a04;
+      --bottle-tint: 0.95;            /* @ws number min=0.5 max=1 step=0.05 */
+      --bottle-emboss: #361608;
+
+      --cap-color: #f4ad21;
+      --cap-top: #ffc94a;
+      --cap-shadow: #b87a13;
+
+      --label-yellow: #f9b323;
+      --label-edge: #e07a1c;
+      --label-cream: #f7d97c;
+      --label-border: #b8651a;
+
+      --banner-red: #a02320;
+      --banner-shadow: #6b1413;
+      --barrel-wood: #b9742a;
+      --barrel-band: #3a1f0e;
+      --barrel-shadow: #6b3e10;
+
+      --text-dark: #2a1208;
+      --text-cream: #f7e2a8;
+      --outline: #1b0a04;
+      --stroke-thin: 1;               /* @ws number min=0.3 max=3 step=0.2 */
+      --stroke-mid: 2.5;              /* @ws number min=0.5 max=4 step=0.5 */
+    }
+    .background     { fill: url(#bg-grad); }
+    .skin           { fill: var(--skin-mid); stroke: var(--outline); stroke-width: var(--stroke-thin); stroke-linejoin: round; }
+    .skin-shadow    { fill: var(--skin-shadow); }
+    .skin-deep      { fill: var(--skin-deep); }
+    .skin-highlight { fill: var(--skin-highlight); }
+    .nail           { fill: var(--nail-color); stroke: var(--outline); stroke-width: 0.5; }
+    .crease         { fill: none; stroke: var(--skin-deep); stroke-width: 1.5; stroke-linecap: round; }
+    .bottle         { fill: var(--bottle-glass); stroke: var(--outline); stroke-width: var(--stroke-mid); stroke-linejoin: round; opacity: var(--bottle-tint); }
+    .bottle-shade   { fill: var(--bottle-shadow); }
+    .bottle-shine   { fill: var(--bottle-highlight); }
+    .bottle-emboss  { fill: none; stroke: var(--bottle-emboss); stroke-width: 1; opacity: 0.5; }
+    .cap            { fill: var(--cap-color); stroke: var(--outline); stroke-width: var(--stroke-mid); stroke-linejoin: round; }
+    .cap-top        { fill: var(--cap-top); stroke: var(--outline); stroke-width: var(--stroke-thin); }
+    .cap-shadow     { fill: var(--cap-shadow); }
+    .label          { fill: var(--label-yellow); stroke: var(--outline); stroke-width: var(--stroke-mid); stroke-linejoin: round; }
+    .label-inner    { fill: var(--label-cream); }
+    .label-border   { fill: none; stroke: var(--label-border); stroke-width: 1.5; }
+    .banner         { fill: var(--banner-red); stroke: var(--outline); stroke-width: var(--stroke-thin); stroke-linejoin: round; }
+    .banner-shadow  { fill: var(--banner-shadow); }
+    .barrel         { fill: var(--barrel-wood); stroke: var(--outline); stroke-width: var(--stroke-thin); }
+    .barrel-band    { fill: var(--barrel-band); }
+    .barrel-shadow  { fill: var(--barrel-shadow); }
+    .text-dark      { font-family: serif; fill: var(--text-dark); font-weight: bold; }
+    .text-cream     { font-family: sans-serif; fill: var(--text-cream); font-weight: bold; letter-spacing: 1px; }#trace-ref path { fill: none !important; stroke: #ff00ff; stroke-width: 0.5; vector-effect: non-scaling-stroke; opacity: 0.85; }</style><defs><radialGradient id="bg-grad" cx=".7" cy=".2" r="1"><stop offset="0" stop-color="var(--bg-glow)"/><stop offset="1" stop-color="var(--bg-color)"/></radialGradient><path id="bundaberg-arc" fill="none" d="M290 580q190-50 380 0"/></defs><path d="M0 0h960v1280H0z" class="background"/><path d="M130 1280v-180q15-90 100-110 130-20 250-20t260 20q75 20 80 110v180Z" class="skin"/><path d="M145 985q-57-65-50-145-7-50 15-95 20-40 60-45 45 5 65 40 15 50 17 110 8 75 33 135Z" class="skin"/><path d="M95 790q5 90 45 185l40 10q-30-105-45-195Z" class="skin-shadow" opacity=".6"/><path d="M120 790q2 90 35 180h13q-30-90-30-170Z" class="skin-deep" opacity=".4"/><ellipse cx="195" cy="855" fill="var(--skin-mid)" stroke="var(--outline)" stroke-width=".5" opacity=".9" rx="35" ry="26"/><path stroke-width="2" d="M138 855q60-20 114 5" class="crease"/><ellipse cx="200" cy="843" fill="var(--skin-highlight)" opacity=".6" rx="24" ry="10"/><ellipse cx="165" cy="720" class="nail" rx="22" ry="14" transform="rotate(-15 165 720)"/><path d="M700 1000q70-15 100 0v80q-40-5-100-5Z" class="skin"/><path stroke-width="2" d="M200 1080q40-20 85-15m435 10q50 0 90 20m-660 45q80-5 135 0m435 5q80 5 85 30" class="crease"/><path stroke-width="1.5" d="M130 1200q130-20 220 0m250 0q130-20 220 0" class="crease" opacity=".7"/><ellipse cx="170" cy="1050" fill="var(--skin-highlight)" opacity=".4" rx="40" ry="60" transform="rotate(-15 170 1050)"/><path d="M400 110v60q-5 30-40 60-90 60-120 130v545q0 40 45 40h390q45 0 45-40V360q-30-70-120-130-35-30-40-60v-60Z" class="bottle"/><path d="M240 360q30-70 120-130l20 20q-85 55-110 115v540q0 30 20 40h-40q-10-10-10-40Z" class="bottle-shade" opacity=".5"/><path d="M720 360q-30-70-120-130l-20 20q85 55 110 115v540q0 27-20 37h35q15-7 15-37Z" class="bottle-shine" opacity=".5"/><path d="M280 880h400m-380 25h360m-330 23h300" class="bottle-emboss"/><path fill="none" stroke="#f5e0c8" stroke-linecap="round" stroke-width="3.5" d="M690 290q10 30 10 90v500q-5 40-15 55" opacity=".5"/><ellipse cx="320" cy="370" fill="#a05a30" opacity=".5" rx="28" ry="65"/><ellipse cx="320" cy="370" fill="#e0a880" opacity=".4" rx="14" ry="42"/><ellipse cx="480" cy="110" fill="var(--cap-shadow)" stroke="var(--outline)" stroke-width="var(--stroke-thin)" rx="80" ry="8"/><path d="M400 110V50q0-20 15-22h130q15 2 15 22v60Z" class="cap"/><ellipse cx="480" cy="32" class="cap-top" rx="80" ry="11"/><path fill="none" stroke="#d44818" stroke-linecap="round" stroke-width="3" d="M484 35q18 15 8 40-10 13-4 30" opacity=".8"/><path fill="none" stroke="#d44818" stroke-linecap="round" stroke-width="3" d="M478 35q-18 20-8 45 12 12 8 25" opacity=".7"/><path d="M275 470q0-10 10-10h390q10 0 10 10v400q0 10-10 10H285q-10 0-10-10Z" class="label"/><path d="M285 472h393v396H285Z" class="label-border"/><path fill="none" stroke="var(--text-dark)" stroke-width="1.5" d="M295 482q185-16 375 0"/><path fill="none" stroke="var(--label-border)" stroke-width=".7" d="M295 487q185-16 375 0" opacity=".6"/><path d="M295 494h375v48H295Z" class="label-inner" opacity=".3"/><path stroke="var(--label-border)" stroke-width=".6" d="M295 494h375m-375 48h375" opacity=".5"/><text x="480" y="510" class="text-dark" font-size="11" opacity=".8" text-anchor="middle">FLASCHE VOR DEM ÖFFNEN AUF DEN KOPF DREHEN</text><text x="480" y="525" class="text-dark" font-size="10" opacity=".7" text-anchor="middle">RETOURNER LA BOUTEILLE AVANT L&apos;OUVERTURE</text><text class="text-dark" font-size="38" letter-spacing=".5" text-anchor="middle">
+    <textPath href="#bundaberg-arc" startOffset="50%">BUNDABERG</textPath>
+  </text><text x="480" y="615" class="text-dark" font-size="11" opacity=".8" text-anchor="middle">ALKOHOLFREI · SANS ALCOOL</text><ellipse cx="480" cy="715" fill="var(--barrel-shadow)" opacity=".4" rx="115" ry="7"/><g transform="translate(390 625)"><ellipse cx="90" cy="14" class="barrel" rx="36" ry="8"/><rect width="72" height="76" x="54" y="14" class="barrel" rx="5"/><path stroke="var(--barrel-shadow)" stroke-width=".8" d="M68 16v72m12-72v72m12-72v72m12-72v72m12-72v72" opacity=".7"/><rect width="14" height="72" x="112" y="16" fill="var(--barrel-shadow)" opacity=".3" rx="2"/><path d="M51 28h78v5H51zm0 48h78v5H51z" class="barrel-band"/><ellipse cx="90" cy="92" class="barrel" rx="36" ry="8"/><ellipse cx="32" cy="30" class="barrel" rx="28" ry="7"/><rect width="56" height="68" x="4" y="30" class="barrel" rx="4"/><path stroke="var(--barrel-shadow)" stroke-width=".7" d="M16 32v64m12-64v64m12-64v64" opacity=".7"/><rect width="12" height="64" x="48" y="32" fill="var(--barrel-shadow)" opacity=".3" rx="2"/><path d="M0 42h64v4.5H0zm0 44h64v4.5H0z" class="barrel-band"/><ellipse cx="32" cy="100" class="barrel" rx="28" ry="7"/><ellipse cx="148" cy="30" class="barrel" rx="28" ry="7"/><rect width="56" height="68" x="120" y="30" class="barrel" rx="4"/><path stroke="var(--barrel-shadow)" stroke-width=".7" d="M132 32v64m12-64v64m12-64v64" opacity=".7"/><rect width="12" height="64" x="164" y="32" fill="var(--barrel-shadow)" opacity=".4" rx="2"/><path d="M116 42h64v4.5h-64zm0 44h64v4.5h-64z" class="barrel-band"/><ellipse cx="148" cy="100" class="barrel" rx="28" ry="7"/></g><path d="m260 740 30-10v50l-30-10Zm440 0-30-10v50l30-10Z" class="banner-shadow"/><path d="M290 730h380v50H290Z" class="banner"/><text x="480" y="765" class="text-cream" font-size="26" text-anchor="middle">GINGER BEER</text><text x="480" y="810" class="text-dark" font-size="13" opacity=".8" text-anchor="middle">AUSTRALISCHES</text><text x="480" y="825" class="text-dark" font-size="13" opacity=".8" text-anchor="middle">FAMILIENUNTERNEHMEN</text><text x="480" y="845" class="text-dark" font-size="13" opacity=".8" text-anchor="middle">SOCIÉTÉ FAMILIALE D&apos;ORIGINE</text><text x="480" y="858" class="text-dark" font-size="13" opacity=".8" text-anchor="middle">AUSTRALIENNE</text><path fill="var(--text-dark)" d="M488 870q4-3 6-7 1 4 4 5 2 1 4-1 1 4-1 7-2 2-7 1-2-1-6-5" opacity=".8"/><text x="295" y="700" class="text-dark" font-size="11" opacity=".8">375 mL e</text><circle cx="668" cy="800" r="26" fill="var(--label-yellow)" stroke="var(--outline)" stroke-width="var(--stroke-thin)"/><text x="668" y="809" class="text-dark" font-size="18" font-weight="bold" text-anchor="middle">3</text><path d="M720 880q40-10 70 25 10 30-20 40-30-5-50-25Z" class="skin"/><path d="M720 920q30 15 60 20l-10 10q-30-5-45-15Z" class="skin-shadow" opacity=".5"/><ellipse cx="785" cy="900" class="nail" rx="13" ry="9" transform="rotate(45 785 900)"/><path d="M700 925q45-10 75 20 10 30-25 40-35-5-55-25Z" class="skin"/><path d="M695 960q35 15 70 20l-5 10q-40-5-60-15Z" class="skin-shadow" opacity=".5"/><ellipse cx="775" cy="940" class="nail" rx="12" ry="8" transform="rotate(60 775 940)"/><path d="M690 970q40-5 70 15 10 20-20 25-35-5-55-20Z" class="skin"/><ellipse cx="760" cy="985" class="nail" rx="11" ry="7" transform="rotate(75 760 985)"/><path stroke-width="2.5" d="M720 925q0 10-20 20m0 25q0 10-15 15" class="crease"/></svg>

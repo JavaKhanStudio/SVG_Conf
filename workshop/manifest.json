@@ -1,0 +1,12 @@
+{
+  "files": [
+    {"name": "puppy.svg",        "label": "Puppy"},
+    {"name": "leprechaun.svg",   "label": "Leprechaun"},
+    {"name": "stone.svg",        "label": "Stone (Tarot)"},
+    {"name": "goldenspring.svg", "label": "Golden Spring"},
+    {"name": "boyscast.svg",     "label": "The Boyscast"},
+    {"name": "xenonauts.svg",    "label": "Chief Scientist"},
+    {"name": "bundaberg.svg",    "label": "Bundaberg"},
+    {"name": "coffee.svg",       "label": "Coffee Maker"}
+  ]
+}
