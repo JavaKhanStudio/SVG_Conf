@@ -6,6 +6,10 @@ node_modules/
 # (Their own git history lives upstream — don't track them.)
 _SynAndKaya_clone/
 
+# Personal-source material for the talk: photos, slide drafts,
+# private rewrites. Stays local — not committed.
+FromSlides/
+
 # Workshop runtime state.
 # Snapshots are committed (they're part of the showcase / agent output).
 # Preprocessed reference images and metrics history are local-only noise.
