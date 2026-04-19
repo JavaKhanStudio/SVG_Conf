@@ -3,6 +3,7 @@ const translations = {
     fr: {
         // Nav
         nav_home: "Accueil",
+        nav_concepts: "Concepts",
         nav_what: "C'est quoi ?",
         nav_anatomy: "Anatomie",
         nav_live: "Modification Live",
@@ -141,6 +142,7 @@ const translations = {
     },
     en: {
         nav_home: "Home",
+        nav_concepts: "Concepts",
         nav_what: "What is it?",
         nav_anatomy: "Anatomy",
         nav_live: "Live Editing",
