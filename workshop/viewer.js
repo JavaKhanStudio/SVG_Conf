@@ -66,6 +66,14 @@ async function selectFile(name) {
   renderFileList();
   await loadSvg(name);
   applyViewMode();
+  updateSourceLink(name);
+}
+
+function updateSourceLink(name) {
+  const link = $('#source-link');
+  if (!link) return;
+  link.href = `${BASE}gallery/${encodeURIComponent(name)}`;
+  link.hidden = false;
 }
 
 // ============================================================ SVG load + parse

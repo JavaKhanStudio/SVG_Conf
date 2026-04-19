@@ -32,9 +32,23 @@
 .workshop-viewer #file-list li.active { background: #2e3a52; color: #fff; }
 
 .workshop-viewer #preview-pane {
-  display: flex; align-items: center; justify-content: center;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
   background: #121218; padding: 12px;
+  position: relative;
 }
+.workshop-viewer #source-link {
+  position: absolute;
+  bottom: 8px; right: 12px;
+  font-size: 11px;
+  color: #9aa1b3;
+  text-decoration: none;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.4);
+  font-family: ui-monospace, monospace;
+}
+.workshop-viewer #source-link:hover { color: #fff; background: rgba(59, 91, 219, 0.6); }
 .workshop-viewer #preview-host {
   width: 100%; height: 100%;
   display: flex; align-items: center; justify-content: center;
