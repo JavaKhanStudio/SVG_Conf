@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><style>:root {
       --clover-green-color: #77C139;
       --mid-green-color: #3a7a2a;
-      --hat-green-color: #1d5d24;
+      --hat-green-color: #1d5d24;      /* @ws mix=mid-green-color:-0.3 */
       --skin-color: #F1C39A;
       --beard-orange-color: #D65D23;
       --beard-brown-color: #7a4a20;      /* @ws mix=beard-orange-color:-0.24 */
