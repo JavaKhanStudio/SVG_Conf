@@ -9,8 +9,12 @@
 //   - no WebSocket file watching  (static deployment, no server)
 //   - no upload / snapshot save   (no backend)
 //   - no backend health banner    (no backend)
-//   - no reference image / trace overlay / measure / metrics
+//   - no trace overlay / measure / metrics
 //   - no point2d controls         (none of the gallery SVGs use them)
+//
+// Reference photos: each manifest entry can carry a `reference` path
+// (relative to the workshop folder).  A toggle button swaps the SVG
+// preview for the source photo so visitors can compare the two.
 
 const $ = sel => document.querySelector(sel);
 
@@ -21,9 +25,11 @@ const BASE = 'workshop/';
 const state = {
   files: [],
   currentFile: null,
+  currentRef: null,
   svgEl: null,
   variables: [],
   values: {},
+  showRef: false,
 };
 
 // ============================================================ boot
@@ -33,6 +39,18 @@ async function init() {
   renderFileList();
   if (state.files.length) selectFile(state.files[0].name);
   $('#reset-btn').addEventListener('click', resetToDefaults);
+  $('#ref-btn').addEventListener('click', toggleReference);
+
+  // The language toggle in main.js calls translatePage(), which would
+  // overwrite our dynamically-set button label.  Re-apply after every
+  // language flip so the toggle text stays in sync with state.showRef.
+  const origToggle = window.toggleLanguage;
+  if (typeof origToggle === 'function') {
+    window.toggleLanguage = function() {
+      origToggle.apply(this, arguments);
+      applyRefVisibility();
+    };
+  }
 }
 
 // ============================================================ file list
@@ -50,8 +68,11 @@ function renderFileList() {
 
 async function selectFile(name) {
   state.currentFile = name;
+  const meta = state.files.find(f => f.name === name);
+  state.currentRef = meta?.reference ? BASE + meta.reference : null;
   renderFileList();
   await loadSvg(name);
+  applyRefVisibility();
 }
 
 // ============================================================ SVG load + parse
@@ -256,6 +277,48 @@ function resetToDefaults() {
   state.values = {};
   for (const v of state.variables) state.values[v.name] = v.rawValue;
   renderControls();
+}
+
+// ============================================================ reference photo toggle
+function toggleReference() {
+  state.showRef = !state.showRef;
+  applyRefVisibility();
+}
+
+function refButtonLabel() {
+  // Pull the label from main.js's translations table if available.
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'fr';
+  const dict = (typeof translations !== 'undefined') ? translations[lang] : null;
+  const key = state.showRef ? 'workshop_show_svg' : 'workshop_show_ref';
+  const fallback = state.showRef ? 'Voir le SVG' : 'Voir la photo';
+  return (dict && dict[key]) || fallback;
+}
+
+function applyRefVisibility() {
+  const host = $('#preview-host');
+  const btn = $('#ref-btn');
+  if (!host) return;
+
+  // Drop any previously-mounted reference image
+  const stale = host.querySelector('img.reference');
+  if (stale) stale.remove();
+
+  // Hide the SVG when in reference mode
+  if (state.svgEl) state.svgEl.style.display = state.showRef ? 'none' : '';
+
+  if (state.showRef && state.currentRef) {
+    const img = document.createElement('img');
+    img.className = 'reference';
+    img.src = state.currentRef;
+    img.alt = 'Reference photo';
+    host.appendChild(img);
+  }
+
+  if (btn) {
+    btn.textContent = refButtonLabel();
+    btn.classList.toggle('active', state.showRef);
+    btn.disabled = !state.currentRef;
+  }
 }
 
 // ============================================================ derived colours (@ws mix=)

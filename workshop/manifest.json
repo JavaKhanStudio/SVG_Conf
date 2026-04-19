@@ -1,12 +1,12 @@
 {
   "files": [
-    {"name": "puppy.svg",        "label": "Puppy"},
-    {"name": "leprechaun.svg",   "label": "Leprechaun"},
-    {"name": "stone.svg",        "label": "Stone (Tarot)"},
-    {"name": "goldenspring.svg", "label": "Golden Spring"},
-    {"name": "boyscast.svg",     "label": "The Boyscast"},
-    {"name": "xenonauts.svg",    "label": "Chief Scientist"},
-    {"name": "bundaberg.svg",    "label": "Bundaberg"},
-    {"name": "coffee.svg",       "label": "Coffee Maker"}
+    {"name": "puppy.svg",        "label": "Puppy",            "reference": "references/puppy.jpg"},
+    {"name": "leprechaun.svg",   "label": "Leprechaun",       "reference": "references/leprechaun.jpg"},
+    {"name": "stone.svg",        "label": "Stone (Tarot)",    "reference": "references/stone.jpg"},
+    {"name": "goldenspring.svg", "label": "Golden Spring",    "reference": "references/goldenspring.jpg"},
+    {"name": "boyscast.svg",     "label": "The Boyscast",     "reference": "references/boyscast.jpg"},
+    {"name": "xenonauts.svg",    "label": "Chief Scientist",  "reference": "references/xenonauts.jpg"},
+    {"name": "bundaberg.svg",    "label": "Bundaberg",        "reference": "references/bundaberg.jpg"},
+    {"name": "coffee.svg",       "label": "Coffee Maker",     "reference": "references/coffee.jpg"}
   ]
 }
