@@ -232,8 +232,7 @@
             stroke: white;
             stroke-width: 2;
             opacity: 0.92;
-            transition: transform 0.2s ease;
-            transform-origin: center;
+            transition: fill 0.15s ease;
         }
         .anat-callouts .anat-callout text {
             fill: white;
@@ -243,7 +242,28 @@
             pointer-events: none;
         }
         .anat-callouts .anat-callout:hover circle {
-            transform: scale(1.2);
+            fill: #0752CF;
+        }
+        .anat-callouts[hidden] { display: none; }
+        .anat-toggle {
+            display: flex; align-items: center; gap: 0.5rem;
+            margin: 0 0 0.75rem; font-size: 0.9rem;
+            color: var(--text-light);
+            justify-content: center;
+        }
+        .anat-toggle input { cursor: pointer; }
+        .live-controls {
+            display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem;
+            align-items: center; margin-top: 0.5rem;
+        }
+        .live-controls label {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            font-size: 0.88rem;
+        }
+        .live-controls input[type="color"] {
+            width: 36px; height: 28px; padding: 0;
+            border: 1px solid var(--border-color); border-radius: 4px;
+            cursor: pointer;
         }
         /* Live-edit zoom cards */
         .anat-cards { display: flex; flex-direction: column; gap: 1.5rem; }
@@ -388,13 +408,7 @@
             from { opacity: 0; transform: translateY(-12px) scale(0.85); }
             to   { opacity: 1; transform: translateY(0) scale(1); }
         }
-        #random-tag-host .rand-tag svg { display: block; width: 130px; height: auto; }
-        #random-tag-host .rand-tag .rand-name {
-            font-family: ui-monospace, monospace;
-            font-size: 0.78rem;
-            color: var(--text-light);
-            margin-top: 0.25rem;
-        }
+        #random-tag-host .rand-tag svg { display: block; width: 180px; height: auto; }
     </style>
 </head>
 <body>
@@ -448,9 +462,9 @@
                     <p data-i18n-html="story2_claude_p1">Claude, via son systeme d'<strong>artifacts</strong>, fait quelque chose de different. Le SVG ne s'affiche pas juste en tant que code : il est rendu <strong>live</strong>, dans un panneau a droite, avec un vrai aperçu visuel. A chaque message qui modifie le SVG, le panneau se met a jour instantanement.</p>
                     <p data-i18n-html="story2_claude_p2">La boucle d'iteration devient visuelle plutot que textuelle :</p>
                     <ul style="margin-left: 1.25rem; color: var(--text-color); font-size: 0.95rem;">
-                        <li data-i18n="story2_claude_b1">"Rends le metal plus sombre, plus pres de la couleur de la bordure" — on voit le bone s'assombrir en temps reel.</li>
-                        <li data-i18n="story2_claude_b2">"Ajoute un effet grave au texte" — un filtre SVG apparait, le texte prend un relief.</li>
-                        <li data-i18n="story2_claude_b3">"Un peu plus de contraste sur les bords" — le highlight est ajuste en consequence.</li>
+                        <li data-i18n="story2_claude_b1">"Rends le metal plus sombre, plus pres de la couleur de la bordure", on voit le bone s'assombrir en temps reel.</li>
+                        <li data-i18n="story2_claude_b2">"Ajoute un effet grave au texte", un filtre SVG apparait, le texte prend un relief.</li>
+                        <li data-i18n="story2_claude_b3">"Un peu plus de contraste sur les bords", le highlight est ajuste en consequence.</li>
                     </ul>
                     <p data-i18n-html="story2_claude_p3">Pour du SVG specifiquement, ca change tout. La sortie finale (<code>boneV13.svg</code>, celui utilise dans <a class="inline-link" href="workshop.html">l'atelier</a>) est nettement plus riche : gradient lineaire multi-stops, pattern de texture diagonal, gradient de bord en overlay, filtre d'emboss sur le texte.</p>
                 </div>
@@ -482,7 +496,7 @@
                         <iframe class="evo-frame" sandbox="allow-same-origin" aria-label="bone preview"></iframe>
                     </div>
                     <div class="evo-source">
-                        <div class="evo-source-label">SVG source — modifiable</div>
+                        <div class="evo-source-label">SVG source, modifiable</div>
                         <textarea class="evo-textarea" spellcheck="false"></textarea>
                     </div>
                 </div>
@@ -504,37 +518,36 @@
         <!-- Anatomy of the dogtag -->
         <div class="content-block">
             <h3 data-i18n="story2_anat_title">Anatomie d'un dogtag</h3>
-            <p data-i18n="story2_anat_desc">Le dogtag complet a gauche reste visible pendant que tu defiles les techniques. Clique sur un repere pour aller au zoom correspondant. Chaque carte a un editeur live et un selecteur de couleur — modifie, vois.</p>
+            <p data-i18n="story2_anat_desc">Le dogtag complet a gauche reste visible pendant que tu defiles les techniques. Clique sur un repere pour aller au zoom correspondant. Chaque carte a un editeur live et un selecteur de couleur, modifie, vois.</p>
 
             <div class="anat-layout">
                 <div class="anat-sticky">
+                    <label class="anat-toggle">
+                        <input type="checkbox" id="anat-callouts-toggle" checked>
+                        <span data-i18n="story2_anat_toggle">Afficher les reperes</span>
+                    </label>
                     <div class="anat-stage">
-                        <svg id="anat-svg" viewBox="0 0 360 380" xmlns="http://www.w3.org/2000/svg" style="--metal-s1:#3a2d1a; --metal-s3:#5d4a2e; --metal-s4:#7a6238; --metal-s5:#9c7e44; --metal-s6:#c39b58; --metal-s7:#e8c281; --bone-border:#3a2d1a">
-                            <defs>
-                                <clipPath id="anat-clip"><circle cx="180" cy="130" r="100"/></clipPath>
-                            </defs>
-                            <image href="images/story/syn.jpg" x="80" y="30" width="200" height="200" preserveAspectRatio="xMidYMid slice" clip-path="url(#anat-clip)"/>
-                            <circle cx="180" cy="130" r="100" fill="none" stroke="#3a2d1a" stroke-width="7"/>
-                            <g class="bone-slot" data-x="60" data-y="240" data-w="240" data-h="140"></g>
-                            <text x="180" y="320" text-anchor="middle" font-family="Cabin Sketch, Arial" font-weight="bold" font-size="32" fill="#fff" stroke="#000" stroke-width="4" stroke-linejoin="round" style="paint-order: stroke fill">Syntaxe</text>
+                        <svg id="anat-svg" viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg" style="--metal-s1:#3a2d1a; --metal-s3:#5d4a2e; --metal-s4:#7a6238; --metal-s5:#9c7e44; --metal-s6:#c39b58; --metal-s7:#e8c281; --bone-border:#3a2d1a">
+                            <g class="bone-slot" data-x="10" data-y="30" data-w="340" data-h="300"></g>
+                            <text x="180" y="205" text-anchor="middle" font-family="Cabin Sketch, Arial" font-weight="bold" font-size="56" fill="#fff" stroke="#000" stroke-width="5" stroke-linejoin="round" style="paint-order: stroke fill">Syntaxe</text>
 
                             <!-- Clickable callouts -->
                             <g class="anat-callouts">
                                 <g class="anat-callout" data-jump="card-grad">
-                                    <circle cx="180" cy="295" r="14" />
-                                    <text x="180" y="300" text-anchor="middle">1</text>
+                                    <circle cx="180" cy="140" r="16" />
+                                    <text x="180" y="146" text-anchor="middle">1</text>
                                 </g>
                                 <g class="anat-callout" data-jump="card-edge">
-                                    <circle cx="280" cy="290" r="14" />
-                                    <text x="280" y="295" text-anchor="middle">2</text>
+                                    <circle cx="290" cy="110" r="16" />
+                                    <text x="290" y="116" text-anchor="middle">2</text>
                                 </g>
                                 <g class="anat-callout" data-jump="card-tex">
-                                    <circle cx="100" cy="280" r="14" />
-                                    <text x="100" y="285" text-anchor="middle">3</text>
+                                    <circle cx="75" cy="235" r="16" />
+                                    <text x="75" y="241" text-anchor="middle">3</text>
                                 </g>
                                 <g class="anat-callout" data-jump="card-emboss">
-                                    <circle cx="180" cy="335" r="14" />
-                                    <text x="180" y="340" text-anchor="middle">4</text>
+                                    <circle cx="180" cy="255" r="16" />
+                                    <text x="180" y="261" text-anchor="middle">4</text>
                                 </g>
                             </g>
                         </svg>
@@ -560,7 +573,8 @@
 &lt;/svg&gt;</textarea>
                         </div>
                         <div class="live-controls">
-                            <label>Couleur principale : <input type="color" class="live-color" value="#c39b58"></label>
+                            <label>Reflet : <input type="color" class="live-color" value="#c39b58" data-anat-var="--metal-s6"></label>
+                            <label>Ombre : <input type="color" class="live-color" value="#5d4a2e" data-anat-var="--metal-s3"></label>
                             <button class="live-reset" type="button">Reinitialiser</button>
                         </div>
                     </div>
@@ -568,7 +582,7 @@
                     <div class="zoom-card live-card" id="card-edge" data-primary="#7a6238">
                         <div class="card-num">2</div>
                         <h5>L'edge highlight (2 paths)</h5>
-                        <p data-i18n-html="story2_zoom_edge">L'os est dessine <strong>deux fois</strong> sur le meme path. La premiere copie a le metal en fill. La deuxieme, par-dessus, n'a aucun fill — juste un <code>stroke</code> blanc-vers-transparent. Ca simule un reflet sur le bord.</p>
+                        <p data-i18n-html="story2_zoom_edge">L'os est dessine <strong>deux fois</strong> sur le meme path. La premiere copie a le metal en fill. La deuxieme, par-dessus, n'a aucun fill, juste un <code>stroke</code> blanc-vers-transparent. Ca simule un reflet sur le bord.</p>
                         <div class="live-mini">
                             <iframe class="live-frame" sandbox="allow-same-origin" aria-label="preview"></iframe>
                             <textarea class="live-source" spellcheck="false">&lt;svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg"&gt;
@@ -584,7 +598,7 @@
 &lt;/svg&gt;</textarea>
                         </div>
                         <div class="live-controls">
-                            <label>Couleur du metal : <input type="color" class="live-color" value="#7a6238"></label>
+                            <label>Couleur du metal : <input type="color" class="live-color" value="#7a6238" data-anat-var="--metal-s4"></label>
                             <button class="live-reset" type="button">Reinitialiser</button>
                         </div>
                     </div>
@@ -610,7 +624,8 @@
 &lt;/svg&gt;</textarea>
                         </div>
                         <div class="live-controls">
-                            <label>Couleur de fond : <input type="color" class="live-color" value="#9c7e44"></label>
+                            <label>Fond : <input type="color" class="live-color" value="#9c7e44" data-anat-var="--metal-s5"></label>
+                            <label>Diagonales : <input type="color" class="live-color" value="#3a2d1a" data-anat-var="--metal-s1"></label>
                             <button class="live-reset" type="button">Reinitialiser</button>
                         </div>
                     </div>
@@ -641,20 +656,21 @@
 &lt;/svg&gt;</textarea>
                         </div>
                         <div class="live-controls">
-                            <label>Couleur de fond : <input type="color" class="live-color" value="#9c7e44"></label>
+                            <label>Fond : <input type="color" class="live-color" value="#9c7e44" data-anat-var="--metal-s7"></label>
+                            <label>Ombre : <input type="color" class="live-color" value="#000000" data-anat-var="--bone-border"></label>
                             <button class="live-reset" type="button">Reinitialiser</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <p data-i18n-html="story2_anat_outro" style="margin-top:1.25rem;">Combine ces quatre techniques + un cercle stroke pour la photo + un calcul JS pour la couleur de bordure (le <a class="inline-link" href="story-part1.html">flip de luminance vu a l'acte 1</a>), et tu as un dogtag complet. C'est ca qu'on reconstruit pour chacun des onze chiens — il suffit de changer le nom, la photo et la couleur de base.</p>
+            <p data-i18n-html="story2_anat_outro" style="margin-top:1.25rem;">Combine ces quatre techniques + un cercle stroke pour la photo + un calcul JS pour la couleur de bordure (le <a class="inline-link" href="story-part1.html">flip de luminance vu a l'acte 1</a>), et tu as un dogtag complet. C'est ca qu'on reconstruit pour chacun des onze chiens, il suffit de changer le nom, la photo et la couleur de base.</p>
         </div>
 
         <!-- SVG + JS: random dogtag demo -->
         <div class="content-block" style="border-left: 4px solid #9b59b6; background: linear-gradient(135deg, rgba(155, 89, 182, 0.04), rgba(186, 1, 1, 0.04));">
             <h3 data-i18n="story2_js_title"><i class="fa-solid fa-shuffle" style="color:#9b59b6; margin-right:0.5rem;"></i>SVG + JavaScript = combo</h3>
-            <p data-i18n-html="story2_js_p1">Une fois que ton SVG est texte, tu peux le manipuler avec n'importe quel langage. Avec un peu de JavaScript, tu peux ajouter, dupliquer, animer ou recolorer des elements en temps reel — sans jamais regenerer le fichier.</p>
+            <p data-i18n-html="story2_js_p1">Une fois que ton SVG est texte, tu peux le manipuler avec n'importe quel langage. Avec un peu de JavaScript, tu peux ajouter, dupliquer, animer ou recolorer des elements en temps reel, sans jamais regenerer le fichier.</p>
             <p data-i18n="story2_js_p2">Demonstration : un bouton qui ajoute un dogtag avec un nom et une couleur tires au hasard. C'est une dizaine de lignes de JS qui clonent le template, changent le texte et la palette, et l'inserent dans la page.</p>
 
             <div class="js-demo">
@@ -663,15 +679,15 @@
                 <div id="random-tag-host"></div>
             </div>
 
-            <p data-i18n-html="story2_js_p3" style="margin-top: 1rem;">L'IA est exceptionnellement bonne pour cabler ces deux mondes. Decrire en francais "<em>un bouton qui ajoute une nouvelle medaille avec un nom au hasard</em>", et obtenir simultanement le bon SVG, le bon JavaScript, et le bon CSS — c'est ce qui fait passer une page statique a un outil vivant.</p>
+            <p data-i18n-html="story2_js_p3" style="margin-top: 1rem;">L'IA est exceptionnellement bonne pour cabler ces deux mondes. Decrire en francais "<em>un bouton qui ajoute une nouvelle medaille avec un nom au hasard</em>", et obtenir simultanement le bon SVG, le bon JavaScript, et le bon CSS, c'est ce qui fait passer une page statique a un outil vivant.</p>
         </div>
 
         <!-- Takeaway -->
         <div class="content-block">
             <h3 data-i18n="story2_lesson_title">La lecon</h3>
-            <p data-i18n-html="story2_lesson_p1">Bon. Soyons honnetes : <strong>GPT fut lamentable</strong> pour ce besoin precis. (C'est aussi assez drole de voir une IA d'une compagnie en competition essayer de defendre une autre — donc rectifions le tir.)</p>
+            <p data-i18n-html="story2_lesson_p1">Bon. Soyons honnetes : <strong>GPT fut lamentable</strong> pour ce besoin precis. (C'est aussi assez drole de voir une IA d'une compagnie en competition essayer de defendre une autre, donc rectifions le tir.)</p>
             <p data-i18n-html="story2_lesson_p2">Ce qu'il faut comprendre, c'est que <strong>les bons outils permettent les bons resultats</strong>. Le format texte du SVG permet de comprendre rapidement une image et de l'affecter directement avec des variables, exactement comme on le ferait avec du code. Combine avec un outil qui rend ce code en direct (artifacts) ou qui edite tes fichiers a ta place (Claude Code), et tu passes de "generateur d'image" a "atelier".</p>
-            <p data-i18n-html="story2_lesson_p3">Le vrai gain, finalement, ce n'est pas le code genere en lui-meme — c'est la boucle d'iteration.</p>
+            <p data-i18n-html="story2_lesson_p3">Le vrai gain, finalement, ce n'est pas le code genere en lui-meme, c'est la boucle d'iteration.</p>
         </div>
 
         <!-- End-of-act CTA -->
@@ -786,7 +802,7 @@
                 svg.appendChild(slot);
                 const text = document.createElementNS(SVG_NS, 'text');
                 text.setAttribute('x', '100');
-                text.setAttribute('y', '78');
+                text.setAttribute('y', '74');
                 text.setAttribute('text-anchor', 'middle');
                 text.setAttribute('font-family', 'Cabin Sketch, Arial');
                 text.setAttribute('font-weight', 'bold');
@@ -799,10 +815,6 @@
                 text.textContent = name;
                 svg.appendChild(text);
                 wrap.appendChild(svg);
-                const label = document.createElement('div');
-                label.className = 'rand-name';
-                label.textContent = name;
-                wrap.appendChild(label);
                 host.appendChild(wrap);
                 slot.replaceWith(makeBone(slot));
             }
@@ -825,12 +837,16 @@
                 let current = 0;
                 const sources = new Array(bones.length).fill(null);
 
+                // v1's bone uses stroke="currentColor" and would render
+                // black-on-black on the dark stage. Give the iframe body a
+                // light color so currentColor resolves to something visible,
+                // and force every bone to fill the stage regardless of the
+                // authored width/height (v1 ships as 16x16).
                 const wrapEvo = (svgText) =>
                     `<!DOCTYPE html><html><head><style>
-                       html,body{margin:0;height:100%;background:#1e1e24;}
-                       body{display:flex;align-items:center;justify-content:center;padding:8px;box-sizing:border-box;}
-                       svg{width:auto;height:auto;max-width:100%;max-height:100%;display:block;}
-                       svg:not([width]):not([height]){width:90%;height:90%;}
+                       html,body{margin:0;height:100%;background:#1e1e24;color:#e6e9ef;}
+                       body{display:flex;align-items:center;justify-content:center;padding:12px;box-sizing:border-box;}
+                       svg{width:90% !important;height:90% !important;display:block;}
                      </style></head><body>${svgText}</body></html>`;
 
                 // Build the timeline markers (alternating button + segment).
@@ -884,12 +900,36 @@
                 goTo(0);
             }
 
-            // ----- Anatomy callout jumps -----
+            // ----- Anatomy callout jumps + toggle -----
             for (const cb of document.querySelectorAll('.anat-callout')) {
                 cb.addEventListener('click', () => {
                     const target = document.getElementById(cb.dataset.jump);
                     if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 });
+            }
+            const calloutsToggle = document.getElementById('anat-callouts-toggle');
+            const calloutsGroup = document.querySelector('#anat-svg .anat-callouts');
+            if (calloutsToggle && calloutsGroup) {
+                calloutsToggle.addEventListener('change', () => {
+                    calloutsGroup.toggleAttribute('hidden', !calloutsToggle.checked);
+                });
+            }
+
+            // Rebuild the anatomy stage's bone so a fresh palette reading
+            // (from the inline style on #anat-svg) takes effect. The bone
+            // svg is the first inner <svg> of #anat-svg; replace it with a
+            // new .bone-slot -> makeBone(slot).
+            const anatSvg = document.getElementById('anat-svg');
+            function rebuildAnatBone() {
+                if (!anatSvg) return;
+                const prev = anatSvg.querySelector(':scope > svg');
+                const SLOT_ATTRS = { 'data-x': '10', 'data-y': '30', 'data-w': '340', 'data-h': '300' };
+                const slot = document.createElementNS(SVG_NS, 'g');
+                slot.setAttribute('class', 'bone-slot');
+                for (const [k, v] of Object.entries(SLOT_ATTRS)) slot.setAttribute(k, v);
+                if (prev) anatSvg.replaceChild(slot, prev);
+                else anatSvg.insertBefore(slot, anatSvg.firstChild);
+                slot.replaceWith(makeBone(slot));
             }
 
             // ----- Live edit cards (anatomy techniques) -----
@@ -904,30 +944,44 @@
             for (const card of document.querySelectorAll('.zoom-card.live-card')) {
                 const src = card.querySelector('.live-source');
                 const frame = card.querySelector('.live-frame');
-                const picker = card.querySelector('.live-color');
+                const pickers = Array.from(card.querySelectorAll('.live-color'));
                 const reset = card.querySelector('.live-reset');
                 if (!src || !frame) continue;
                 const initial = src.value;
-                let lastColor = picker ? picker.value : null;
+                // Track each picker's "current" value so we know what to
+                // swap out of the source text on the next change.
+                const state = pickers.map(p => ({ picker: p, initial: p.value, current: p.value, anatVar: p.dataset.anatVar }));
 
                 const render = () => { frame.srcdoc = wrapHTML(src.value); };
                 src.addEventListener('input', render);
-                if (picker) {
-                    picker.addEventListener('input', () => {
-                        // Replace the previous primary color (case-insensitive) with the new one
-                        const re = new RegExp(lastColor.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
-                        src.value = src.value.replace(re, picker.value);
-                        lastColor = picker.value;
+
+                for (const s of state) {
+                    s.picker.addEventListener('input', () => {
+                        const oldVal = s.current;
+                        const newVal = s.picker.value;
+                        const re = new RegExp(oldVal.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+                        src.value = src.value.replace(re, newVal);
+                        s.current = newVal;
                         render();
+                        // Mirror the change onto the full dogtag: set the
+                        // mapped CSS variable on #anat-svg and rebuild its
+                        // bone so the palette re-reads.
+                        if (s.anatVar && anatSvg) {
+                            anatSvg.style.setProperty(s.anatVar, newVal);
+                            rebuildAnatBone();
+                        }
                     });
                 }
+
                 if (reset) {
                     reset.addEventListener('click', () => {
                         src.value = initial;
-                        if (picker) {
-                            picker.value = card.dataset.primary || picker.value;
-                            lastColor = picker.value;
+                        for (const s of state) {
+                            s.picker.value = s.initial;
+                            s.current = s.initial;
+                            if (s.anatVar && anatSvg) anatSvg.style.setProperty(s.anatVar, s.initial);
                         }
+                        if (anatSvg) rebuildAnatBone();
                         render();
                     });
                 }
