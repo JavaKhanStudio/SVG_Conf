@@ -10,9 +10,14 @@
             }
             /* Subtle layered animations: slow rotation on the radial ray
                pattern, gentle hue drift on the whole card. Pairs with the
-               existing SMIL glow-pulse (which already pulses stdDeviation). */
+               existing SMIL glow-pulse (which already pulses stdDeviation).
+               transform-box: fill-box makes transform-origin resolve
+               against the element's own bounding box rather than the
+               parent viewport, so the rays rotate around their visual
+               centre instead of vanishing off-screen. */
             #rays-rotating {
-                transform-origin: 150px 260px;
+                transform-box: fill-box;
+                transform-origin: center;
                 animation: cardRaysRotate 60s linear infinite;
             }
             svg {
