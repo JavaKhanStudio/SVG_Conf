@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acte 1 - Formation SVG</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" href="images/LogoHeaderSBP.png" type="image/png">
+    <style>
+        .story-portrait {
+            float: right; width: 180px; height: 180px;
+            border-radius: 50%; object-fit: cover;
+            margin: 0 0 1rem 1.5rem;
+            border: 4px solid var(--primary-blue);
+            box-shadow: var(--shadow);
+        }
+        @media (max-width: 600px) {
+            .story-portrait { float: none; display: block; margin: 0 auto 1rem; width: 140px; height: 140px; }
+        }
+        .needs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .need-card {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.85rem 1rem;
+            background: linear-gradient(135deg, rgba(186, 1, 1, 0.05), rgba(7, 82, 207, 0.05));
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+        }
+        .need-card .need-icon {
+            color: var(--primary-blue);
+            flex-shrink: 0;
+            display: flex; align-items: center;
+        }
+        .need-card .need-num {
+            display: inline-block; min-width: 1.2em;
+            color: var(--primary-red); font-weight: 700;
+        }
+        a.need-link {
+            color: inherit; text-decoration: none;
+            transition: transform var(--transition), box-shadow var(--transition);
+        }
+        a.need-link:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        .tag-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        @media (max-width: 700px) { .tag-row { grid-template-columns: 1fr; } }
+        .tag-card {
+            background: #faf6ee;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1rem;
+            text-align: center;
+        }
+        .tag-card svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+        .tag-card .tag-caption {
+            margin-top: 0.5rem; font-size: 0.85rem;
+            color: var(--text-light); font-style: italic;
+        }
+        .litter-photo {
+            display: block; max-width: 100%;
+            margin: 1rem auto;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        /* Money shot */
+        .money-shot {
+            float: right;
+            width: 240px;
+            margin: 0 0 1rem 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        @media (max-width: 700px) {
+            .money-shot { float: none; display: block; margin: 0 auto 1rem; width: 200px; }
+        }
+        /* Mini-workshop */
+        .tagshop {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        @media (max-width: 800px) { .tagshop { grid-template-columns: 1fr; } }
+        .tagshop-stage {
+            background: linear-gradient(135deg, #fff8e1, #ffe0b2);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .tagshop-controls .control-group { margin-bottom: 0.9rem; }
+        .tagshop-controls .photo-picker {
+            display: flex; gap: 0.5rem; flex-wrap: wrap;
+        }
+        .tagshop-controls .photo-picker button {
+            background: white; border: 2px solid var(--border-color);
+            border-radius: 8px; padding: 0.25rem; cursor: pointer;
+            transition: all var(--transition);
+        }
+        .tagshop-controls .photo-picker button.active {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 2px rgba(7, 82, 207, 0.2);
+        }
+        .tagshop-controls .photo-picker button img {
+            display: block; width: 84px; height: 84px;
+            object-fit: cover; border-radius: 50%;
+        }
+        .tagshop-controls label { font-size: 1rem; font-weight: 600; }
+        .tagshop-controls input[type="text"] {
+            width: 100%; padding: 0.55rem 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px; font-size: 1.15rem;
+        }
+        .tagshop-controls input[type="color"] {
+            width: 64px; height: 40px; padding: 0;
+            border: 1px solid var(--border-color);
+            border-radius: 4px; cursor: pointer; vertical-align: middle;
+        }
+        .tagshop-controls input[type="range"] { height: 28px; }
+        /* Luminance / flip indicator */
+        #ts-flip-panel .lum-bar {
+            position: relative; height: 18px;
+            margin: 0.25rem 0 0.4rem;
+            border-radius: 3px;
+            overflow: visible;
+        }
+        #ts-flip-panel .lum-bar-track {
+            position: absolute; inset: 0;
+            background: linear-gradient(to right, #000 0%, #fff 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+        }
+        #ts-flip-panel .lum-bar-marker {
+            position: absolute; top: -3px; bottom: -3px;
+            width: 4px;
+            background: var(--primary-red);
+            border-radius: 2px;
+            transform: translateX(-50%);
+            box-shadow: 0 0 0 1px white;
+            transition: left 0.15s ease;
+        }
+        #ts-flip-panel .lum-bar-threshold {
+            position: absolute; top: -6px; bottom: -6px;
+            width: 2px;
+            background: var(--primary-blue);
+            border-radius: 1px;
+            transform: translateX(-50%);
+            box-shadow: 0 0 0 1px white;
+        }
+        #ts-flip-panel .lum-readout {
+            font-size: 0.85rem; color: var(--text-light);
+            display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;
+        }
+        #ts-flip-panel .lum-readout code {
+            background: #f0f0f4; padding: 1px 5px; border-radius: 3px;
+            color: var(--text-color); font-size: 0.85rem;
+        }
+        #ts-flip-panel .lum-spacer { color: var(--border-color); }
+        #ts-flip-panel .lum-swatch {
+            display: inline-block;
+            width: 14px; height: 14px;
+            border: 1px solid #aaa;
+            border-radius: 2px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <!-- The bone subtree is injected into each consumer <svg> at load time
+         (see the bottom <script>). Each instance gets unique gradient/pattern
+         IDs so they don't collide; colors are baked in per instance from the
+         tag's palette. CSS-variable inheritance through cross-SVG <use> isn't
+         reliable for gradient stops, hence the inlined-per-instance approach. -->
+
+
+    <main>
+        <div class="page-hero">
+            <p style="text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.25rem;" data-i18n="story_act_label">Acte 1</p>
+            <h2 data-i18n="story1_title">Comment je me suis retrouve a coder un atelier de SVG</h2>
+            <p data-i18n="story1_subtitle">Une histoire de chien, de site web et de variables CSS</p>
+        </div>
+
+        <!-- Intro -->
+        <div class="content-block">
+            <h3 data-i18n="story1_hello_title">Qui suis-je</h3>
+            <img src="images/story/portrait.jpg" alt="Simon" class="story-portrait">
+            <p data-i18n="story1_hello_p1">Simon Bedard, professeur d'informatique depuis 3 ans, Canadien en France depuis 10 ans, et grand curieux ayant fait aussi bien du jeu video que du design web dans mes temps libres. J'ai actuellement un interet tout particulier pour les outils augmentes par l'IA.</p>
+            <p data-i18n="story1_hello_p2">Aujourd'hui au menu : l'histoire de comment un projet personnel m'a force a reapprendre comment fonctionne le SVG.</p>
+        </div>
+
+        <!-- The dog -->
+        <div class="content-block">
+            <h3 data-i18n-html="story1_dog_title">Une famille de cabots <span style="color: var(--text-light); font-weight: 400; font-size: 0.85em;">&rarr; 5 chiots plus tard</span></h3>
+            <p data-i18n-html="story1_dog_p1">Mon chien Syn (Syntaxe pour les intimes) etait sur le point d'etre papa. Naturellement, j'ai voulu <a class="inline-link" href="https://javakhanstudio.github.io/SynAndKaya/" target="_blank" rel="noopener">faire un petit site pour presenter la petite famille</a> et celebrer l'occasion.</p>
+            <img src="images/story/puppies.jpg" alt="Les chiots" class="litter-photo" style="max-width: 500px;">
+            <p data-i18n-html="story1_dog_p2"><s style="color: var(--text-light);">J'ai donc facture une journee de travail a Syn.</s> C'etait le moment parfait pour faire un peu de veille techno, tester quelques outils et garder un souvenir de cet episode.</p>
+        </div>
+
+        <!-- The challenge -->
+        <div class="content-block">
+            <h3 data-i18n="story1_challenge_title">Defi : un dogtag par chien</h3>
+            <p data-i18n="story1_challenge_p1">Un de mes objectifs : afficher chaque chien avec sa propre medaille personnalisee. Onze chiens, onze medailles, toutes coherentes mais toutes uniques.</p>
+            <p data-i18n="story1_challenge_p2">Premier reflexe : demander a une IA de generer les images. Probleme :</p>
+            <div class="needs-grid">
+                <a class="need-card need-link" href="svg-anatomy.html">
+                    <span class="need-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h12M4 18h8"/></svg>
+                    </span>
+                    <span><span class="need-num">1.</span> <span data-i18n-html="story1_need_text">Besoin d'une image <strong>avec du texte</strong>.</span></span>
+                </a>
+                <a class="need-card need-link" href="workshop.html">
+                    <span class="need-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="11.5" r="2.5"/><circle cx="11.5" cy="17.5" r="2.5"/><circle cx="18.5" cy="14.5" r="2.5"/></svg>
+                    </span>
+                    <span><span class="need-num">2.</span> <span data-i18n-html="story1_need_color">Besoin d'une image <strong>facilement recoloriable</strong>.</span></span>
+                </a>
+                <a class="need-card need-link" href="what-is-svg.html">
+                    <span class="need-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3 14 10M3 21l7-7M21 3v7M21 3h-7M3 21v-7M3 21h7"/></svg>
+                    </span>
+                    <span><span class="need-num">3.</span> <span data-i18n-html="story1_need_size">Besoin d'une <strong>taille flexible</strong>.</span></span>
+                </a>
+                <a class="need-card need-link" href="make-svg.html">
+                    <span class="need-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l3-3 9-9 3 3-9 9-3 0v-3"/><path d="M14 6l4 4"/><path d="M10 21h11"/></svg>
+                    </span>
+                    <span><span class="need-num">4.</span> <span data-i18n-html="story1_need_draw">Et surtout : <strong>je suis nul en dessin.</strong></span></span>
+                </a>
+            </div>
+        </div>
+
+        <!-- The 3 examples (boneV13-based) -->
+        <div class="content-block">
+            <h3 data-i18n="story1_examples_title">La solution : un SVG</h3>
+            <p data-i18n="story1_examples_desc">Apres plusieurs iterations, que nous verrons par la suite, la solution est rapidement devenue claire : utiliser un SVG. Meme template, trois chiens differents (le premier, c'est Syn — enfin, Syntaxe).</p>
+
+            <div class="tag-row">
+                <!-- Syn(taxe) — warm gold/orange -->
+                <div class="tag-card">
+                    <svg viewBox="0 0 200 235" xmlns="http://www.w3.org/2000/svg" style="--metal-s1:#56380e; --metal-s3:#7a5418; --metal-s4:#9a6e23; --metal-s5:#b78b34; --metal-s6:#d6ab51; --metal-s7:#f0cd7c; --bone-border:#5a3c0e">
+                        <defs>
+                            <clipPath id="circ-syn"><circle cx="100" cy="80" r="65"/></clipPath>
+                        </defs>
+                        <image href="images/story/syn.jpg" x="35" y="15" width="130" height="130" preserveAspectRatio="xMidYMid slice" clip-path="url(#circ-syn)"/>
+                        <circle cx="100" cy="80" r="65" fill="none" stroke="#5a3c0e" stroke-width="5"/>
+                        <g class="bone-slot" data-x="20" data-y="120" data-w="160" data-h="100"></g>
+                        <text x="100" y="180" text-anchor="middle" font-family="Cabin Sketch, Arial" font-weight="bold" font-size="22" fill="#fff" stroke="#000" stroke-width="3" stroke-linejoin="round" paint-order="stroke" style="paint-order: stroke fill" transform="scale(1)">Syntaxe</text>
+                    </svg>
+                    <p class="tag-caption" data-i18n="story1_tag_caption_syn">Syn(taxe), le papa</p>
+                </div>
+                <!-- Albert — blue -->
+                <div class="tag-card">
+                    <svg viewBox="0 0 200 235" xmlns="http://www.w3.org/2000/svg" style="--metal-s1:#0a1428; --metal-s3:#152340; --metal-s4:#1d3056; --metal-s5:#264070; --metal-s6:#33548c; --metal-s7:#4a72b3; --bone-border:rgba(255,255,255,0.7)">
+                        <defs>
+                            <clipPath id="circ-alb"><circle cx="100" cy="80" r="65"/></clipPath>
+                        </defs>
+                        <image href="images/story/albert.jpg" x="35" y="15" width="130" height="130" preserveAspectRatio="xMidYMid slice" clip-path="url(#circ-alb)"/>
+                        <circle cx="100" cy="80" r="65" fill="none" stroke="#0a1428" stroke-width="5"/>
+                        <g class="bone-slot" data-x="20" data-y="120" data-w="160" data-h="100"></g>
+                        <text x="100" y="180" text-anchor="middle" font-family="Cabin Sketch, Arial" font-weight="bold" font-size="22" fill="#fff" stroke="#000" stroke-width="3" stroke-linejoin="round" paint-order="stroke" style="paint-order: stroke fill">Albert</text>
+                    </svg>
+                    <p class="tag-caption">Albert</p>
+                </div>
+                <!-- Daisy — pink -->
+                <div class="tag-card">
+                    <svg viewBox="0 0 200 235" xmlns="http://www.w3.org/2000/svg" style="--metal-s1:#4a1a3c; --metal-s3:#7a2c5e; --metal-s4:#a04280; --metal-s5:#c057a0; --metal-s6:#d97cba; --metal-s7:#f0a8d6; --bone-border:#4a1a3c">
+                        <defs>
+                            <clipPath id="circ-dai"><circle cx="100" cy="80" r="65"/></clipPath>
+                        </defs>
+                        <image href="images/story/daisy.jpg" x="35" y="15" width="130" height="130" preserveAspectRatio="xMidYMid slice" clip-path="url(#circ-dai)"/>
+                        <circle cx="100" cy="80" r="65" fill="none" stroke="#4a1a3c" stroke-width="5"/>
+                        <g class="bone-slot" data-x="20" data-y="120" data-w="160" data-h="100"></g>
+                        <text x="100" y="180" text-anchor="middle" font-family="Cabin Sketch, Arial" font-weight="bold" font-size="22" fill="#fff" stroke="#000" stroke-width="3" stroke-linejoin="round" paint-order="stroke" style="paint-order: stroke fill">Daisy</text>
+                    </svg>
+                    <p class="tag-caption">Daisy</p>
+                </div>
+            </div>
+            <p data-i18n="story1_examples_note">Le format est SVG : du texte XML, recolorable a la volee, redimensionnable a l'infini, et le nom du chien est juste... un attribut texte.</p>
+        </div>
+
+        <!-- Mini-workshop -->
+        <div class="content-block">
+            <h3 data-i18n="story1_play_title">A toi de jouer</h3>
+            <p data-i18n="story1_play_desc">Choisis un chien, change le nom, change la couleur de la medaille. Tout est genere en temps reel — c'est exactement le pattern qu'utilise le site SynAndKaya pour onze chiens differents.</p>
+
+            <div class="tagshop">
+                <div class="tagshop-stage">
+                    <svg id="ts-svg" viewBox="0 0 200 235" width="340" height="400" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <clipPath id="ts-clip"><circle cx="100" cy="80" r="65"/></clipPath>
+                        </defs>
+                        <image id="ts-image" href="images/story/syn.jpg" x="35" y="15" width="130" height="130" preserveAspectRatio="xMidYMid slice" clip-path="url(#ts-clip)"/>
+                        <circle id="ts-ring" cx="100" cy="80" r="65" fill="none" stroke="#5a3c0e" stroke-width="5"/>
+                        <g class="bone-slot" data-x="20" data-y="120" data-w="160" data-h="100"></g>
+                        <text id="ts-text" x="100" y="180" text-anchor="middle" font-family="Cabin Sketch, Arial" font-weight="bold" font-size="22" fill="#fff" stroke="#000" stroke-width="3" stroke-linejoin="round" paint-order="stroke" style="paint-order: stroke fill">Syntaxe</text>
+                    </svg>
+                </div>
+                <div class="tagshop-controls">
+                    <div class="control-group">
+                        <label data-i18n="story1_play_pick">Choisis un chien :</label>
+                        <div class="photo-picker">
+                            <button class="active" data-img="images/story/syn.jpg" data-name="Syntaxe" data-base="#9a6e23"><img src="images/story/syn.jpg" alt="Syn"></button>
+                            <button data-img="images/story/albert.jpg" data-name="Albert" data-base="#1d3056"><img src="images/story/albert.jpg" alt="Albert"></button>
+                            <button data-img="images/story/daisy.jpg" data-name="Daisy" data-base="#a04280"><img src="images/story/daisy.jpg" alt="Daisy"></button>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="ts-name" data-i18n="story1_play_name">Nom :</label>
+                        <input type="text" id="ts-name" value="Syntaxe" maxlength="14">
+                    </div>
+                    <div class="control-group">
+                        <label for="ts-base" data-i18n="story1_play_color">Couleur de la medaille :</label>
+                        <div style="display: flex; gap: 0.75rem; align-items: center; margin-top: 0.25rem;">
+                            <input type="color" id="ts-base" value="#9a6e23">
+                            <span id="ts-base-hex" style="font-family: ui-monospace, monospace; font-size: 0.85rem; color: var(--text-light);">#9a6e23</span>
+                        </div>
+                    </div>
+
+                    <!-- Luminance / flip indicator -->
+                    <div class="control-group" id="ts-flip-panel">
+                        <label data-i18n="story1_flip_label">Luminance et seuil de flip :</label>
+                        <div class="lum-bar">
+                            <div class="lum-bar-track"></div>
+                            <div class="lum-bar-marker" id="ts-lum-marker" title="luminance"></div>
+                            <div class="lum-bar-threshold" id="ts-thresh-marker" title="seuil"></div>
+                        </div>
+                        <div class="lum-readout">
+                            <span data-i18n="story1_flip_lum">Luminance :</span>
+                            <code id="ts-lum-val">0.00</code>
+                            <span class="lum-spacer">&middot;</span>
+                            <span data-i18n="story1_flip_border">Bordure :</span>
+                            <code id="ts-border-mode">mid</code>
+                            <span id="ts-border-swatch" class="lum-swatch"></span>
+                        </div>
+                        <div style="display:flex; gap:0.5rem; align-items:center; margin-top:0.5rem; font-size:0.85rem;">
+                            <label for="ts-thresh" data-i18n="story1_flip_thresh">Seuil :</label>
+                            <input type="range" id="ts-thresh" min="0" max="1" step="0.01" value="0.30" style="flex:1;">
+                            <code id="ts-thresh-val" style="min-width: 3em; text-align: right;">0.30</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p data-i18n-html="story1_flip_explain" style="margin-top:1rem; padding:0.75rem 1rem; background:rgba(155, 89, 182, 0.06); border-left:3px solid #9b59b6; border-radius:0 6px 6px 0; font-size:0.92rem;">
+                <i class="fa-solid fa-code" style="color:#9b59b6; margin-right:0.4rem;"></i>
+                <strong>Et la bordure ?</strong> Elle n'est pas dans la palette : c'est du <strong>JavaScript</strong> qui la calcule a partir de la luminance perceptive de la couleur principale. Si <code>0.299&middot;R + 0.587&middot;G + 0.114&middot;B</code> (la luminance) passe sous le seuil, la bordure passe en <strong>blanc</strong> (sinon elle reste sombre). Glisse le seuil ou choisis Albert pour voir le flip se declencher.
+            </p>
+        </div>
+
+        <!-- AI bridge with money shot -->
+        <div class="content-block" style="border-left: 4px solid #9b59b6; background: linear-gradient(135deg, rgba(155, 89, 182, 0.04), rgba(186, 1, 1, 0.04));">
+            <h3 data-i18n="story1_ai_title"><i class="fa-solid fa-robot" style="color:#9b59b6; margin-right:0.5rem;"></i>Tout ca, possible grace a l'IA</h3>
+            <img src="images/story/money-shot.jpg" alt="Syntaxe en dogtag — la solution finale" class="money-shot">
+            <p data-i18n="story1_ai_p1">Le travail ne fut pas simple, mais en une journee, accompagne par Claude, les tags etaient prets a l'emploi et uniques pour chaque chien.</p>
+            <p data-i18n-html="story1_ai_p2">Je suis nul en dessin, mais je sais ecrire un prompt et lire du code — les deux seuls skills necessaires pour creer une image vectorielle en 2026. C'est la-dessus qu'on va creuser dans la suite : <a class="inline-link" href="what-is-svg.html">pourquoi le SVG plait a l'IA</a>, comment <a class="inline-link" href="svg-anatomy.html">l'anatomie d'un fichier</a> se prete au format texte, et comment construire ses propres SVGs <a class="inline-link" href="make-svg.html">parametriques</a> avec un atelier interactif.</p>
+            <div style="clear: both;"></div>
+        </div>
+
+        <!-- End-of-act CTA -->
+        <div class="content-block" style="text-align: center;">
+            <p data-i18n="story1_end_label" style="text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-light); font-size: 0.85rem;">Fin de l'acte 1</p>
+            <p data-i18n="story1_end_p" style="font-size: 1.05rem; margin: 1rem 0;">L'acte 2 raconte comment l'IA m'a aide a tout construire — les outils, les pieges, les surprises.</p>
+            <a href="stories.html" data-i18n="story1_end_back" style="display: inline-block; padding: 0.65rem 1.4rem; background: var(--card-bg); color: var(--primary-blue); border: 1px solid var(--primary-blue); border-radius: var(--radius); text-decoration: none; font-weight: 600; margin-right: 0.5rem;">Retour aux histoires</a>
+            <a href="story-part2.html" data-i18n="story1_end_continue" style="display: inline-block; padding: 0.65rem 1.4rem; background: var(--accent-gradient); color: white; border-radius: var(--radius); text-decoration: none; font-weight: 600;">Continuer vers l'Acte 2 &rarr;</a>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Port of SynAndKaya's colorUtils.generateColorPalette — Disney-ish
+        // metallic stops S1..S7 plus a contrast border, derived from a single
+        // RGB base.
+        (() => {
+            const $ = sel => document.querySelector(sel);
+            const SVG_NS = 'http://www.w3.org/2000/svg';
+            let boneCounter = 0;
+
+            // Build a self-contained bone <svg> subtree with this instance's
+            // palette baked in (no CSS-var indirection — that path is unreliable
+            // through cross-SVG references).  Returns an SVGSVGElement that
+            // should be inserted as a child of the target SVG.
+            function makeBone({x, y, w, h, palette}) {
+                const id = 'bv13-' + (++boneCounter);
+                const wrapper = document.createElementNS(SVG_NS, 'svg');
+                wrapper.setAttribute('x', x);
+                wrapper.setAttribute('y', y);
+                wrapper.setAttribute('width', w);
+                wrapper.setAttribute('height', h);
+                wrapper.setAttribute('viewBox', '0 0 24 15');
+                wrapper.setAttribute('overflow', 'visible');
+                wrapper.innerHTML = `
+                    <defs>
+                        <linearGradient id="${id}-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%"   stop-color="${palette.s3}"/>
+                            <stop offset="10%"  stop-color="${palette.s4}"/>
+                            <stop offset="25%"  stop-color="${palette.s5}"/>
+                            <stop offset="40%"  stop-color="${palette.s6}"/>
+                            <stop offset="60%"  stop-color="${palette.s6}"/>
+                            <stop offset="75%"  stop-color="${palette.s5}"/>
+                            <stop offset="80%"  stop-color="${palette.s6}"/>
+                            <stop offset="100%" stop-color="${palette.s7}"/>
+                        </linearGradient>
+                        <pattern id="${id}-tex" patternUnits="userSpaceOnUse" width="2" height="5" patternTransform="scale(0.2)">
+                            <rect width="5" height="5" fill="url(#${id}-grad)"/>
+                            <path d="M0,0 L5,5 M5,0 L0,5" stroke="${palette.s1}" stroke-width="0.15" stroke-opacity="0.1"/>
+                        </pattern>
+                        <linearGradient id="${id}-edge" x1="0%" y1="50%" x2="100%" y2="100%">
+                            <stop offset="0%"   stop-color="rgba(255,255,255,0.6)"/>
+                            <stop offset="30%"  stop-color="rgba(255,255,255,0.2)"/>
+                            <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+                        </linearGradient>
+                    </defs>
+                    <ellipse cx="12" cy="7" rx="8" ry="5" fill="rgba(0,0,0,0.15)"/>
+                    <g transform="matrix(0.832724, 0.832724, -0.847675, 0.847675, 12.115215, -12.831682)">
+                        <path d="M15 3a3 3 0 0 1 3 3a3 3 0 1 1 -2.12 5.122l-4.758 4.758a3 3 0 1 1 -5.117 2.297l0 -.177l-.176 0a3 3 0 1 1 2.298 -5.115l4.758 -4.758a3 3 0 0 1 2.12 -5.122z"
+                              fill="url(#${id}-tex)" stroke="${palette.border}"
+                              stroke-width="0.4" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M15 3a3 3 0 0 1 3 3a3 3 0 1 1 -2.12 5.122l-4.758 4.758a3 3 0 1 1 -5.117 2.297l0 -.177l-.176 0a3 3 0 1 1 2.298 -5.115l4.758 -4.758a3 3 0 0 1 2.12 -5.122z"
+                              fill="none" stroke="url(#${id}-edge)"
+                              stroke-width="0.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </g>
+                `;
+                return wrapper;
+            }
+
+            // Read palette from inline CSS variables on the parent SVG, with
+            // hard-coded fallbacks (so static tags work even when JS hasn't
+            // run yet — defensive only, JS always runs).
+            function paletteFromSvg(svg) {
+                const cs = getComputedStyle(svg);
+                const get = (name, fb) => (cs.getPropertyValue(name).trim() || fb);
+                return {
+                    s1:     get('--metal-s1', '#444'),
+                    s3:     get('--metal-s3', '#666'),
+                    s4:     get('--metal-s4', '#777'),
+                    s5:     get('--metal-s5', '#888'),
+                    s6:     get('--metal-s6', '#999'),
+                    s7:     get('--metal-s7', '#aaa'),
+                    border: get('--bone-border', '#333'),
+                };
+            }
+
+            // Inject bones into the 3 example tags' .bone-slot placeholders,
+            // using each parent SVG's CSS variables for the palette. The
+            // mini-workshop slot is handled separately by applyAll().
+            function buildStaticBones() {
+                for (const slot of document.querySelectorAll('.tag-card .bone-slot')) {
+                    const svg = slot.ownerSVGElement;
+                    const palette = paletteFromSvg(svg);
+                    const bone = makeBone({
+                        x: +slot.dataset.x,
+                        y: +slot.dataset.y,
+                        w: +slot.dataset.w,
+                        h: +slot.dataset.h,
+                        palette,
+                    });
+                    slot.replaceWith(bone);
+                }
+            }
+
+            // Mini-workshop: keep a reference to the current bone (or the
+            // initial placeholder) so we can replace it on color/photo change.
+            let workshopBone = document.querySelector('#ts-svg .bone-slot');
+            function rebuildWorkshopBone(palette) {
+                const svg = $('#ts-svg');
+                const fresh = makeBone({
+                    x: 20, y: 155, w: 160, h: 100,
+                    palette,
+                });
+                if (workshopBone) workshopBone.replaceWith(fresh);
+                else svg.insertBefore(fresh, $('#ts-text'));
+                workshopBone = fresh;
+            }
+
+            function hexToRgb(hex) {
+                const h = hex.replace('#', '');
+                return [
+                    parseInt(h.slice(0, 2), 16),
+                    parseInt(h.slice(2, 4), 16),
+                    parseInt(h.slice(4, 6), 16),
+                ];
+            }
+            function rgbStr(r, g, b) {
+                return `rgb(${r}, ${g}, ${b})`;
+            }
+            function clamp(n) { return Math.max(0, Math.min(255, Math.round(n))); }
+            function metallicShade(r, g, b, brightAdj, satFactor, metalFactor) {
+                let er = Math.min(255, r * 1.1);
+                let eg = Math.min(255, g * 1.1);
+                let eb = Math.min(255, b * 1.1);
+                const ba = brightAdj - 5;
+                let ar = Math.max(0, Math.min(255, er + ba));
+                let ag = Math.max(0, Math.min(255, eg + ba));
+                let ab = Math.max(0, Math.min(255, eb + ba));
+                const grey = (ar + ag + ab) / 3;
+                const mf = metalFactor * 0.8;
+                ar = clamp(ar * (1 - mf) + grey * mf);
+                ag = clamp(ag * (1 - mf) + grey * mf);
+                ab = clamp(ab * (1 - mf) + grey * mf);
+                return [ar, ag, ab];
+            }
+            function luminance(r, g, b) {
+                return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+            }
+            // Computes the border color from the base RGB + a configurable
+            // "flip" threshold. Below the threshold => the border flips to
+            // semi-transparent white (so a dark tag stays readable).
+            function computeBorder(r, g, b, flipThreshold) {
+                const lum = luminance(r, g, b);
+                if (lum < flipThreshold)  return { color: 'rgba(255,255,255,0.7)', mode: 'white (flip)' };
+                if (lum > 0.7)            return { color: rgbStr(clamp(r-120), clamp(g-120), clamp(b-120)), mode: 'super dark' };
+                                          return { color: rgbStr(...metallicShade(r, g, b, -60, 0.5, 0.45)), mode: 'mid metallic' };
+            }
+            function generatePalette(hex, flipThreshold = 0.30) {
+                const [r, g, b] = hexToRgb(hex);
+                const stops = [
+                    metallicShade(r, g, b, -90, 0.6, 0.6),   // S1
+                    metallicShade(r, g, b, -70, 0.62, 0.58), // S2
+                    metallicShade(r, g, b, -50, 0.65, 0.56), // S3
+                    metallicShade(r, g, b, -25, 0.7, 0.54),  // S4
+                    metallicShade(r, g, b, 0,   0.75, 0.52), // S5
+                    metallicShade(r, g, b, 25,  0.8, 0.5),   // S6
+                    metallicShade(r, g, b, 50,  0.85, 0.48), // S7
+                ];
+                const borderInfo = computeBorder(r, g, b, flipThreshold);
+                return {
+                    s1: rgbStr(...stops[0]), s2: rgbStr(...stops[1]),
+                    s3: rgbStr(...stops[2]), s4: rgbStr(...stops[3]),
+                    s5: rgbStr(...stops[4]), s6: rgbStr(...stops[5]),
+                    s7: rgbStr(...stops[6]),
+                    border: borderInfo.color,
+                    borderMode: borderInfo.mode,
+                    lum: luminance(r, g, b),
+                };
+            }
+
+            const stage = {
+                svg:        $('#ts-svg'),
+                img:        $('#ts-image'),
+                ring:       $('#ts-ring'),
+                text:       $('#ts-text'),
+                name:       $('#ts-name'),
+                base:       $('#ts-base'),
+                hex:        $('#ts-base-hex'),
+                thresh:     $('#ts-thresh'),
+                threshVal:  $('#ts-thresh-val'),
+                lumMarker:  $('#ts-lum-marker'),
+                threshMark: $('#ts-thresh-marker'),
+                lumVal:     $('#ts-lum-val'),
+                borderMode: $('#ts-border-mode'),
+                borderSwatch: $('#ts-border-swatch'),
+            };
+
+            function applyAll() {
+                stage.text.textContent = stage.name.value || 'Sans nom';
+                const flipThresh = parseFloat(stage.thresh.value);
+                const p = generatePalette(stage.base.value, flipThresh);
+                rebuildWorkshopBone(p);
+                stage.ring.setAttribute('stroke', p.border);
+                stage.hex.textContent = stage.base.value;
+                // Flip panel
+                stage.lumMarker.style.left = `${(p.lum * 100).toFixed(1)}%`;
+                stage.threshMark.style.left = `${(flipThresh * 100).toFixed(1)}%`;
+                stage.lumVal.textContent = p.lum.toFixed(2);
+                stage.threshVal.textContent = flipThresh.toFixed(2);
+                stage.borderMode.textContent = p.borderMode;
+                stage.borderSwatch.style.background = p.border;
+            }
+
+            stage.name.addEventListener('input', applyAll);
+            stage.base.addEventListener('input', applyAll);
+            stage.thresh.addEventListener('input', applyAll);
+
+            for (const btn of document.querySelectorAll('.photo-picker button')) {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.photo-picker button').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    stage.img.setAttribute('href', btn.dataset.img);
+                    stage.name.value = btn.dataset.name;
+                    stage.base.value = btn.dataset.base;
+                    applyAll();
+                });
+            }
+
+            buildStaticBones();
+            applyAll();
+        })();
+    </script>
+</body>
+</html>
