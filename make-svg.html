@@ -18,6 +18,39 @@
         .pitfall-list { list-style: none; padding: 0; }
         .pitfall-list li { padding: 0.6rem 0.9rem; margin: 0.4rem 0; background: rgba(231, 76, 60, 0.06); border-left: 3px solid #e74c3c; border-radius: 0 6px 6px 0; }
         .pitfall-list li strong { color: #c0392b; }
+        /* Live editor */
+        .live-editor .live-code {
+            display: flex; flex-direction: column;
+            min-height: 280px;
+        }
+        .live-editor .live-source {
+            flex: 1;
+            background: var(--code-bg);
+            color: var(--code-text);
+            border: none; outline: none;
+            font-family: ui-monospace, "Cascadia Code", monospace;
+            font-size: 0.82rem;
+            line-height: 1.45;
+            padding: 0.8rem 1rem;
+            border-radius: 6px;
+            resize: vertical;
+            tab-size: 2;
+            min-height: 240px;
+            white-space: pre;
+        }
+        .live-editor .live-render {
+            display: flex; align-items: stretch; justify-content: stretch;
+            min-height: 280px;
+            padding: 0;
+        }
+        .live-editor .live-render iframe {
+            flex: 1;
+            border: none;
+            background: white;
+            border-radius: var(--radius);
+            min-height: 280px;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -34,33 +67,25 @@
             <h3 data-i18n="recipe_principle_title">Le principe</h3>
             <p data-i18n-html="recipe_principle_desc">Tu declares tes parametres en variables CSS dans une regle <code>:root</code>, placee dans une balise <code>&lt;style&gt;</code> en tout debut du SVG. Tu reutilises ces variables via <code>var(--ma-variable)</code> dans les attributs. C'est tout : le SVG reste 100% valide, ouvrable dans Inkscape, dans une page web, ou dans <a class="inline-link" href="workshop.html">l'atelier</a> qui detecte les variables et fabrique les controles automatiquement.</p>
 
-            <div class="recipe-grid">
-                <div class="code-block">
-                    <span class="code-label">Template minimal</span>
-                    <code><span class="tag">&lt;svg</span> <span class="attr">xmlns</span>=<span class="val">"http://www.w3.org/2000/svg"</span> <span class="attr">viewBox</span>=<span class="val">"0 0 200 200"</span><span class="tag">&gt;</span>
-  <span class="tag">&lt;style&gt;</span>
+            <div class="recipe-grid live-editor" data-editor="template">
+                <div class="code-block live-code">
+                    <span class="code-label" data-i18n="recipe_live_label">Template minimal &mdash; modifie a gauche, regarde a droite</span>
+                    <textarea class="live-source" spellcheck="false">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"&gt;
+  &lt;style&gt;
     :root {
-      <span class="attr">--bg-color</span>:    <span class="val">#1a1a2e</span>;
-      <span class="attr">--shape-color</span>: <span class="val">#4a90e2</span>;
-      <span class="attr">--shape-size</span>:  <span class="val">50</span>;
+      --bg-color:    #1a1a2e;
+      --shape-color: #4a90e2;
+      --shape-size:  50;
     }
-  <span class="tag">&lt;/style&gt;</span>
-  <span class="tag">&lt;rect</span> <span class="attr">width</span>=<span class="val">"100%"</span> <span class="attr">height</span>=<span class="val">"100%"</span>
-        <span class="attr">fill</span>=<span class="val">"var(--bg-color)"</span> <span class="tag">/&gt;</span>
-  <span class="tag">&lt;circle</span> <span class="attr">cx</span>=<span class="val">"100"</span> <span class="attr">cy</span>=<span class="val">"100"</span>
-           <span class="attr">r</span>=<span class="val">"var(--shape-size)"</span>
-           <span class="attr">fill</span>=<span class="val">"var(--shape-color)"</span> <span class="tag">/&gt;</span>
-<span class="tag">&lt;/svg&gt;</span></code>
+  &lt;/style&gt;
+  &lt;rect width="100%" height="100%"
+        fill="var(--bg-color)" /&gt;
+  &lt;circle cx="100" cy="100"
+           r="var(--shape-size)"
+           fill="var(--shape-color)" /&gt;
+&lt;/svg&gt;</textarea>
                 </div>
-                <div class="svg-display">
-                    <svg viewBox="0 0 200 200" width="220" height="220" xmlns="http://www.w3.org/2000/svg">
-                        <style>.recipe-demo { --bg-color: #1a1a2e; --shape-color: #4a90e2; --shape-size: 50; }</style>
-                        <g class="recipe-demo">
-                            <rect width="100%" height="100%" fill="#1a1a2e"/>
-                            <circle cx="100" cy="100" r="50" fill="#4a90e2"/>
-                        </g>
-                    </svg>
-                </div>
+                <div class="svg-display live-render"></div>
             </div>
         </div>
 
@@ -117,29 +142,20 @@
             <h3 data-i18n="recipe_example_title">Exemple : deux couleurs liees</h3>
             <p data-i18n-html="recipe_example_desc">Le cas classique : une couleur principale et son ombre. Avec <code>@ws mix=...</code>, tu modifies une seule couleur et l'autre suit en temps reel.</p>
 
-            <div class="recipe-grid">
-                <div class="code-block">
-                    <code><span class="tag">&lt;svg</span> <span class="attr">xmlns</span>=<span class="val">"http://www.w3.org/2000/svg"</span>
-     <span class="attr">viewBox</span>=<span class="val">"0 0 200 100"</span><span class="tag">&gt;</span>
-  <span class="tag">&lt;style&gt;</span>
-    :root {
-      <span class="attr">--orange</span>:        <span class="val">#f09040</span>;
-      <span class="attr">--orange-shadow</span>: <span class="val">#7a4820</span>;
-      <span class="comment">/* @ws mix=orange:-0.55 */</span>
-    }
-    .sun    { fill: var(--orange); }
-    .shadow { fill: var(--orange-shadow); }
-  <span class="tag">&lt;/style&gt;</span>
-  <span class="tag">&lt;circle</span> <span class="attr">class</span>=<span class="val">"sun"</span>    <span class="attr">cx</span>=<span class="val">"60"</span>  <span class="attr">cy</span>=<span class="val">"50"</span> <span class="attr">r</span>=<span class="val">"40"</span><span class="tag">/&gt;</span>
-  <span class="tag">&lt;circle</span> <span class="attr">class</span>=<span class="val">"shadow"</span> <span class="attr">cx</span>=<span class="val">"140"</span> <span class="attr">cy</span>=<span class="val">"50"</span> <span class="attr">r</span>=<span class="val">"40"</span><span class="tag">/&gt;</span>
-<span class="tag">&lt;/svg&gt;</span></code>
+            <div class="recipe-grid live-editor" data-editor="linked">
+                <div class="code-block live-code">
+                    <span class="code-label" data-i18n="recipe_live_label2">Edite le code, regarde le resultat</span>
+                    <textarea class="live-source" spellcheck="false">&lt;svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 200 100"&gt;
+  &lt;style&gt;
+    .sun    { fill: #f09040; }
+    .shadow { fill: #7a4820; }
+  &lt;/style&gt;
+  &lt;circle class="sun"    cx="60"  cy="50" r="40"/&gt;
+  &lt;circle class="shadow" cx="140" cy="50" r="40"/&gt;
+&lt;/svg&gt;</textarea>
                 </div>
-                <div class="svg-display">
-                    <svg viewBox="0 0 200 100" width="280" height="140" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="60"  cy="50" r="40" fill="#f09040"/>
-                        <circle cx="140" cy="50" r="40" fill="#7a4820"/>
-                    </svg>
-                </div>
+                <div class="svg-display live-render"></div>
             </div>
         </div>
 
@@ -166,5 +182,35 @@
     <div id="footer-placeholder"></div>
 
     <script src="js/main.js"></script>
+    <script>
+        // Render the textarea SVG inside an iframe (srcdoc) so its <style>
+        // block, especially the :root rule, doesn't bleed into the host page.
+        // The iframe is its own document with its own root element.
+        (() => {
+            for (const editor of document.querySelectorAll('.live-editor')) {
+                const src = editor.querySelector('.live-source');
+                const out = editor.querySelector('.live-render');
+                if (!src || !out) continue;
+
+                // Mount a single iframe once; we'll just rewrite its srcdoc.
+                const frame = document.createElement('iframe');
+                frame.setAttribute('sandbox', 'allow-same-origin');
+                frame.setAttribute('aria-label', 'SVG preview');
+                out.appendChild(frame);
+
+                const wrap = (svgText) =>
+                    `<!DOCTYPE html><html><head><style>
+                       html,body{margin:0;height:100%;}
+                       body{display:flex;align-items:center;justify-content:center;padding:8px;box-sizing:border-box;}
+                       svg{width:auto;height:auto;max-width:100%;max-height:100%;display:block;}
+                       svg:not([width]):not([height]){width:90%;height:90%;}
+                     </style></head><body>${svgText}</body></html>`;
+
+                const update = () => { frame.srcdoc = wrap(src.value); };
+                src.addEventListener('input', update);
+                update();
+            }
+        })();
+    </script>
 </body>
 </html>
