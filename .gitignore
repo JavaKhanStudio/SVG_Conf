@@ -2,6 +2,10 @@ node_modules/
 .idea/
 .vscode/
 
+# Detached-server logs written by start-server.bat / PowerShell launches.
+.server.log
+.server.err.log
+
 # Read-only clones of related repos kept here for reference only.
 # (Their own git history lives upstream — don't track them.)
 _SynAndKaya_clone/
