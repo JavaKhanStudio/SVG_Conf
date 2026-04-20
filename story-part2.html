@@ -643,7 +643,7 @@
     &lt;filter id="emboss" x="-0.1" y="-0.1" width="1.2" height="1.4"&gt;
       &lt;feGaussianBlur in="SourceAlpha" stdDeviation="0.8" result="blr"/&gt;
       &lt;feOffset in="blr" dx="2" dy="2" result="off"/&gt;
-      &lt;feFlood flood-color="rgba(0,0,0,0.85)" result="col"/&gt;
+      &lt;feFlood flood-color="#000000" result="col"/&gt;
       &lt;feComposite in="col" in2="off" operator="in" result="shd"/&gt;
       &lt;feMerge&gt;
         &lt;feMergeNode in="shd"/&gt;
@@ -658,7 +658,7 @@
 &lt;/svg&gt;</textarea>
                         </div>
                         <div class="live-controls">
-                            <label>Fond : <input type="color" class="live-color" value="#9c7e44" data-anat-var="--metal-s7"></label>
+                            <label>Fond : <input type="color" class="live-color" value="#9c7e44" data-anat-var="--metal-s5"></label>
                             <label>Ombre : <input type="color" class="live-color" value="#000000" data-anat-var="--bone-border"></label>
                             <button class="live-reset" type="button">Reinitialiser</button>
                         </div>
