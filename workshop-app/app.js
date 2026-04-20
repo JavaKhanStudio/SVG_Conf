@@ -1,5 +1,21 @@
 // SVG Workshop frontend
 // Single-file app. No framework, no build step.
+//
+// Parser + generic control builder are shared with workshop-viewer/
+// via /src/ws-*.js. This file keeps everything that's editor-specific:
+// the WebSocket file watcher, snapshots, metrics, reference overlays,
+// and the point2d draggable-dot UI.
+
+import {
+  parseRootVars,
+  isDerived,
+  resolveDerived as resolveDerivedVars,
+} from '/src/ws-parser.js';
+import {
+  buildControl as buildGenericControl,
+  refreshDerivedSwatches as refreshSharedSwatches,
+  mixLabel,
+} from '/src/ws-controls.js';
 
 const $ = sel => document.querySelector(sel);
 
@@ -141,82 +157,7 @@ function reloadCurrent() {
   return Promise.resolve();
 }
 
-// Parse :root { } declarations with optional trailing @ws hint comment.
-// Hints live AFTER the semicolon on the same line, e.g.
-//   --pupil-size: 20;  /* @ws number min=5 max=50 */
-// so we match the whole declaration in one shot rather than splitting on ';'.
-function parseRootVars(cssText) {
-  const out = [];
-  const rootRe = /:root\s*\{([^}]*)\}/g;
-  let m;
-  while ((m = rootRe.exec(cssText))) {
-    const body = m[1];
-    const declRe = /(--[\w-]+)\s*:\s*([^;]*?)\s*;[ \t]*(?:\/\*\s*@ws\s*([^*]*?)\s*\*\/)?/g;
-    let d;
-    while ((d = declRe.exec(body))) {
-      const name = d[1];
-      const rawValue = d[2].trim();
-      const hintRaw = d[3];
-      const hint = hintRaw ? parseHint(hintRaw) : null;
-      const type = hint?.type && hint.type !== 'point2d' && hint.type !== 'seed' && hint.type !== 'ignore'
-        ? hint.type
-        : inferType(rawValue);
-      out.push({ name, rawValue, type, hint });
-    }
-  }
-  return out;
-}
-
-function parseHint(s) {
-  // e.g. "number min=5 max=50 step=1"  or "point2d=light"  or "select options=a,b,c"
-  const parts = s.trim().split(/\s+/);
-  const first = parts.shift();
-  const hint = { raw: s.trim() };
-  // Type token may be "point2d=light" or "number"
-  if (first.includes('=')) {
-    const [k, v] = first.split('=');
-    hint.type = k;
-    hint.group = v;
-  } else {
-    hint.type = first;
-  }
-  for (const p of parts) {
-    const [k, v] = p.split('=');
-    if (v === undefined) continue;
-    if (k === 'options') hint.options = v.split(',');
-    else hint[k] = isNaN(Number(v)) ? v : Number(v);
-  }
-  return hint;
-}
-
-function inferType(val) {
-  const v = val.trim();
-  if (/^#([0-9a-f]{3,8})$/i.test(v)) return 'color';
-  if (/^rgba?\(/i.test(v) || /^hsla?\(/i.test(v)) return 'color';
-  if (NAMED_COLORS.has(v.toLowerCase())) return 'color';
-  if (/^-?\d+(\.\d+)?(px|deg|%|em|rem)?$/.test(v)) return 'number';
-  if (v === 'true' || v === 'false') return 'boolean';
-  return 'text';
-}
-
-const NAMED_COLORS = new Set([
-  'aliceblue','antiquewhite','aqua','aquamarine','azure','beige','bisque','black','blanchedalmond','blue',
-  'blueviolet','brown','burlywood','cadetblue','chartreuse','chocolate','coral','cornflowerblue','cornsilk',
-  'crimson','cyan','darkblue','darkcyan','darkgoldenrod','darkgray','darkgreen','darkkhaki','darkmagenta',
-  'darkolivegreen','darkorange','darkorchid','darkred','darksalmon','darkseagreen','darkslateblue','darkslategray',
-  'darkturquoise','darkviolet','deeppink','deepskyblue','dimgray','dodgerblue','firebrick','floralwhite','forestgreen',
-  'fuchsia','gainsboro','ghostwhite','gold','goldenrod','gray','green','greenyellow','honeydew','hotpink','indianred',
-  'indigo','ivory','khaki','lavender','lavenderblush','lawngreen','lemonchiffon','lightblue','lightcoral','lightcyan',
-  'lightgoldenrodyellow','lightgray','lightgreen','lightpink','lightsalmon','lightseagreen','lightskyblue',
-  'lightslategray','lightsteelblue','lightyellow','lime','limegreen','linen','magenta','maroon','mediumaquamarine',
-  'mediumblue','mediumorchid','mediumpurple','mediumseagreen','mediumslateblue','mediumspringgreen','mediumturquoise',
-  'mediumvioletred','midnightblue','mintcream','mistyrose','moccasin','navajowhite','navy','oldlace','olive','olivedrab',
-  'orange','orangered','orchid','palegoldenrod','palegreen','paleturquoise','palevioletred','papayawhip','peachpuff',
-  'peru','pink','plum','powderblue','purple','rebeccapurple','red','rosybrown','royalblue','saddlebrown','salmon',
-  'sandybrown','seagreen','seashell','sienna','silver','skyblue','slateblue','slategray','snow','springgreen',
-  'steelblue','tan','teal','thistle','tomato','turquoise','violet','wheat','white','whitesmoke','yellow','yellowgreen',
-  'transparent'
-]);
+// Parser + hint grammar + named-colour set live in /src/ws-parser.js.
 
 // ---------- Controls rendering ----------
 function renderControls() {
@@ -224,130 +165,26 @@ function renderControls() {
   root.innerHTML = '';
   const handled = new Set();
 
-  // Render point2d groups first
+  // point2d groups get a custom draggable-dot control; the shared
+  // builder doesn't know about them.
   for (const g of state.point2dGroups) {
     handled.add(g.xVar.name);
     handled.add(g.yVar.name);
     root.appendChild(buildPoint2dControl(g));
   }
 
+  const resolved = resolveDerivedVars(state.variables, state.values);
+  const ctrlOpts = {
+    getCurrentValue: (n) => state.values[n],
+    setValue,
+    isDerived,
+    getDerivedColor: (n) => resolved[n],
+    derivedLabel: mixLabel,
+  };
   for (const v of state.variables) {
     if (handled.has(v.name)) continue;
-    root.appendChild(buildControl(v));
+    root.appendChild(buildGenericControl(v, ctrlOpts));
   }
-}
-
-function buildControl(v) {
-  const wrap = document.createElement('div');
-  wrap.className = 'ctrl';
-  const label = document.createElement('label');
-  label.textContent = v.name;
-  wrap.appendChild(label);
-
-  const row = document.createElement('div');
-  row.className = 'row';
-  wrap.appendChild(row);
-
-  // Derived variables get a read-only swatch instead of an editor so the
-  // workshop doesn't pretend the user can set them directly.
-  if (isDerived(v)) {
-    const resolved = resolveDerived(state.values);
-    const swatch = document.createElement('div');
-    swatch.setAttribute('data-derived-swatch', v.name);
-    swatch.style.cssText = 'width: 36px; height: 24px; border: 1px solid #444; border-radius: 3px; background: ' + (resolved[v.name] || v.rawValue);
-    const info = document.createElement('span');
-    info.style.cssText = 'font-size: 10px; color: #88899a; margin-left: 6px; font-family: ui-monospace, monospace;';
-    info.textContent = '= ' + (v.hint.raw.match(/mix=[\w-]+:-?\d*\.?\d+/)?.[0] || 'derived');
-    row.appendChild(swatch);
-    row.appendChild(info);
-    return wrap;
-  }
-
-  const current = state.values[v.name] ?? v.rawValue;
-
-  const isSeed = v.hint?.type === 'seed';
-
-  if (v.hint?.type === 'select') {
-    const sel = document.createElement('select');
-    for (const opt of v.hint.options || []) {
-      const o = document.createElement('option');
-      o.value = opt; o.textContent = opt;
-      if (opt === current) o.selected = true;
-      sel.appendChild(o);
-    }
-    sel.addEventListener('change', () => setValue(v.name, sel.value));
-    row.appendChild(sel);
-    return wrap;
-  }
-
-  if (v.type === 'color') {
-    const picker = document.createElement('input');
-    picker.type = 'color';
-    picker.value = normalizeColorForPicker(current);
-    picker.addEventListener('input', () => setValue(v.name, picker.value));
-    const text = document.createElement('input');
-    text.type = 'text';
-    text.value = current;
-    text.addEventListener('change', () => {
-      setValue(v.name, text.value);
-      picker.value = normalizeColorForPicker(text.value);
-    });
-    row.appendChild(picker);
-    row.appendChild(text);
-    return wrap;
-  }
-
-  if (v.type === 'number' || isSeed) {
-    const { number: num0, unit } = splitNumber(current);
-    const range = parseRange(v.hint, num0);
-    const slider = document.createElement('input');
-    slider.type = 'range';
-    slider.min = range.min; slider.max = range.max; slider.step = range.step;
-    slider.value = num0;
-    const num = document.createElement('input');
-    num.type = 'number';
-    num.min = range.min; num.max = range.max; num.step = range.step;
-    num.value = num0;
-
-    const commit = (val) => {
-      const v2 = unit ? `${val}${unit}` : `${val}`;
-      setValue(v.name, v2);
-    };
-    slider.addEventListener('input', () => { num.value = slider.value; commit(slider.value); });
-    num.addEventListener('input', () => { slider.value = num.value; commit(num.value); });
-
-    if (!isSeed) row.appendChild(slider);
-    row.appendChild(num);
-
-    if (isSeed) {
-      const btn = document.createElement('button');
-      btn.textContent = '🎲';
-      btn.title = 'Randomize';
-      btn.addEventListener('click', () => {
-        const r = Math.floor(Math.random() * 1_000_000);
-        num.value = r; commit(r);
-      });
-      row.appendChild(btn);
-    }
-    return wrap;
-  }
-
-  if (v.type === 'boolean') {
-    const cb = document.createElement('input');
-    cb.type = 'checkbox';
-    cb.checked = current === 'true';
-    cb.addEventListener('change', () => setValue(v.name, cb.checked ? 'true' : 'false'));
-    row.appendChild(cb);
-    return wrap;
-  }
-
-  // text
-  const text = document.createElement('input');
-  text.type = 'text';
-  text.value = current;
-  text.addEventListener('change', () => setValue(v.name, text.value));
-  row.appendChild(text);
-  return wrap;
 }
 
 function buildPoint2dControl(g) {
@@ -371,60 +208,17 @@ function buildPoint2dControl(g) {
   return wrap;
 }
 
-function parseRange(hint, current) {
-  if (hint && hint.min !== undefined && hint.max !== undefined) {
-    return {
-      min: Number(hint.min),
-      max: Number(hint.max),
-      step: Number(hint.step ?? 1),
-    };
-  }
-  const n = Number(current);
-  if (!isFinite(n)) return { min: 0, max: 100, step: 1 };
-  if (n >= 0 && n <= 100) return { min: 0, max: 100, step: n < 2 ? 0.01 : 1 };
-  const max = Math.max(1, Math.round(n * 2));
-  return { min: 0, max, step: n < 2 ? 0.01 : 1 };
-}
-
-function splitNumber(val) {
-  const m = /^(-?\d+(?:\.\d+)?)(px|deg|%|em|rem)?$/.exec(String(val).trim());
-  if (!m) return { number: Number(val) || 0, unit: '' };
-  return { number: Number(m[1]), unit: m[2] || '' };
-}
-
-function normalizeColorForPicker(val) {
-  if (typeof val !== 'string') return '#000000';
-  if (/^#[0-9a-f]{6}$/i.test(val)) return val;
-  if (/^#[0-9a-f]{3}$/i.test(val)) {
-    return '#' + val.slice(1).split('').map(c => c + c).join('');
-  }
-  // Try using a temp element
-  try {
-    const d = document.createElement('div');
-    d.style.color = val;
-    document.body.appendChild(d);
-    const cs = getComputedStyle(d).color;
-    document.body.removeChild(d);
-    const m = /rgb\((\d+),\s*(\d+),\s*(\d+)/.exec(cs);
-    if (m) {
-      return '#' + [1,2,3].map(i => Number(m[i]).toString(16).padStart(2,'0')).join('');
-    }
-  } catch {}
-  return '#000000';
-}
-
 // ---------- Applying values ----------
 function setValue(name, val) {
   state.values[name] = val;
   // Resolve derived colours and push everything to the rendered SVG so
   // that editing a base colour immediately propagates to its shades.
   if (state.svgEl) {
-    const resolved = resolveDerived(state.values);
+    const resolved = resolveDerivedVars(state.variables, state.values);
     for (const [k, v] of Object.entries(resolved)) {
       state.svgEl.style.setProperty(k, v);
     }
-    // Update any derived-colour swatches in the control panel.
-    refreshDerivedSwatches(resolved);
+    refreshSharedSwatches(state.variables, resolved, isDerived);
   }
   saveStoredValues(state.currentFile, state.values);
   for (const g of state.point2dGroups) {
@@ -432,14 +226,6 @@ function setValue(name, val) {
       positionPointDot(g);
       break;
     }
-  }
-}
-
-function refreshDerivedSwatches(resolved) {
-  for (const v of state.variables) {
-    if (!isDerived(v)) continue;
-    const el = document.querySelector(`[data-derived-swatch="${v.name}"]`);
-    if (el) el.style.background = resolved[v.name] || v.rawValue;
   }
 }
 
@@ -464,80 +250,15 @@ function positionPointDot(g) {
 
 function applyAllValues() {
   if (!state.svgEl) return;
-  const resolved = resolveDerived(state.values);
+  const resolved = resolveDerivedVars(state.variables, state.values);
   for (const [k, v] of Object.entries(resolved)) {
     state.svgEl.style.setProperty(k, v);
   }
 }
 
 // ---------- Derived (linked) colours ----------
-// Hint syntax: `/* @ws mix=<base-var-short-name>:<amount> */` on a colour
-// variable.  amount ∈ [-1, 1]: negative darkens (mix toward black),
-// positive lightens (mix toward white), 0 = base unchanged.
-//
-// Example:
-//   --fur-tan: #cb9464;
-//   --fur-brown: #55371a;   /* @ws mix=fur-tan:-0.4 */
-//
-// When the user tweaks --fur-tan in the workshop, --fur-brown is recomputed
-// as `mix(#cb9464, -0.4)` and applied as an inline style.  Because the
-// workshop resolves the derived value to a literal colour before applying,
-// the SVG still rasterises correctly in resvg (which doesn't understand
-// CSS color-mix()).
-function mixColor(baseHex, amount) {
-  const [r, g, b] = hexToRgbTriple(baseHex);
-  let r2, g2, b2;
-  if (amount < 0) {
-    const f = 1 + amount;                // -0.4 → 0.6
-    r2 = r * f; g2 = g * f; b2 = b * f;
-  } else {
-    const f = amount;                    // 0.4 → 0.4
-    r2 = r + (255 - r) * f;
-    g2 = g + (255 - g) * f;
-    b2 = b + (255 - b) * f;
-  }
-  const clamp = n => Math.max(0, Math.min(255, Math.round(n)));
-  return '#' + [r2, g2, b2].map(n => clamp(n).toString(16).padStart(2, '0')).join('');
-}
-
-function hexToRgbTriple(hex) {
-  const h = hex.replace('#', '');
-  const s = h.length === 3
-    ? h.split('').map(c => c + c).join('')
-    : h.slice(0, 6);
-  return [parseInt(s.slice(0, 2), 16), parseInt(s.slice(2, 4), 16), parseInt(s.slice(4, 6), 16)];
-}
-
-function resolveDerived(values) {
-  // Pass-through all non-derived values; replace derived ones with the
-  // computed mix.  A derived var that points at an unknown or
-  // non-colour base falls back to its rawValue.
-  const out = { ...values };
-  for (const v of state.variables) {
-    if (v.hint?.type === 'mix') continue;  // safety
-    if (!v.hint?.mix) continue;
-    // hint.mix is the raw "base:amount" string from parseHint's remainder,
-    // so we parse it here instead of in parseHint.
-  }
-  // Walk state.variables, looking at hint.raw for "mix=base:amount"
-  for (const v of state.variables) {
-    const raw = v.hint?.raw;
-    if (!raw) continue;
-    const m = /\bmix=([\w-]+):(-?\d*\.?\d+)/.exec(raw);
-    if (!m) continue;
-    const baseShort = m[1];
-    const amount = Number(m[2]);
-    const baseFullName = '--' + baseShort;
-    const baseValue = out[baseFullName];
-    if (!baseValue || !/^#[0-9a-f]{3,8}$/i.test(baseValue.trim())) continue;
-    out[v.name] = mixColor(baseValue.trim(), amount);
-  }
-  return out;
-}
-
-function isDerived(v) {
-  return !!(v.hint?.raw && /\bmix=[\w-]+:-?\d*\.?\d+/.test(v.hint.raw));
-}
+// Derived-colour logic (@ws mix=base:amount) lives in /src/ws-parser.js —
+// isDerived + resolveDerived + mixColor are imported at the top of this file.
 
 // Reset all variables to their source defaults: drop any inline overrides
 // on the rendered SVG, clear the stored values for this file, reload the
