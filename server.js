@@ -135,6 +135,18 @@ const server = http.createServer(async (req, res) => {
       try {
         const stat = await fsp.stat(full);
         if (stat.isFile()) return serveStatic(res, full);
+        if (stat.isDirectory()) {
+          // Redirect /foo → /foo/ so relative asset links resolve,
+          // then serve index.html if the folder has one.
+          if (!pathname.endsWith('/')) {
+            return send(res, 301, '', { Location: pathname + '/' });
+          }
+          const indexPath = path.join(full, 'index.html');
+          try {
+            const istat = await fsp.stat(indexPath);
+            if (istat.isFile()) return serveStatic(res, indexPath);
+          } catch { /* no index — fall through to 404 */ }
+        }
       } catch { /* fall through to 404 below */ }
     }
 
