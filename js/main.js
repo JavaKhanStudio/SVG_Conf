@@ -27,6 +27,9 @@ const translations = {
         workshop_view_compare: "Comparer",
         workshop_view_photo: "Photo",
         workshop_download: "Telecharger",
+        workshop_editor_title: "Envie de pousser plus loin ?",
+        workshop_editor_desc: "Cette page est une vitrine statique. Pour l'atelier complet — surveillance des fichiers, snapshots, import d'une photo de reference, metriques de ressemblance — clonez le depot et demarrez le serveur local :",
+        workshop_editor_link: "Ouvrir l'editeur interactif \u2192",
         // Footer
         footer_made: "Fait par",
         // Home
@@ -340,6 +343,9 @@ const translations = {
         workshop_view_compare: "Compare",
         workshop_view_photo: "Photo",
         workshop_download: "Download",
+        workshop_editor_title: "Want to go further?",
+        workshop_editor_desc: "This page is a static showcase. For the full workshop \u2014 file watching, snapshots, reference-photo import, similarity metrics \u2014 clone the repo and start the local server:",
+        workshop_editor_link: "Open the interactive editor \u2192",
         footer_made: "Made by",
         home_title: "SVG Workshop",
         home_subtitle: "Discover the power of SVG for the web",
