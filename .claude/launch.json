@@ -4,8 +4,14 @@
     {
       "name": "svg-workshop",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["server.js", "./examples"],
+      "runtimeArgs": ["server.js", "./gallery"],
       "port": 5173
+    },
+    {
+      "name": "svg-site",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8080"],
+      "port": 8080
     }
   ]
 }
