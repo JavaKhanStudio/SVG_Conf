@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anatomie SVG - Formation SVG</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" href="images/LogoHeaderSBP.png" type="image/png">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+        <div class="page-hero">
+            <h2 data-i18n="anat_title">Anatomie d'un SVG</h2>
+            <p data-i18n="anat_subtitle">Comprendre la structure du code SVG</p>
+        </div>
+
+        <!-- Basic structure -->
+        <div class="content-block">
+            <h3 data-i18n="anat_structure_title">Structure de base</h3>
+            <p data-i18n="anat_structure_desc">Un SVG est un document XML avec un element racine &lt;svg&gt; et des elements enfants qui decrivent les formes.</p>
+            <div class="split-layout">
+                <div class="code-block">
+                    <span class="code-label">SVG</span>
+                    <code><span class="tag">&lt;svg</span> <span class="attr">xmlns</span>=<span class="val">"http://www.w3.org/2000/svg"</span>
+     <span class="attr">viewBox</span>=<span class="val">"0 0 200 200"</span>
+     <span class="attr">width</span>=<span class="val">"200"</span> <span class="attr">height</span>=<span class="val">"200"</span><span class="tag">&gt;</span>
+
+  <span class="comment">&lt;!-- Shapes go here --&gt;</span>
+  <span class="tag">&lt;circle</span> <span class="attr">cx</span>=<span class="val">"100"</span> <span class="attr">cy</span>=<span class="val">"100"</span> <span class="attr">r</span>=<span class="val">"80"</span>
+          <span class="attr">fill</span>=<span class="val">"#0752CF"</span> <span class="tag">/&gt;</span>
+
+<span class="tag">&lt;/svg&gt;</span></code>
+                </div>
+                <div class="svg-display">
+                    <svg viewBox="0 0 200 200" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="100" cy="100" r="80" fill="#0752CF"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- ViewBox -->
+        <div class="content-block">
+            <h3 data-i18n="anat_viewbox_title">Le ViewBox</h3>
+            <p data-i18n="anat_viewbox_desc">L'attribut viewBox definit le systeme de coordonnees interne du SVG. Il permet de creer des graphiques responsifs qui s'adaptent a n'importe quelle taille.</p>
+            <div class="split-layout">
+                <div>
+                    <div class="code-block">
+                        <span class="code-label">viewBox</span>
+                        <code><span class="attr">viewBox</span>=<span class="val">"min-x min-y width height"</span>
+
+<span class="comment">&lt;!-- Example: viewBox="0 0 100 100" --&gt;</span>
+<span class="comment">&lt;!-- Creates a 100x100 coordinate space --&gt;</span>
+<span class="comment">&lt;!-- The SVG scales to fit its container --&gt;</span></code>
+                    </div>
+                    <div class="controls" id="viewbox-controls">
+                        <div class="control-group">
+                            <label>viewBox width</label>
+                            <input type="range" min="50" max="400" value="200" id="vb-width" oninput="updateViewBox()">
+                            <span class="control-value" id="vb-width-val">200</span>
+                        </div>
+                        <div class="control-group">
+                            <label>viewBox height</label>
+                            <input type="range" min="50" max="400" value="200" id="vb-height" oninput="updateViewBox()">
+                            <span class="control-value" id="vb-height-val">200</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="svg-display" style="border: 2px dashed var(--primary-blue);">
+                    <svg id="viewbox-demo" viewBox="0 0 200 200" width="250" height="250" xmlns="http://www.w3.org/2000/svg" style="background:#f8f9fa;">
+                        <rect x="10" y="10" width="80" height="80" fill="#BA0101" rx="5"/>
+                        <circle cx="150" cy="50" r="35" fill="#0752CF"/>
+                        <polygon points="50,150 90,190 10,190" fill="#2ecc71"/>
+                        <rect x="110" y="120" width="70" height="70" fill="#f39c12" rx="5"/>
+                        <!-- Grid lines -->
+                        <line x1="100" y1="0" x2="100" y2="200" stroke="#ddd" stroke-width="0.5" stroke-dasharray="4"/>
+                        <line x1="0" y1="100" x2="200" y2="100" stroke="#ddd" stroke-width="0.5" stroke-dasharray="4"/>
+                    </svg>
+                    <div id="viewbox-code" style="font-family:monospace; font-size:0.85rem; margin-top:0.5rem; color:var(--primary-blue);">viewBox="0 0 200 200"</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Basic shapes -->
+        <div class="content-block">
+            <h3 data-i18n="anat_shapes_title">Formes de base</h3>
+            <p data-i18n="anat_shapes_desc">SVG offre plusieurs formes primitives pour construire vos graphiques.</p>
+
+            <div class="gallery-grid" style="grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));">
+                <!-- rect -->
+                <div class="gallery-card">
+                    <div class="card-image" style="min-height:120px;">
+                        <svg viewBox="0 0 120 80" width="120" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="10" y="10" width="100" height="60" fill="#0752CF" rx="5"/>
+                        </svg>
+                    </div>
+                    <div class="card-body">
+                        <h4>&lt;rect&gt;</h4>
+                        <div class="code-block" style="font-size:0.75rem; padding:0.5rem;"><code><span class="tag">&lt;rect</span> <span class="attr">x</span>=<span class="val">"10"</span> <span class="attr">y</span>=<span class="val">"10"</span>
+  <span class="attr">width</span>=<span class="val">"100"</span> <span class="attr">height</span>=<span class="val">"60"</span>
+  <span class="attr">rx</span>=<span class="val">"5"</span> <span class="tag">/&gt;</span></code></div>
+                    </div>
+                </div>
+                <!-- circle -->
+                <div class="gallery-card">
+                    <div class="card-image" style="min-height:120px;">
+                        <svg viewBox="0 0 100 100" width="100" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="40" fill="#BA0101"/>
+                        </svg>
+                    </div>
+                    <div class="card-body">
+                        <h4>&lt;circle&gt;</h4>
+                        <div class="code-block" style="font-size:0.75rem; padding:0.5rem;"><code><span class="tag">&lt;circle</span> <span class="attr">cx</span>=<span class="val">"50"</span> <span class="attr">cy</span>=<span class="val">"50"</span>
+  <span class="attr">r</span>=<span class="val">"40"</span> <span class="tag">/&gt;</span></code></div>
+                    </div>
+                </div>
+                <!-- ellipse -->
+                <div class="gallery-card">
+                    <div class="card-image" style="min-height:120px;">
+                        <svg viewBox="0 0 120 80" width="120" xmlns="http://www.w3.org/2000/svg">
+                            <ellipse cx="60" cy="40" rx="50" ry="30" fill="#2ecc71"/>
+                        </svg>
+                    </div>
+                    <div class="card-body">
+                        <h4>&lt;ellipse&gt;</h4>
+                        <div class="code-block" style="font-size:0.75rem; padding:0.5rem;"><code><span class="tag">&lt;ellipse</span> <span class="attr">cx</span>=<span class="val">"60"</span> <span class="attr">cy</span>=<span class="val">"40"</span>
+  <span class="attr">rx</span>=<span class="val">"50"</span> <span class="attr">ry</span>=<span class="val">"30"</span> <span class="tag">/&gt;</span></code></div>
+                    </div>
+                </div>
+                <!-- line -->
+                <div class="gallery-card">
+                    <div class="card-image" style="min-height:120px;">
+                        <svg viewBox="0 0 120 80" width="120" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="10" y1="10" x2="110" y2="70" stroke="#f39c12" stroke-width="4" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="card-body">
+                        <h4>&lt;line&gt;</h4>
+                        <div class="code-block" style="font-size:0.75rem; padding:0.5rem;"><code><span class="tag">&lt;line</span> <span class="attr">x1</span>=<span class="val">"10"</span> <span class="attr">y1</span>=<span class="val">"10"</span>
+  <span class="attr">x2</span>=<span class="val">"110"</span> <span class="attr">y2</span>=<span class="val">"70"</span>
+  <span class="attr">stroke</span>=<span class="val">"#f39c12"</span> <span class="tag">/&gt;</span></code></div>
+                    </div>
+                </div>
+                <!-- polygon -->
+                <div class="gallery-card">
+                    <div class="card-image" style="min-height:120px;">
+                        <svg viewBox="0 0 120 100" width="120" xmlns="http://www.w3.org/2000/svg">
+                            <polygon points="60,5 110,40 90,95 30,95 10,40" fill="#9b59b6"/>
+                        </svg>
+                    </div>
+                    <div class="card-body">
+                        <h4>&lt;polygon&gt;</h4>
+                        <div class="code-block" style="font-size:0.75rem; padding:0.5rem;"><code><span class="tag">&lt;polygon</span> <span class="attr">points</span>=<span class="val">"60,5
+  110,40 90,95 30,95 10,40"</span> <span class="tag">/&gt;</span></code></div>
+                    </div>
+                </div>
+                <!-- path -->
+                <div class="gallery-card">
+                    <div class="card-image" style="min-height:120px;">
+                        <svg viewBox="0 0 60 55" width="100" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M30,45 C30,45 10,30 10,18 C10,12 14,8 20,8 C24,8 27,10 30,13 C33,10 36,8 40,8 C46,8 50,12 50,18 C50,30 30,45 30,45 Z" fill="#e74c3c"/>
+                        </svg>
+                    </div>
+                    <div class="card-body">
+                        <h4>&lt;path&gt;</h4>
+                        <div class="code-block" style="font-size:0.75rem; padding:0.5rem;"><code><span class="tag">&lt;path</span> <span class="attr">d</span>=<span class="val">"M30,45 C30,45
+  10,30 10,18..."</span> <span class="tag">/&gt;</span></code></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Path commands -->
+        <div class="content-block">
+            <h3 data-i18n="anat_path_title">La balise Path</h3>
+            <p data-i18n="anat_path_desc">L'element &lt;path&gt; est le plus puissant du SVG. Il peut dessiner n'importe quelle forme avec des commandes de deplacement.</p>
+            <p data-i18n-html="anat_path_commands" style="font-style:italic; color: var(--text-light);">Commandes principales : M (deplacer), L (ligne), H (horizontal), V (vertical), <a class="inline-link" href="bezier.html">C (courbe cubique), Q (courbe quadratique)</a>, A (arc), Z (fermer)</p>
+            <p data-i18n-html="anat_path_ai" style="margin-top:1rem; padding:0.75rem 1rem; background:rgba(155, 89, 182, 0.06); border-left:3px solid #9b59b6; border-radius:0 6px 6px 0;"><i class="fa-solid fa-robot" style="color:#9b59b6; margin-right:0.4rem;"></i><strong>Cote IA :</strong> ces commandes (<code>M</code>, <code>C</code>, <code>Q</code>, <code>L</code>...) sont exactement ce qu'un LLM ecrit quand on lui demande de dessiner. Une fleur, un coeur, un logo : tout devient une chaine de caracteres comme <code>d="M30,45 C30,45 10,30 10,18..."</code>. Pour aller plus loin, voir les <a class="inline-link" href="bezier.html">courbes de Bezier</a>.</p>
+
+            <div class="svg-display" style="margin-top:1.5rem;">
+                <svg viewBox="0 0 500 200" width="100%" xmlns="http://www.w3.org/2000/svg" style="max-width:500px;">
+                    <!-- M command -->
+                    <text x="30" y="20" font-size="11" fill="#333" font-weight="bold">M (move)</text>
+                    <circle cx="30" cy="40" r="4" fill="#BA0101"/>
+                    <text x="40" y="44" font-size="9" fill="#666">M 30,40</text>
+
+                    <!-- L command -->
+                    <text x="120" y="20" font-size="11" fill="#333" font-weight="bold">L (line)</text>
+                    <line x1="120" y1="30" x2="180" y2="60" stroke="#0752CF" stroke-width="2"/>
+                    <circle cx="120" cy="30" r="3" fill="#BA0101"/>
+                    <circle cx="180" cy="60" r="3" fill="#BA0101"/>
+
+                    <!-- H & V commands -->
+                    <text x="220" y="20" font-size="11" fill="#333" font-weight="bold">H &amp; V</text>
+                    <path d="M220,35 H280 V65" stroke="#2ecc71" stroke-width="2" fill="none"/>
+                    <circle cx="220" cy="35" r="3" fill="#BA0101"/>
+
+                    <!-- Q command -->
+                    <text x="320" y="20" font-size="11" fill="#333" font-weight="bold">Q (quad)</text>
+                    <path d="M320,60 Q350,15 380,60" stroke="#9b59b6" stroke-width="2" fill="none"/>
+                    <circle cx="320" cy="60" r="3" fill="#BA0101"/>
+                    <circle cx="350" cy="15" r="3" fill="#f39c12" stroke="#f39c12" stroke-width="1"/>
+                    <line x1="320" y1="60" x2="350" y2="15" stroke="#f39c12" stroke-width="0.5" stroke-dasharray="3"/>
+                    <line x1="350" y1="15" x2="380" y2="60" stroke="#f39c12" stroke-width="0.5" stroke-dasharray="3"/>
+
+                    <!-- C command -->
+                    <text x="420" y="20" font-size="11" fill="#333" font-weight="bold">C (cubic)</text>
+                    <path d="M420,60 C435,15 465,15 480,60" stroke="#e74c3c" stroke-width="2" fill="none"/>
+                    <circle cx="420" cy="60" r="3" fill="#BA0101"/>
+                    <circle cx="435" cy="15" r="3" fill="#f39c12"/>
+                    <circle cx="465" cy="15" r="3" fill="#f39c12"/>
+                    <line x1="420" y1="60" x2="435" y2="15" stroke="#f39c12" stroke-width="0.5" stroke-dasharray="3"/>
+                    <line x1="465" y1="15" x2="480" y2="60" stroke="#f39c12" stroke-width="0.5" stroke-dasharray="3"/>
+
+                    <!-- A command -->
+                    <text x="30" y="100" font-size="11" fill="#333" font-weight="bold">A (arc)</text>
+                    <path d="M30,130 A30,20 0 0 1 90,130" stroke="#0752CF" stroke-width="2" fill="none"/>
+
+                    <!-- Z command -->
+                    <text x="140" y="100" font-size="11" fill="#333" font-weight="bold">Z (close)</text>
+                    <path d="M140,130 L180,110 L180,150 Z" fill="#2ecc71" opacity="0.6" stroke="#2ecc71" stroke-width="1"/>
+
+                    <!-- Full example -->
+                    <text x="260" y="100" font-size="11" fill="#333" font-weight="bold">Combined</text>
+                    <path d="M280,150 C280,150 260,135 260,123 C260,117 264,113 270,113 C274,113 277,115 280,118 C283,115 286,113 290,113 C296,113 300,117 300,123 C300,135 280,150 280,150 Z" fill="#e74c3c"/>
+                    <text x="260" y="170" font-size="8" fill="#666" font-family="monospace">d="M280,150 C280,150 ..."</text>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Styling -->
+        <div class="content-block">
+            <h3 data-i18n="anat_styling_title">Stylisation</h3>
+            <p data-i18n-html="anat_styling_desc">Les elements SVG peuvent etre styles avec des attributs, du CSS inline, ou des feuilles de style externes. Combine avec des <strong>variables CSS</strong>, le meme SVG devient parametrable a la volee — c'est exactement ce que fait <a class="inline-link" href="workshop.html">l'atelier</a>.</p>
+            <div class="split-layout">
+                <div class="code-block">
+                    <span class="code-label">Attributes</span>
+                    <code><span class="tag">&lt;rect</span> <span class="attr">fill</span>=<span class="val">"#0752CF"</span>
+      <span class="attr">stroke</span>=<span class="val">"#BA0101"</span>
+      <span class="attr">stroke-width</span>=<span class="val">"3"</span>
+      <span class="attr">opacity</span>=<span class="val">"0.8"</span>
+      <span class="attr">rx</span>=<span class="val">"10"</span> <span class="tag">/&gt;</span>
+
+<span class="comment">&lt;!-- Or with CSS --&gt;</span>
+<span class="tag">&lt;style&gt;</span>
+  <span class="attr">rect</span> {
+    <span class="attr">fill</span>: <span class="val">#0752CF</span>;
+    <span class="attr">stroke</span>: <span class="val">#BA0101</span>;
+    <span class="attr">transition</span>: <span class="val">fill 0.3s</span>;
+  }
+  <span class="attr">rect:hover</span> {
+    <span class="attr">fill</span>: <span class="val">#BA0101</span>;
+  }
+<span class="tag">&lt;/style&gt;</span></code>
+                </div>
+                <div class="svg-display">
+                    <svg viewBox="0 0 300 200" width="300" xmlns="http://www.w3.org/2000/svg">
+                        <style>
+                            .hover-rect { transition: fill 0.3s, rx 0.3s; cursor: pointer; }
+                            .hover-rect:hover { fill: #BA0101; rx: 20; }
+                        </style>
+                        <rect class="hover-rect" x="25" y="25" width="250" height="150" fill="#0752CF" stroke="#BA0101" stroke-width="3" opacity="0.8" rx="10"/>
+                        <text x="150" y="105" text-anchor="middle" fill="white" font-size="14" font-family="Arial" pointer-events="none">Hover me!</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cheatsheet link -->
+        <div class="content-block" style="text-align:center;">
+            <h3 data-i18n="anat_cheatsheet">Aide-memoire complet</h3>
+            <div class="svg-display" style="max-height: 600px; overflow-y: auto;">
+                <img src="images/cheatSheets/cs_general.svg" alt="SVG Cheat Sheet" style="width:100%; max-width:800px;">
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <a href="https://javakhanstudio.github.io/SynAndKaya/" target="_blank" title="Syn + Kaya">
+        <img src="QR_CODE.svg" class="qr-easter-egg" alt="QR -> SynAndKaya">
+    </a>
+
+    <script src="js/main.js"></script>
+    <script>
+        function updateViewBox() {
+            const w = document.getElementById('vb-width').value;
+            const h = document.getElementById('vb-height').value;
+            document.getElementById('vb-width-val').textContent = w;
+            document.getElementById('vb-height-val').textContent = h;
+            document.getElementById('viewbox-demo').setAttribute('viewBox', `0 0 ${w} ${h}`);
+            document.getElementById('viewbox-code').textContent = `viewBox="0 0 ${w} ${h}"`;
+        }
+    </script>
+</body>
+</html>

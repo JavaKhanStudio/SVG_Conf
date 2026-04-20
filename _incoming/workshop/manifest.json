@@ -1,0 +1,11 @@
+{
+  "files": [
+    {"name": "puppy.svg",        "label": "Puppy",            "reference": "references/puppy.jpg"},
+    {"name": "leprechaun.svg",   "label": "Leprechaun",       "reference": "references/leprechaun.jpg"},
+    {"name": "stone.svg",        "label": "Stone (Tarot)",    "reference": "references/stone.jpg"},
+    {"name": "goldenspring.svg", "label": "Golden Spring",    "reference": "references/goldenspring.jpg"},
+    {"name": "boyscast.svg",     "label": "The Boyscast",     "reference": "references/boyscast.jpg"},
+    {"name": "xenonauts.svg",    "label": "Chief Scientist",  "reference": "references/xenonauts.jpg"},
+    {"name": "bundaberg.svg",    "label": "Bundaberg",        "reference": "references/bundaberg.jpg"}
+  ]
+}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histoires - Formation SVG</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" href="images/LogoHeaderSBP.png" type="image/png">
+    <style>
+        .story-list { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 1rem; }
+        .story-item {
+            display: flex; gap: 1.25rem; align-items: center;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.25rem;
+            text-decoration: none; color: inherit;
+            border-left: 4px solid var(--primary-blue);
+            transition: transform var(--transition), box-shadow var(--transition);
+        }
+        .story-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+        .story-item.coming-soon {
+            border-left-color: var(--border-color);
+            opacity: 0.6; cursor: default;
+        }
+        .story-item.coming-soon:hover { transform: none; box-shadow: var(--shadow); }
+        .story-item .act-num {
+            flex-shrink: 0;
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; font-weight: 700;
+        }
+        .story-item.coming-soon .act-num {
+            background: var(--border-color); color: var(--text-light);
+        }
+        .story-item .story-text h4 {
+            color: var(--primary-blue);
+            font-size: 1.1rem; margin-bottom: 0.25rem;
+        }
+        .story-item .story-text p {
+            color: var(--text-light); font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+        <div class="page-hero">
+            <h2 data-i18n="stories_title">Les histoires</h2>
+            <p data-i18n="stories_subtitle">La presentation, racontee comme une serie d'actes</p>
+        </div>
+
+        <div class="content-block">
+            <p data-i18n="stories_intro">Cette section est ce qui sert de fil rouge a la presentation. Chaque acte raconte un morceau de l'histoire — d'ou venait le besoin, comment l'IA a aide, ce qui a marche, ce qui a foire. Tu peux suivre dans l'ordre ou piocher.</p>
+
+            <div class="story-list">
+                <a href="story-part1.html" class="story-item">
+                    <div class="act-num">1</div>
+                    <div class="story-text">
+                        <h4 data-i18n="stories_act1_title">Acte 1 — D'ou ca vient</h4>
+                        <p data-i18n="stories_act1_desc">L'origine du projet : un chien, des chiots, et un besoin tres specifique d'images recoloriables avec du texte dedans.</p>
+                    </div>
+                </a>
+
+                <a href="story-part2.html" class="story-item">
+                    <div class="act-num">2</div>
+                    <div class="story-text">
+                        <h4 data-i18n="stories_act2_title">Acte 2 — Comment l'IA a aide</h4>
+                        <p data-i18n="stories_act2_desc">Les outils utilises (ChatGPT, les artifacts de Claude, Claude Code), leurs forces et leurs limites pour le SVG, les detours et les surprises.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

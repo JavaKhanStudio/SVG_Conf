@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atelier SVG - Formation SVG</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="workshop/viewer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" href="images/LogoHeaderSBP.png" type="image/png">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+        <div class="page-hero">
+            <h2 data-i18n="workshop_title">Atelier SVG</h2>
+            <p data-i18n="workshop_subtitle">Choisissez une illustration et modifiez ses variables CSS en direct</p>
+        </div>
+
+        <div class="content-block">
+            <h3 data-i18n="workshop_how_title">Comment ca marche</h3>
+            <p data-i18n-html="workshop_how_desc">Chaque SVG de la galerie declare ses parametres dans une regle <code>:root</code>, et accole un commentaire <code>/* @ws ... */</code> qui dit a l'atelier comment construire le bon controle. C'est tout. Le fichier reste un SVG valide ouvrable dans n'importe quel navigateur.</p>
+            <div class="code-block" style="font-size: 0.8rem; margin: 0.75rem 0 1rem;">
+                <span class="code-label">CSS dans le SVG</span>
+                <code>:root {
+  <span class="attr">--bg-color</span>: <span class="val">#1a1a2e</span>;          <span class="comment">/* @ws color */</span>
+  <span class="attr">--shape-size</span>: <span class="val">50</span>;             <span class="comment">/* @ws number min=10 max=100 */</span>
+  <span class="attr">--accent</span>: <span class="val">#f09040</span>;
+  <span class="attr">--accent-shadow</span>: <span class="val">#7a4820</span>;     <span class="comment">/* @ws mix=accent:-0.55 */</span>
+}</code>
+            </div>
+            <p data-i18n-html="workshop_how_extra"><strong>Compare</strong> place le SVG et la photo source cote a cote, <strong>Telecharger</strong> recupere ton SVG avec tes modifications, et <strong>Voir le code source</strong> sous l'illustration ouvre le fichier brut dans un nouvel onglet.</p>
+
+            <div class="workshop-viewer">
+                <aside id="files-pane">
+                    <ul id="file-list"></ul>
+                </aside>
+                <main id="preview-pane">
+                    <div id="preview-host"></div>
+                    <a id="source-link" href="#" target="_blank" rel="noopener" hidden data-i18n="workshop_view_source">Voir le code source &rarr;</a>
+                </main>
+                <aside id="right-pane">
+                    <section id="controls-section">
+                        <div id="controls-header">
+                            <h2 data-i18n="workshop_controls">Controles</h2>
+                            <div class="header-buttons">
+                                <div class="view-toggle" role="group">
+                                    <button class="view-btn active" data-view="svg" data-i18n="workshop_view_svg">SVG</button>
+                                    <button class="view-btn" data-view="compare" data-i18n="workshop_view_compare">Comparer</button>
+                                    <button class="view-btn" data-view="ref" data-i18n="workshop_view_photo">Photo</button>
+                                </div>
+                                <button id="download-btn" data-i18n="workshop_download" title="Telecharger le SVG avec mes modifications">Telecharger</button>
+                                <button id="reset-btn" data-i18n="workshop_reset">Reinitialiser</button>
+                            </div>
+                        </div>
+                        <div id="controls"></div>
+                        <div id="empty-hint" data-i18n="workshop_empty" hidden>Ce SVG n'expose aucune variable.</div>
+                    </section>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="js/main.js"></script>
+    <script src="workshop/viewer.js"></script>
+</body>
+</html>

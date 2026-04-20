@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courbes de Bezier - Formation SVG</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" href="images/LogoHeaderSBP.png" type="image/png">
+    <style>
+        .bezier-canvas { background: white; border: 1px solid var(--border-color); border-radius: var(--radius); cursor: crosshair; display: block; margin: 0 auto; touch-action: none; }
+        .point-label { font-size: 0.8rem; color: var(--text-light); margin-top: 0.25rem; }
+        .legend { display: flex; gap: 1.5rem; flex-wrap: wrap; margin: 1rem 0; justify-content: center; }
+        .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; }
+        .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .bezier-command { font-family: monospace; background: var(--code-bg); color: var(--code-text); padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.9rem; text-align: center; margin-top: 1rem; word-break: break-all; }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+        <div class="page-hero">
+            <h2 data-i18n="bez_title">Courbes de Bezier</h2>
+            <p data-i18n="bez_subtitle">Explorez les courbes cubiques et quadratiques de maniere interactive</p>
+        </div>
+
+        <p style="text-align:center; font-style:italic; color:var(--primary-blue); margin-bottom:1.5rem;" data-i18n="bez_drag">Glissez les points de controle pour modifier la courbe !</p>
+
+        <!-- Quadratic Bezier -->
+        <div class="content-block">
+            <h3 data-i18n="bez_quad_title">Courbe quadratique (Q)</h3>
+            <p data-i18n="bez_quad_desc">Definie par un point de depart, un point de controle et un point d'arrivee. La courbe est attiree vers le point de controle.</p>
+
+            <div class="legend">
+                <div class="legend-item"><div class="legend-dot" style="background:#BA0101;"></div> Start / End</div>
+                <div class="legend-item"><div class="legend-dot" style="background:#f39c12;"></div> Control Point</div>
+                <div class="legend-item"><div class="legend-dot" style="background:#0752CF; border-radius:0; width:20px; height:3px;"></div> Curve</div>
+                <div class="legend-item"><div class="legend-dot" style="background:#ccc; border-radius:0; width:20px; height:2px; border-top: 2px dashed #aaa;"></div> Control Lines</div>
+            </div>
+
+            <svg id="quad-svg" class="bezier-canvas" viewBox="0 0 600 300" width="100%" style="max-width:600px; max-height:300px;" xmlns="http://www.w3.org/2000/svg">
+                <!-- Grid -->
+                <defs>
+                    <pattern id="qgrid" width="30" height="30" patternUnits="userSpaceOnUse">
+                        <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#f0f0f0" stroke-width="0.5"/>
+                    </pattern>
+                </defs>
+                <rect width="600" height="300" fill="url(#qgrid)"/>
+                <!-- Control lines -->
+                <line id="q-line1" x1="80" y1="250" x2="300" y2="50" stroke="#ddd" stroke-width="1.5" stroke-dasharray="6"/>
+                <line id="q-line2" x1="300" y1="50" x2="520" y2="250" stroke="#ddd" stroke-width="1.5" stroke-dasharray="6"/>
+                <!-- Curve -->
+                <path id="q-curve" d="M80,250 Q300,50 520,250" fill="none" stroke="#0752CF" stroke-width="3"/>
+                <!-- Points -->
+                <circle id="q-start" cx="80" cy="250" r="8" fill="#BA0101" style="cursor:grab;"/>
+                <circle id="q-control" cx="300" cy="50" r="10" fill="#f39c12" stroke="#e67e22" stroke-width="2" style="cursor:grab;"/>
+                <circle id="q-end" cx="520" cy="250" r="8" fill="#BA0101" style="cursor:grab;"/>
+                <!-- Labels -->
+                <text id="q-start-label" x="80" y="280" text-anchor="middle" font-size="11" fill="#666">P0 (80,250)</text>
+                <text id="q-control-label" x="300" y="35" text-anchor="middle" font-size="11" fill="#e67e22" font-weight="bold">CP (300,50)</text>
+                <text id="q-end-label" x="520" y="280" text-anchor="middle" font-size="11" fill="#666">P1 (520,250)</text>
+            </svg>
+
+            <div class="bezier-command" id="quad-command" data-i18n-prefix="bez_command">
+                <span data-i18n="bez_command">Commande SVG :</span> M80,250 Q300,50 520,250
+            </div>
+        </div>
+
+        <!-- Cubic Bezier -->
+        <div class="content-block">
+            <h3 data-i18n="bez_cubic_title">Courbe cubique (C)</h3>
+            <p data-i18n="bez_cubic_desc">Definie par un point de depart, deux points de controle et un point d'arrivee. Offre plus de precision que la quadratique.</p>
+
+            <div class="legend">
+                <div class="legend-item"><div class="legend-dot" style="background:#BA0101;"></div> Start / End</div>
+                <div class="legend-item"><div class="legend-dot" style="background:#2ecc71;"></div> Control Point 1</div>
+                <div class="legend-item"><div class="legend-dot" style="background:#9b59b6;"></div> Control Point 2</div>
+                <div class="legend-item"><div class="legend-dot" style="background:#0752CF; border-radius:0; width:20px; height:3px;"></div> Curve</div>
+            </div>
+
+            <svg id="cubic-svg" class="bezier-canvas" viewBox="0 0 600 300" width="100%" style="max-width:600px; max-height:300px;" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <pattern id="cgrid" width="30" height="30" patternUnits="userSpaceOnUse">
+                        <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#f0f0f0" stroke-width="0.5"/>
+                    </pattern>
+                </defs>
+                <rect width="600" height="300" fill="url(#cgrid)"/>
+                <!-- Control lines -->
+                <line id="c-line1" x1="80" y1="250" x2="180" y2="50" stroke="#ddd" stroke-width="1.5" stroke-dasharray="6"/>
+                <line id="c-line2" x1="420" y1="50" x2="520" y2="250" stroke="#ddd" stroke-width="1.5" stroke-dasharray="6"/>
+                <!-- Curve -->
+                <path id="c-curve" d="M80,250 C180,50 420,50 520,250" fill="none" stroke="#0752CF" stroke-width="3"/>
+                <!-- Points -->
+                <circle id="c-start" cx="80" cy="250" r="8" fill="#BA0101" style="cursor:grab;"/>
+                <circle id="c-cp1" cx="180" cy="50" r="10" fill="#2ecc71" stroke="#27ae60" stroke-width="2" style="cursor:grab;"/>
+                <circle id="c-cp2" cx="420" cy="50" r="10" fill="#9b59b6" stroke="#8e44ad" stroke-width="2" style="cursor:grab;"/>
+                <circle id="c-end" cx="520" cy="250" r="8" fill="#BA0101" style="cursor:grab;"/>
+                <!-- Labels -->
+                <text id="c-start-label" x="80" y="280" text-anchor="middle" font-size="11" fill="#666">P0 (80,250)</text>
+                <text id="c-cp1-label" x="180" y="35" text-anchor="middle" font-size="11" fill="#27ae60" font-weight="bold">CP1 (180,50)</text>
+                <text id="c-cp2-label" x="420" y="35" text-anchor="middle" font-size="11" fill="#8e44ad" font-weight="bold">CP2 (420,50)</text>
+                <text id="c-end-label" x="520" y="280" text-anchor="middle" font-size="11" fill="#666">P1 (520,250)</text>
+            </svg>
+
+            <div class="bezier-command" id="cubic-command">
+                <span data-i18n="bez_command">Commande SVG :</span> M80,250 C180,50 420,50 520,250
+            </div>
+        </div>
+
+        <!-- Real LLM-generated path -->
+        <div class="content-block" style="border-left: 4px solid #9b59b6; background: linear-gradient(135deg, rgba(155, 89, 182, 0.04), rgba(7, 82, 207, 0.04));">
+            <h3 data-i18n="bez_ai_title"><i class="fa-solid fa-robot" style="color:#9b59b6; margin-right:0.5rem;"></i>Une courbe ecrite par une IA</h3>
+            <p data-i18n-html="bez_ai_desc">Voici la fleur en cloche d'une heather, dessinee par Claude. Toute la corolle est un seul <code>&lt;path&gt;</code> compose de <strong>commandes Q (quadratiques)</strong> chainees — exactement ce que tu as appris a manipuler plus haut.</p>
+
+            <div class="split-layout" style="margin-top:1.5rem;">
+                <div class="svg-display" style="background:#fafafa;">
+                    <svg viewBox="0 0 100 100" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50 80 Q50 70 50 60" fill="none" stroke="#7A8C38" stroke-width="1.5"/>
+                        <path d="M50 60 Q55 60 58 55 Q60 50 58 45 Q55 40 50 40 Q45 40 42 45 Q40 50 42 55 Q45 60 50 60"
+                              fill="#E6A5B9" stroke="#D4879C" stroke-width="0.8"/>
+                        <path d="M50 60 Q50 55 50 40" fill="none" stroke="#D4879C" stroke-width="0.3" opacity="0.7"/>
+                        <path d="M55 58 Q55 50 55 42" fill="none" stroke="#D4879C" stroke-width="0.3" opacity="0.7"/>
+                        <path d="M45 58 Q45 50 45 42" fill="none" stroke="#D4879C" stroke-width="0.3" opacity="0.7"/>
+                        <circle cx="50" cy="45" r="0.8" fill="#FFD700"/>
+                        <circle cx="48" cy="47" r="0.6" fill="#FFD700"/>
+                        <circle cx="52" cy="47" r="0.6" fill="#FFD700"/>
+                    </svg>
+                </div>
+                <div class="code-block">
+                    <span class="code-label">d</span>
+                    <code><span class="tag">M</span> 50 60
+<span class="tag">Q</span> 55 60 58 55
+<span class="tag">Q</span> 60 50 58 45
+<span class="tag">Q</span> 55 40 50 40
+<span class="tag">Q</span> 45 40 42 45
+<span class="tag">Q</span> 40 50 42 55
+<span class="tag">Q</span> 45 60 50 60</code>
+                </div>
+            </div>
+
+            <p data-i18n-html="bez_ai_takeaway" style="margin-top:1rem;">Chaque <code>Q</code> = un point de controle + un point d'arrivee. Sept commandes, une fleur. C'est ca qui rend les SVGs si interessants pour l'IA : <strong>sortie courte, structure claire, modifiable a la main</strong>. Tu pourrais ouvrir ce fichier et changer une couleur, deplacer un petale, ou ajouter une etamine — sans regenerer quoi que ce soit. Voir d'autres exemples dans la <a class="inline-link" href="gallery.html">galerie</a>.</p>
+        </div>
+
+        <!-- Cheatsheet reference -->
+        <div class="content-block" style="text-align:center;">
+            <h3 data-i18n="anat_cheatsheet">Aide-memoire Bezier</h3>
+            <div class="svg-display" style="max-height: 500px; overflow-y: auto;">
+                <img src="images/cheatSheets/cs_bezier.svg" alt="Bezier Cheat Sheet" style="width:100%; max-width:700px;">
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <a href="https://javakhanstudio.github.io/SynAndKaya/" target="_blank" title="Syn + Kaya">
+        <img src="QR_CODE.svg" class="qr-easter-egg" alt="QR -> SynAndKaya">
+    </a>
+
+    <script src="js/main.js"></script>
+    <script>
+        // ===== Draggable Bezier Points =====
+        function makeDraggable(svgEl, points, updateFn) {
+            let activePoint = null;
+
+            function getMousePos(evt) {
+                const svg = svgEl;
+                const pt = svg.createSVGPoint();
+                const touch = evt.touches ? evt.touches[0] : evt;
+                pt.x = touch.clientX;
+                pt.y = touch.clientY;
+                const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
+                return { x: Math.round(svgP.x), y: Math.round(svgP.y) };
+            }
+
+            points.forEach(p => {
+                p.el.addEventListener('mousedown', (e) => { activePoint = p; e.preventDefault(); });
+                p.el.addEventListener('touchstart', (e) => { activePoint = p; e.preventDefault(); }, { passive: false });
+            });
+
+            function onMove(e) {
+                if (!activePoint) return;
+                const pos = getMousePos(e);
+                const x = Math.max(10, Math.min(590, pos.x));
+                const y = Math.max(10, Math.min(290, pos.y));
+                activePoint.el.setAttribute('cx', x);
+                activePoint.el.setAttribute('cy', y);
+                activePoint.x = x;
+                activePoint.y = y;
+                updateFn();
+            }
+
+            function onUp() { activePoint = null; }
+
+            svgEl.addEventListener('mousemove', onMove);
+            svgEl.addEventListener('touchmove', onMove, { passive: false });
+            svgEl.addEventListener('mouseup', onUp);
+            svgEl.addEventListener('mouseleave', onUp);
+            svgEl.addEventListener('touchend', onUp);
+        }
+
+        // ===== Quadratic =====
+        const qStart = { el: document.getElementById('q-start'), x: 80, y: 250 };
+        const qControl = { el: document.getElementById('q-control'), x: 300, y: 50 };
+        const qEnd = { el: document.getElementById('q-end'), x: 520, y: 250 };
+
+        function updateQuad() {
+            const d = `M${qStart.x},${qStart.y} Q${qControl.x},${qControl.y} ${qEnd.x},${qEnd.y}`;
+            document.getElementById('q-curve').setAttribute('d', d);
+            document.getElementById('q-line1').setAttribute('x1', qStart.x);
+            document.getElementById('q-line1').setAttribute('y1', qStart.y);
+            document.getElementById('q-line1').setAttribute('x2', qControl.x);
+            document.getElementById('q-line1').setAttribute('y2', qControl.y);
+            document.getElementById('q-line2').setAttribute('x1', qControl.x);
+            document.getElementById('q-line2').setAttribute('y1', qControl.y);
+            document.getElementById('q-line2').setAttribute('x2', qEnd.x);
+            document.getElementById('q-line2').setAttribute('y2', qEnd.y);
+            document.getElementById('q-start-label').textContent = `P0 (${qStart.x},${qStart.y})`;
+            document.getElementById('q-start-label').setAttribute('x', qStart.x);
+            document.getElementById('q-start-label').setAttribute('y', Math.min(qStart.y + 25, 295));
+            document.getElementById('q-control-label').textContent = `CP (${qControl.x},${qControl.y})`;
+            document.getElementById('q-control-label').setAttribute('x', qControl.x);
+            document.getElementById('q-control-label').setAttribute('y', Math.max(qControl.y - 15, 15));
+            document.getElementById('q-end-label').textContent = `P1 (${qEnd.x},${qEnd.y})`;
+            document.getElementById('q-end-label').setAttribute('x', qEnd.x);
+            document.getElementById('q-end-label').setAttribute('y', Math.min(qEnd.y + 25, 295));
+            document.getElementById('quad-command').innerHTML = `<span>Commande SVG :</span> M${qStart.x},${qStart.y} Q${qControl.x},${qControl.y} ${qEnd.x},${qEnd.y}`;
+        }
+
+        makeDraggable(document.getElementById('quad-svg'), [qStart, qControl, qEnd], updateQuad);
+
+        // ===== Cubic =====
+        const cStart = { el: document.getElementById('c-start'), x: 80, y: 250 };
+        const cCp1 = { el: document.getElementById('c-cp1'), x: 180, y: 50 };
+        const cCp2 = { el: document.getElementById('c-cp2'), x: 420, y: 50 };
+        const cEnd = { el: document.getElementById('c-end'), x: 520, y: 250 };
+
+        function updateCubic() {
+            const d = `M${cStart.x},${cStart.y} C${cCp1.x},${cCp1.y} ${cCp2.x},${cCp2.y} ${cEnd.x},${cEnd.y}`;
+            document.getElementById('c-curve').setAttribute('d', d);
+            document.getElementById('c-line1').setAttribute('x1', cStart.x);
+            document.getElementById('c-line1').setAttribute('y1', cStart.y);
+            document.getElementById('c-line1').setAttribute('x2', cCp1.x);
+            document.getElementById('c-line1').setAttribute('y2', cCp1.y);
+            document.getElementById('c-line2').setAttribute('x1', cCp2.x);
+            document.getElementById('c-line2').setAttribute('y1', cCp2.y);
+            document.getElementById('c-line2').setAttribute('x2', cEnd.x);
+            document.getElementById('c-line2').setAttribute('y2', cEnd.y);
+            document.getElementById('c-start-label').textContent = `P0 (${cStart.x},${cStart.y})`;
+            document.getElementById('c-start-label').setAttribute('x', cStart.x);
+            document.getElementById('c-start-label').setAttribute('y', Math.min(cStart.y + 25, 295));
+            document.getElementById('c-cp1-label').textContent = `CP1 (${cCp1.x},${cCp1.y})`;
+            document.getElementById('c-cp1-label').setAttribute('x', cCp1.x);
+            document.getElementById('c-cp1-label').setAttribute('y', Math.max(cCp1.y - 15, 15));
+            document.getElementById('c-cp2-label').textContent = `CP2 (${cCp2.x},${cCp2.y})`;
+            document.getElementById('c-cp2-label').setAttribute('x', cCp2.x);
+            document.getElementById('c-cp2-label').setAttribute('y', Math.max(cCp2.y - 15, 15));
+            document.getElementById('c-end-label').textContent = `P1 (${cEnd.x},${cEnd.y})`;
+            document.getElementById('c-end-label').setAttribute('x', cEnd.x);
+            document.getElementById('c-end-label').setAttribute('y', Math.min(cEnd.y + 25, 295));
+            document.getElementById('cubic-command').innerHTML = `<span>Commande SVG :</span> M${cStart.x},${cStart.y} C${cCp1.x},${cCp1.y} ${cCp2.x},${cCp2.y} ${cEnd.x},${cEnd.y}`;
+        }
+
+        makeDraggable(document.getElementById('cubic-svg'), [cStart, cCp1, cCp2, cEnd], updateCubic);
+    </script>
+</body>
+</html>

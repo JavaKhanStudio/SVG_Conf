@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modification Live - Formation SVG</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" href="images/LogoHeaderSBP.png" type="image/png">
+    <style>
+        .live-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        @media (max-width: 900px) { .live-grid { grid-template-columns: 1fr; } }
+        #live-svg-container { min-height: 350px; display: flex; align-items: center; justify-content: center; background: repeating-conic-gradient(#f0f0f0 0% 25%, #fff 0% 50%) 50% / 20px 20px; border-radius: var(--radius); border: 1px solid var(--border-color); }
+        #live-code { max-height: 400px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+        <div class="page-hero">
+            <h2 data-i18n="live_title">Modification en direct</h2>
+            <p data-i18n="live_subtitle">Modifiez les attributs SVG et voyez le resultat instantanement</p>
+        </div>
+
+        <!-- Interactive shape -->
+        <div class="content-block">
+            <h3 data-i18n="live_shape_title">Forme interactive</h3>
+            <p data-i18n="live_shape_desc">Utilisez les controles ci-dessous pour modifier les proprietes de cette forme SVG en temps reel.</p>
+
+            <div class="live-grid">
+                <div>
+                    <div class="controls" style="flex-direction:column;">
+                        <div class="control-group" style="flex-direction:row; align-items:center; gap:1rem;">
+                            <label data-i18n="live_shape">Forme</label>
+                            <select id="ctrl-shape" onchange="updateLiveShape()">
+                                <option value="circle" data-i18n="live_circle">Cercle</option>
+                                <option value="rect" data-i18n="live_rect">Rectangle</option>
+                                <option value="polygon" data-i18n="live_polygon">Polygone</option>
+                                <option value="star" data-i18n="live_star">Etoile</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label><span data-i18n="live_fill">Remplissage</span></label>
+                            <div style="display:flex; align-items:center; gap:0.5rem;">
+                                <input type="color" id="ctrl-fill" value="#0752CF" oninput="updateLiveShape()">
+                                <span class="control-value" id="fill-val">#0752CF</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label><span data-i18n="live_stroke">Contour</span></label>
+                            <div style="display:flex; align-items:center; gap:0.5rem;">
+                                <input type="color" id="ctrl-stroke" value="#BA0101" oninput="updateLiveShape()">
+                                <span class="control-value" id="stroke-val">#BA0101</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label><span data-i18n="live_strokew">Epaisseur</span>: <span class="control-value" id="strokew-val">3</span></label>
+                            <input type="range" id="ctrl-strokew" min="0" max="15" value="3" oninput="updateLiveShape()">
+                        </div>
+                        <div class="control-group">
+                            <label><span data-i18n="live_opacity">Opacite</span>: <span class="control-value" id="opacity-val">1</span></label>
+                            <input type="range" id="ctrl-opacity" min="0" max="100" value="100" oninput="updateLiveShape()">
+                        </div>
+                        <div class="control-group">
+                            <label><span data-i18n="live_rotation">Rotation</span>: <span class="control-value" id="rotation-val">0</span>&deg;</label>
+                            <input type="range" id="ctrl-rotation" min="0" max="360" value="0" oninput="updateLiveShape()">
+                        </div>
+                        <div class="control-group">
+                            <label><span data-i18n="live_scale">Echelle</span>: <span class="control-value" id="scale-val">1</span></label>
+                            <input type="range" id="ctrl-scale" min="20" max="200" value="100" oninput="updateLiveShape()">
+                        </div>
+                        <div class="control-group" id="radius-group">
+                            <label><span data-i18n="live_radius">Rayon</span>: <span class="control-value" id="radius-val">60</span></label>
+                            <input type="range" id="ctrl-radius" min="10" max="90" value="60" oninput="updateLiveShape()">
+                        </div>
+                        <div class="control-group" id="sides-group" style="display:none;">
+                            <label><span data-i18n="live_sides">Cotes</span>: <span class="control-value" id="sides-val">5</span></label>
+                            <input type="range" id="ctrl-sides" min="3" max="12" value="5" oninput="updateLiveShape()">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div id="live-svg-container">
+                        <svg id="live-svg" viewBox="0 0 200 200" width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="100" cy="100" r="60" fill="#0752CF" stroke="#BA0101" stroke-width="3"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Generated code -->
+        <div class="content-block">
+            <h3 data-i18n="live_code_title">Code genere</h3>
+            <p data-i18n="live_code_desc">Le code SVG se met a jour automatiquement lorsque vous modifiez les controles.</p>
+            <div class="code-block" id="live-code">
+                <span class="code-label">SVG</span>
+                <code id="live-code-output"></code>
+            </div>
+        </div>
+
+        <!-- Bone tag demo -->
+        <div class="content-block">
+            <h3>SVG &lt;use&gt; + CSS Variables</h3>
+            <p data-i18n-html="live_reuse_desc" style="margin-bottom:1rem;">
+                Un SVG peut definir des elements reutilisables avec <code>&lt;defs&gt;</code> et <code>&lt;use&gt;</code>. Combinez cela avec des variables CSS pour creer des composants personnalisables.
+            </p>
+            <div class="split-layout">
+                <div class="svg-display">
+                    <svg id="bone-demo" viewBox="0 0 24 15" width="400" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="boneGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" id="bone-stop1" style="stop-color:#8B7355"/>
+                                <stop offset="50%" id="bone-stop2" style="stop-color:#D2B48C"/>
+                                <stop offset="100%" id="bone-stop3" style="stop-color:#8B7355"/>
+                            </linearGradient>
+                            <radialGradient id="boneHighlight" cx="40%" cy="30%" r="50%">
+                                <stop offset="0%" style="stop-color:rgba(255,255,255,0.5)"/>
+                                <stop offset="100%" style="stop-color:rgba(255,255,255,0)"/>
+                            </radialGradient>
+                        </defs>
+                        <g transform="matrix(0.832724, 0.832724, -0.847675, 0.847675, 12.115215, -12.831682)">
+                            <path d="M15 3a3 3 0 0 1 3 3a3 3 0 1 1 -2.12 5.122l-4.758 4.758a3 3 0 1 1 -5.117 2.297l0 -.177l-.176 0a3 3 0 1 1 2.298 -5.115l4.758 -4.758a3 3 0 0 1 2.12 -5.122z" fill="url(#boneGrad)" stroke="#6B5B3E" stroke-width="0.3"/>
+                            <path d="M15 3a3 3 0 0 1 3 3a3 3 0 1 1 -2.12 5.122l-4.758 4.758a3 3 0 1 1 -5.117 2.297l0 -.177l-.176 0a3 3 0 1 1 2.298 -5.115l4.758 -4.758a3 3 0 0 1 2.12 -5.122z" fill="url(#boneHighlight)" stroke="none"/>
+                        </g>
+                        <text id="bone-name-text" style="font-family: Arial, sans-serif; font-size: 2.2px; text-anchor: middle; font-weight: bold;" fill="#5C4033" x="12" y="8.5">Syntax</text>
+                    </svg>
+                </div>
+                <div>
+                    <div class="controls" style="flex-direction:column;">
+                        <div class="control-group">
+                            <label>Dog Name</label>
+                            <input type="text" id="bone-name" value="Syntax" oninput="updateBone()" style="width:150px;">
+                        </div>
+                        <div class="control-group">
+                            <label>Color Dark</label>
+                            <input type="color" id="bone-dark" value="#8B7355" oninput="updateBone()">
+                        </div>
+                        <div class="control-group">
+                            <label>Color Light</label>
+                            <input type="color" id="bone-light" value="#D2B48C" oninput="updateBone()">
+                        </div>
+                        <div class="control-group">
+                            <label>Text Color</label>
+                            <input type="color" id="bone-text-color" value="#5C4033" oninput="updateBone()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p data-i18n-html="live_reuse_ai" style="margin-top:1.25rem; padding:0.75rem 1rem; background:rgba(155, 89, 182, 0.06); border-left:3px solid #9b59b6; border-radius:0 6px 6px 0;"><i class="fa-solid fa-robot" style="color:#9b59b6; margin-right:0.4rem;"></i><strong>Le pattern d'une app IA :</strong> ce que tu vois ici est exactement la recette qu'on retrouve dans une application augmentee a l'IA : un <em>template</em> SVG (le os, sa forme) plus des <em>parametres</em> (couleurs, texte) qui peuvent venir d'un humain... ou d'un LLM. <a class="inline-link" href="workshop.html">L'atelier</a> pousse l'idee plus loin avec une galerie complete de SVGs parametriques.</p>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <a href="https://javakhanstudio.github.io/SynAndKaya/" target="_blank" title="Syn + Kaya">
+        <img src="QR_CODE.svg" class="qr-easter-egg" alt="QR -> SynAndKaya">
+    </a>
+
+    <script src="js/main.js"></script>
+    <script>
+        function polygonPoints(cx, cy, r, sides) {
+            const pts = [];
+            for (let i = 0; i < sides; i++) {
+                const angle = (i * 2 * Math.PI / sides) - Math.PI / 2;
+                pts.push(`${(cx + r * Math.cos(angle)).toFixed(1)},${(cy + r * Math.sin(angle)).toFixed(1)}`);
+            }
+            return pts.join(' ');
+        }
+
+        function starPoints(cx, cy, outerR, innerR, points) {
+            const pts = [];
+            for (let i = 0; i < points * 2; i++) {
+                const r = i % 2 === 0 ? outerR : innerR;
+                const angle = (i * Math.PI / points) - Math.PI / 2;
+                pts.push(`${(cx + r * Math.cos(angle)).toFixed(1)},${(cy + r * Math.sin(angle)).toFixed(1)}`);
+            }
+            return pts.join(' ');
+        }
+
+        function updateLiveShape() {
+            const shape = document.getElementById('ctrl-shape').value;
+            const fill = document.getElementById('ctrl-fill').value;
+            const stroke = document.getElementById('ctrl-stroke').value;
+            const strokew = document.getElementById('ctrl-strokew').value;
+            const opacity = (document.getElementById('ctrl-opacity').value / 100).toFixed(2);
+            const rotation = document.getElementById('ctrl-rotation').value;
+            const scale = (document.getElementById('ctrl-scale').value / 100).toFixed(2);
+            const radius = document.getElementById('ctrl-radius').value;
+            const sides = document.getElementById('ctrl-sides').value;
+
+            // Update display values
+            document.getElementById('fill-val').textContent = fill;
+            document.getElementById('stroke-val').textContent = stroke;
+            document.getElementById('strokew-val').textContent = strokew;
+            document.getElementById('opacity-val').textContent = opacity;
+            document.getElementById('rotation-val').textContent = rotation;
+            document.getElementById('scale-val').textContent = scale;
+            document.getElementById('radius-val').textContent = radius;
+            document.getElementById('sides-val').textContent = sides;
+
+            // Show/hide relevant controls
+            document.getElementById('radius-group').style.display = (shape === 'circle' || shape === 'star') ? '' : 'none';
+            document.getElementById('sides-group').style.display = (shape === 'polygon' || shape === 'star') ? '' : 'none';
+
+            const svg = document.getElementById('live-svg');
+            let shapeEl = '';
+            let codeStr = '';
+            const transformAttr = `transform="rotate(${rotation} 100 100) scale(${scale})"`;
+            const styleAttrs = `fill="${fill}" stroke="${stroke}" stroke-width="${strokew}" opacity="${opacity}"`;
+
+            switch(shape) {
+                case 'circle':
+                    shapeEl = `<circle cx="100" cy="100" r="${radius}" ${styleAttrs} ${transformAttr}/>`;
+                    codeStr = `<circle cx="100" cy="100" r="${radius}"\n  fill="${fill}" stroke="${stroke}"\n  stroke-width="${strokew}" opacity="${opacity}"\n  transform="rotate(${rotation} 100 100)\n             scale(${scale})" />`;
+                    break;
+                case 'rect':
+                    const hw = 60, hh = 45;
+                    shapeEl = `<rect x="${100-hw}" y="${100-hh}" width="${hw*2}" height="${hh*2}" rx="5" ${styleAttrs} ${transformAttr}/>`;
+                    codeStr = `<rect x="${100-hw}" y="${100-hh}"\n  width="${hw*2}" height="${hh*2}" rx="5"\n  fill="${fill}" stroke="${stroke}"\n  stroke-width="${strokew}" opacity="${opacity}"\n  transform="rotate(${rotation} 100 100)\n             scale(${scale})" />`;
+                    break;
+                case 'polygon':
+                    const pts = polygonPoints(100, 100, parseInt(radius), parseInt(sides));
+                    shapeEl = `<polygon points="${pts}" ${styleAttrs} ${transformAttr}/>`;
+                    codeStr = `<polygon\n  points="${pts}"\n  fill="${fill}" stroke="${stroke}"\n  stroke-width="${strokew}" opacity="${opacity}"\n  transform="rotate(${rotation} 100 100)\n             scale(${scale})" />`;
+                    break;
+                case 'star':
+                    const spts = starPoints(100, 100, parseInt(radius), parseInt(radius)*0.45, parseInt(sides));
+                    shapeEl = `<polygon points="${spts}" ${styleAttrs} ${transformAttr}/>`;
+                    codeStr = `<polygon\n  points="${spts.substring(0,60)}..."\n  fill="${fill}" stroke="${stroke}"\n  stroke-width="${strokew}" opacity="${opacity}"\n  transform="rotate(${rotation} 100 100)\n             scale(${scale})" />`;
+                    break;
+            }
+
+            svg.innerHTML = shapeEl;
+
+            const codeOutput = document.getElementById('live-code-output');
+            codeOutput.textContent = `<svg viewBox="0 0 200 200" xmlns="...">\n  ${codeStr}\n</svg>`;
+        }
+
+        function updateBone() {
+            const name = document.getElementById('bone-name').value || 'Dog';
+            const dark = document.getElementById('bone-dark').value;
+            const light = document.getElementById('bone-light').value;
+            const textColor = document.getElementById('bone-text-color').value;
+
+            document.getElementById('bone-stop1').style.stopColor = dark;
+            document.getElementById('bone-stop2').style.stopColor = light;
+            document.getElementById('bone-stop3').style.stopColor = dark;
+            document.getElementById('bone-name-text').textContent = name;
+            document.getElementById('bone-name-text').setAttribute('fill', textColor);
+        }
+
+        // Initial render
+        updateLiveShape();
+    </script>
+</body>
+</html>

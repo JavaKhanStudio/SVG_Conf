@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acte 2 - Formation SVG</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" href="images/LogoHeaderSBP.png" type="image/png">
+    <style>
+        .draft-banner {
+            background: linear-gradient(135deg, #fff3cd, #ffeeba);
+            border-left: 4px solid #f0a500;
+            padding: 0.85rem 1.1rem;
+            margin-bottom: 1rem;
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+        }
+        .ai-screen {
+            display: block; max-width: 100%;
+            margin: 1rem auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+        .ai-section { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        @media (min-width: 900px) {
+            .ai-section { grid-template-columns: 1fr 1fr; align-items: center; }
+        }
+        .bone-compare {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            margin: 1.5rem 0;
+        }
+        @media (max-width: 700px) { .bone-compare { grid-template-columns: 1fr; } }
+        .bone-cell {
+            background: #faf6ee;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.25rem;
+            text-align: center;
+        }
+        .bone-cell h4 {
+            color: var(--primary-blue);
+            margin-bottom: 0.25rem;
+        }
+        .bone-cell .ai-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 0.15rem 0.6rem;
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+        }
+        .bone-cell .ai-tag.claude { background: #f3e5f5; color: #7b1fa2; }
+        .bone-cell .ai-tag.gpt { background: #e0f2f1; color: #00695c; }
+        .bone-cell svg { display: block; margin: 0 auto; max-width: 100%; }
+        .bone-cell .ai-meta {
+            margin-top: 0.5rem;
+            font-size: 0.82rem;
+            color: var(--text-light);
+        }
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.92rem;
+        }
+        .compare-table th, .compare-table td {
+            padding: 0.55rem 0.8rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+            vertical-align: top;
+        }
+        .compare-table th {
+            background: #f8f9fa;
+            color: var(--primary-blue);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .compare-table .axis { font-weight: 600; white-space: nowrap; }
+        .compare-table .check { color: #2ecc71; font-weight: 700; }
+        .compare-table .cross { color: #e74c3c; font-weight: 700; }
+        /* Bone evolution carousel */
+        .evo-carousel {
+            background: #faf6ee;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+        }
+        .evo-stage {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            align-items: stretch;
+        }
+        @media (max-width: 800px) { .evo-stage { grid-template-columns: 1fr; } }
+        .evo-render {
+            background: #1e1e24;
+            border-radius: 6px;
+            min-height: 240px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .evo-render .evo-frame {
+            border: none;
+            background: transparent;
+            width: 100%;
+            min-height: 240px;
+        }
+        .evo-source { display: flex; flex-direction: column; }
+        .evo-source-label {
+            font-size: 0.78rem; color: var(--text-light);
+            font-family: ui-monospace, monospace;
+            margin-bottom: 0.3rem;
+            text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .evo-textarea {
+            flex: 1;
+            background: var(--code-bg);
+            color: var(--code-text);
+            border: none; outline: none;
+            font-family: ui-monospace, "Cascadia Code", monospace;
+            font-size: 0.74rem;
+            line-height: 1.5;
+            padding: 0.7rem 0.85rem;
+            border-radius: 6px;
+            resize: vertical;
+            tab-size: 2;
+            min-height: 240px;
+            white-space: pre;
+        }
+        .evo-narration {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            background: rgba(7, 82, 207, 0.05);
+            border-left: 3px solid var(--primary-blue);
+            border-radius: 0 6px 6px 0;
+            font-size: 0.92rem;
+            min-height: 3em;
+        }
+        .evo-narration .evo-step-text { margin: 0; color: var(--text-color); }
+        .evo-controls {
+            display: flex; align-items: center; gap: 0.75rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+        .evo-controls .evo-prev,
+        .evo-controls .evo-next {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .evo-controls .evo-prev:hover,
+        .evo-controls .evo-next:hover {
+            background: var(--primary-blue); color: white;
+        }
+        .evo-controls .evo-prev:disabled,
+        .evo-controls .evo-next:disabled {
+            opacity: 0.3; cursor: not-allowed;
+        }
+        .evo-timeline {
+            display: flex; align-items: center; gap: 0;
+            flex: 0 1 auto;
+        }
+        .evo-timeline button {
+            position: relative;
+            background: none; border: none; cursor: pointer;
+            padding: 0; margin: 0 6px;
+        }
+        .evo-timeline button .dot {
+            display: block;
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 2px solid var(--primary-blue);
+            transition: all var(--transition);
+        }
+        .evo-timeline button .label {
+            display: block;
+            margin-top: 0.25rem;
+            font-size: 0.72rem;
+            color: var(--text-light);
+            font-family: ui-monospace, monospace;
+        }
+        .evo-timeline button.active .dot {
+            background: var(--primary-blue);
+            transform: scale(1.35);
+            box-shadow: 0 0 0 3px rgba(7, 82, 207, 0.2);
+        }
+        .evo-timeline button.active .label { color: var(--primary-blue); font-weight: 700; }
+        .evo-timeline .seg {
+            width: 40px; height: 2px;
+            background: var(--primary-blue);
+            opacity: 0.3;
+        }
+        .evo-timeline .seg.passed { opacity: 1; }
+        /* Anatomy stage */
+        .anat-stage {
+            background: #faf6ee;
+            border-radius: var(--radius);
+            padding: 1rem;
+            box-shadow: var(--shadow);
+        }
+        .anat-stage svg { display: block; width: 100%; max-width: 360px; margin: 0 auto; height: auto; }
+        /* Anatomy layout: sticky dogtag on the left, live cards on the right */
+        .anat-layout {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 1.5rem;
+            align-items: start;
+            margin-top: 1rem;
+        }
+        @media (max-width: 900px) {
+            .anat-layout { grid-template-columns: 1fr; }
+            .anat-sticky { position: static !important; }
+        }
+        .anat-sticky {
+            position: sticky;
+            top: calc(50vh - 200px);
+        }
+        /* Clickable callouts on the dogtag */
+        .anat-callouts .anat-callout { cursor: pointer; }
+        .anat-callouts .anat-callout circle {
+            fill: var(--primary-red);
+            stroke: white;
+            stroke-width: 2;
+            opacity: 0.92;
+            transition: transform 0.2s ease;
+            transform-origin: center;
+        }
+        .anat-callouts .anat-callout text {
+            fill: white;
+            font-family: ui-monospace, monospace;
+            font-size: 14px;
+            font-weight: 700;
+            pointer-events: none;
+        }
+        .anat-callouts .anat-callout:hover circle {
+            transform: scale(1.2);
+        }
+        /* Live-edit zoom cards */
+        .anat-cards { display: flex; flex-direction: column; gap: 1.5rem; }
+        .zoom-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1rem 1.25rem;
+            position: relative;
+            scroll-margin-top: 80px;
+        }
+        .zoom-card .card-num {
+            position: absolute;
+            top: -12px; left: 1rem;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; font-weight: 700;
+            box-shadow: var(--shadow);
+        }
+        .zoom-card h5 {
+            color: var(--primary-blue);
+            font-size: 1.05rem;
+            margin: 0.4rem 0 0.5rem 2rem;
+        }
+        .zoom-card p {
+            font-size: 0.92rem;
+            color: var(--text-color);
+            margin-bottom: 0.75rem;
+        }
+        .live-mini {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+        @media (max-width: 700px) { .live-mini { grid-template-columns: 1fr; } }
+        .live-mini .live-frame {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: white;
+            min-height: 140px;
+            width: 100%;
+        }
+        .live-mini .live-source {
+            background: var(--code-bg);
+            color: var(--code-text);
+            border: none; outline: none;
+            font-family: ui-monospace, "Cascadia Code", monospace;
+            font-size: 0.74rem;
+            line-height: 1.45;
+            padding: 0.6rem 0.75rem;
+            border-radius: 6px;
+            resize: vertical;
+            tab-size: 2;
+            min-height: 140px;
+            white-space: pre;
+        }
+        .live-controls {
+            display: flex; gap: 0.75rem; align-items: center;
+            flex-wrap: wrap;
+            margin-top: 0.6rem;
+            font-size: 0.85rem;
+        }
+        .live-controls input[type="color"] {
+            vertical-align: middle;
+            width: 36px; height: 28px;
+            padding: 0;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .live-controls .live-reset {
+            background: var(--card-bg);
+            color: var(--primary-blue);
+            border: 1px solid var(--primary-blue);
+            border-radius: 4px;
+            padding: 0.25rem 0.65rem;
+            cursor: pointer;
+            font-size: 0.78rem;
+        }
+        .live-controls .live-reset:hover { background: var(--primary-blue); color: white; }
+        /* GPT raw output display */
+        .gpt-raw {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        @media (max-width: 700px) { .gpt-raw { grid-template-columns: 1fr; } }
+        .gpt-raw .gpt-bone-stage {
+            background: #faf6ee;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.25rem;
+            text-align: center;
+        }
+        .gpt-raw .gpt-bone-stage svg { display: block; margin: 0 auto; max-width: 100%; }
+        .gpt-raw .gpt-bone-caption {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+        /* Random-dogtag JS demo */
+        .js-demo { margin: 1.25rem 0; }
+        .js-demo button {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.25rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            margin-right: 0.5rem;
+            transition: transform var(--transition);
+        }
+        .js-demo button:hover { transform: translateY(-1px); }
+        .js-demo button.secondary {
+            background: var(--card-bg);
+            color: var(--primary-blue);
+            border: 1px solid var(--primary-blue);
+        }
+        #random-tag-host {
+            display: flex; flex-wrap: wrap; gap: 1rem;
+            margin-top: 1rem;
+            min-height: 60px;
+        }
+        #random-tag-host .rand-tag {
+            background: #faf6ee;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 0.5rem;
+            text-align: center;
+            animation: tagDrop 0.35s ease;
+        }
+        @keyframes tagDrop {
+            from { opacity: 0; transform: translateY(-12px) scale(0.85); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        #random-tag-host .rand-tag svg { display: block; width: 130px; height: auto; }
+        #random-tag-host .rand-tag .rand-name {
+            font-family: ui-monospace, monospace;
+            font-size: 0.78rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+        <div class="page-hero">
+            <p style="text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.25rem;" data-i18n="story_act2_label">Acte 2</p>
+            <h2 data-i18n="story2_title">Comment l'IA a aide a tout construire</h2>
+            <p data-i18n="story2_subtitle">Deux IA, deux outils, deux philosophies</p>
+        </div>
+
+        <!-- ChatGPT attempt -->
+        <div class="content-block">
+            <h3 data-i18n="story2_gpt_title">Premier essai : ChatGPT</h3>
+            <div class="ai-section">
+                <div>
+                    <p data-i18n-html="story2_gpt_p1">Premiere tentative : je decris mon besoin a ChatGPT. Le resultat qu'il me sort alors est techniquement un SVG qui compile et s'ouvre dans le navigateur. Je vous laisse cependant apprecier par vous-meme la qualite du produit.</p>
+                </div>
+                <img src="images/story/gpt-screen.jpg" alt="ChatGPT interface avec un SVG d'os" class="ai-screen">
+            </div>
+
+            <h4 data-i18n="story2_gpt_raw_title" style="margin-top: 1.5rem; color: var(--primary-blue);">Sauf que finalement...</h4>
+            <div class="gpt-raw">
+                <div class="gpt-bone-stage">
+                    <svg viewBox="0 0 300 150" width="100%" style="max-width: 360px;" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="gpt-raw-grad" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="#ffffff"/>
+                                <stop offset="40%" stop-color="#bbbbbb"/>
+                                <stop offset="100%" stop-color="#888888"/>
+                            </radialGradient>
+                        </defs>
+                        <rect width="300" height="150" fill="#2a2a34"/>
+                        <path d="M85,50 A30,30 0 1,1 115,20 L185,20 A30,30 0 1,1 215,50 Q230,75 215,100 A30,30 0 1,1 185,130 L115,130 A30,30 0 1,1 85,100 Q70,75 85,50 Z" fill="url(#gpt-raw-grad)" stroke="#555555" stroke-width="4"/>
+                    </svg>
+                    <p class="gpt-bone-caption" data-i18n="story2_gpt_raw_caption">Output ChatGPT, taille reelle, palette par defaut.</p>
+                </div>
+                <div>
+                    <p data-i18n="story2_gpt_raw_p">Apres plusieurs retouches, le resultat final s'approche lentement de ce que j'avais en tete, mais j'en ai deja marre, et je decide d'aller voir ailleurs si j'y suis.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Claude attempt -->
+        <div class="content-block">
+            <h3 data-i18n="story2_claude_title">Deuxieme essai : Claude (artifacts)</h3>
+            <div class="ai-section">
+                <img src="images/story/claude-screen.jpg" alt="Claude.ai affichant un artifact SVG" class="ai-screen">
+                <div>
+                    <p data-i18n-html="story2_claude_p1">Claude, via son systeme d'<strong>artifacts</strong>, fait quelque chose de different. Le SVG ne s'affiche pas juste en tant que code : il est rendu <strong>live</strong>, dans un panneau a droite, avec un vrai aperçu visuel. A chaque message qui modifie le SVG, le panneau se met a jour instantanement.</p>
+                    <p data-i18n-html="story2_claude_p2">La boucle d'iteration devient visuelle plutot que textuelle :</p>
+                    <ul style="margin-left: 1.25rem; color: var(--text-color); font-size: 0.95rem;">
+                        <li data-i18n="story2_claude_b1">"Rends le metal plus sombre, plus pres de la couleur de la bordure" — on voit le bone s'assombrir en temps reel.</li>
+                        <li data-i18n="story2_claude_b2">"Ajoute un effet grave au texte" — un filtre SVG apparait, le texte prend un relief.</li>
+                        <li data-i18n="story2_claude_b3">"Un peu plus de contraste sur les bords" — le highlight est ajuste en consequence.</li>
+                    </ul>
+                    <p data-i18n-html="story2_claude_p3">Pour du SVG specifiquement, ca change tout. La sortie finale (<code>boneV13.svg</code>, celui utilise dans <a class="inline-link" href="workshop.html">l'atelier</a>) est nettement plus riche : gradient lineaire multi-stops, pattern de texture diagonal, gradient de bord en overlay, filtre d'emboss sur le texte.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bone evolution carousel -->
+        <div class="content-block">
+            <h3 data-i18n="story2_evo_title">L'evolution de l'os</h3>
+            <p data-i18n-html="story2_evo_desc">Treize versions dans le repo, cinq retenues pour leur saut visuel. Navigue entre les etapes, lis ce qui a change a chaque palier, et modifie le code pour voir l'effet en direct.</p>
+
+            <div class="evo-carousel" id="evo-carousel"
+                 data-bones='[
+                    {"src":"images/story/bones/01-bone.svg","label":"v1","desc":"le contour brut"},
+                    {"src":"images/story/bones/02-boneV4.svg","label":"v4","desc":"le placeholder du nom"},
+                    {"src":"images/story/bones/03-boneV5.svg","label":"v5","desc":"premier rendu metallique"},
+                    {"src":"images/story/bones/04-boneV8.svg","label":"v8","desc":"+ texture et emboss"},
+                    {"src":"images/story/bones/05-boneV13.svg","label":"v13","desc":"la version finale"}
+                 ]'
+                 data-transitions='[
+                    "Point de depart : un simple trace au stylo. Pas de fond, pas de texte, juste la silhouette pour valider la forme.",
+                    "v1 -> v4 : le contour devient une vraie forme d&#39;os, et un placeholder \"Name of the dog\" apparait. Premier signe que ca va devenir une medaille.",
+                    "v4 -> v5 : le contour devient solide, on remplit l&#39;interieur d&#39;un gradient metallique uniforme, le nom est rendu lisiblement par-dessus.",
+                    "v5 -> v8 : un pattern de texture diagonal apparait dans le metal, et le nom prend un effet d&#39;emboss SVG (filtre &lt;feOffset&gt;+&lt;feGaussianBlur&gt;+&lt;feMerge&gt;).",
+                    "v8 -> v13 : polish final. Edge highlight via un gradient en overlay sur le bord, bordure plus contrastee, l&#39;eclat plus credible. C&#39;est cette version qui est utilisee dans l&#39;atelier."
+                 ]'>
+                <div class="evo-stage">
+                    <div class="evo-render">
+                        <iframe class="evo-frame" sandbox="allow-same-origin" aria-label="bone preview"></iframe>
+                    </div>
+                    <div class="evo-source">
+                        <div class="evo-source-label">SVG source — modifiable</div>
+                        <textarea class="evo-textarea" spellcheck="false"></textarea>
+                    </div>
+                </div>
+
+                <div class="evo-narration">
+                    <p class="evo-step-text"></p>
+                </div>
+
+                <div class="evo-controls">
+                    <button class="evo-prev" type="button" aria-label="Previous">&larr;</button>
+                    <div class="evo-timeline" role="tablist"></div>
+                    <button class="evo-next" type="button" aria-label="Next">&rarr;</button>
+                </div>
+            </div>
+
+            <p data-i18n-html="story2_evo_outro" style="margin-top:1rem;">Le code des transitions ci-dessus est une <strong>reconstitution</strong> : les conversations exactes avec Claude sont perdues, mais le diff entre fichiers raconte clairement la progression. Chaque "saut" est le resultat de quelques messages dans l'artifact panel.</p>
+        </div>
+
+        <!-- Anatomy of the dogtag -->
+        <div class="content-block">
+            <h3 data-i18n="story2_anat_title">Anatomie d'un dogtag</h3>
+            <p data-i18n="story2_anat_desc">Le dogtag complet a gauche reste visible pendant que tu defiles les techniques. Clique sur un repere pour aller au zoom correspondant. Chaque carte a un editeur live et un selecteur de couleur — modifie, vois.</p>
+
+            <div class="anat-layout">
+                <div class="anat-sticky">
+                    <div class="anat-stage">
+                        <svg id="anat-svg" viewBox="0 0 360 380" xmlns="http://www.w3.org/2000/svg" style="--metal-s1:#3a2d1a; --metal-s3:#5d4a2e; --metal-s4:#7a6238; --metal-s5:#9c7e44; --metal-s6:#c39b58; --metal-s7:#e8c281; --bone-border:#3a2d1a">
+                            <defs>
+                                <clipPath id="anat-clip"><circle cx="180" cy="130" r="100"/></clipPath>
+                            </defs>
+                            <image href="images/story/syn.jpg" x="80" y="30" width="200" height="200" preserveAspectRatio="xMidYMid slice" clip-path="url(#anat-clip)"/>
+                            <circle cx="180" cy="130" r="100" fill="none" stroke="#3a2d1a" stroke-width="7"/>
+                            <g class="bone-slot" data-x="60" data-y="240" data-w="240" data-h="140"></g>
+                            <text x="180" y="320" text-anchor="middle" font-family="Cabin Sketch, Arial" font-weight="bold" font-size="32" fill="#fff" stroke="#000" stroke-width="4" stroke-linejoin="round" style="paint-order: stroke fill">Syntaxe</text>
+
+                            <!-- Clickable callouts -->
+                            <g class="anat-callouts">
+                                <g class="anat-callout" data-jump="card-grad">
+                                    <circle cx="180" cy="295" r="14" />
+                                    <text x="180" y="300" text-anchor="middle">1</text>
+                                </g>
+                                <g class="anat-callout" data-jump="card-edge">
+                                    <circle cx="280" cy="290" r="14" />
+                                    <text x="280" y="295" text-anchor="middle">2</text>
+                                </g>
+                                <g class="anat-callout" data-jump="card-tex">
+                                    <circle cx="100" cy="280" r="14" />
+                                    <text x="100" y="285" text-anchor="middle">3</text>
+                                </g>
+                                <g class="anat-callout" data-jump="card-emboss">
+                                    <circle cx="180" cy="335" r="14" />
+                                    <text x="180" y="340" text-anchor="middle">4</text>
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="anat-cards">
+                    <div class="zoom-card live-card" id="card-grad" data-primary="#c39b58">
+                        <div class="card-num">1</div>
+                        <h5>Le gradient metallique</h5>
+                        <p data-i18n-html="story2_zoom_grad">Un <code>linearGradient</code> avec plusieurs stops, une sequence sombre&rarr;clair&rarr;sombre, donne l'illusion du metal poli. Joue avec la couleur du milieu.</p>
+                        <div class="live-mini">
+                            <iframe class="live-frame" sandbox="allow-same-origin" aria-label="preview"></iframe>
+                            <textarea class="live-source" spellcheck="false">&lt;svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg"&gt;
+  &lt;defs&gt;
+    &lt;linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"&gt;
+      &lt;stop offset="0%"   stop-color="#5d4a2e"/&gt;
+      &lt;stop offset="50%"  stop-color="#c39b58"/&gt;
+      &lt;stop offset="100%" stop-color="#5d4a2e"/&gt;
+    &lt;/linearGradient&gt;
+  &lt;/defs&gt;
+  &lt;rect x="10" y="10" width="180" height="40" fill="url(#g)" rx="3"/&gt;
+&lt;/svg&gt;</textarea>
+                        </div>
+                        <div class="live-controls">
+                            <label>Couleur principale : <input type="color" class="live-color" value="#c39b58"></label>
+                            <button class="live-reset" type="button">Reinitialiser</button>
+                        </div>
+                    </div>
+
+                    <div class="zoom-card live-card" id="card-edge" data-primary="#7a6238">
+                        <div class="card-num">2</div>
+                        <h5>L'edge highlight (2 paths)</h5>
+                        <p data-i18n-html="story2_zoom_edge">L'os est dessine <strong>deux fois</strong> sur le meme path. La premiere copie a le metal en fill. La deuxieme, par-dessus, n'a aucun fill — juste un <code>stroke</code> blanc-vers-transparent. Ca simule un reflet sur le bord.</p>
+                        <div class="live-mini">
+                            <iframe class="live-frame" sandbox="allow-same-origin" aria-label="preview"></iframe>
+                            <textarea class="live-source" spellcheck="false">&lt;svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg"&gt;
+  &lt;defs&gt;
+    &lt;linearGradient id="edge" x1="0%" y1="50%" x2="100%" y2="100%"&gt;
+      &lt;stop offset="0%"   stop-color="rgba(255,255,255,0.9)"/&gt;
+      &lt;stop offset="100%" stop-color="rgba(255,255,255,0)"/&gt;
+    &lt;/linearGradient&gt;
+  &lt;/defs&gt;
+  &lt;rect x="10" y="10" width="180" height="40" fill="#7a6238" rx="3"/&gt;
+  &lt;rect x="10" y="10" width="180" height="40" fill="none"
+        stroke="url(#edge)" stroke-width="3" rx="3"/&gt;
+&lt;/svg&gt;</textarea>
+                        </div>
+                        <div class="live-controls">
+                            <label>Couleur du metal : <input type="color" class="live-color" value="#7a6238"></label>
+                            <button class="live-reset" type="button">Reinitialiser</button>
+                        </div>
+                    </div>
+
+                    <div class="zoom-card live-card" id="card-tex" data-primary="#9c7e44">
+                        <div class="card-num">3</div>
+                        <h5>Le pattern de texture</h5>
+                        <p data-i18n-html="story2_zoom_pattern">Un <code>&lt;pattern&gt;</code> minuscule, repete sans fin. Deux croix diagonales fines donnent l'effet "metal brosse" sans alourdir le fichier.</p>
+                        <div class="live-mini">
+                            <iframe class="live-frame" sandbox="allow-same-origin" aria-label="preview"></iframe>
+                            <textarea class="live-source" spellcheck="false">&lt;svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg"&gt;
+  &lt;defs&gt;
+    &lt;pattern id="tex" patternUnits="userSpaceOnUse"
+             width="6" height="6"&gt;
+      &lt;rect width="6" height="6" fill="#9c7e44"/&gt;
+      &lt;path d="M0,0 L6,6 M6,0 L0,6"
+            stroke="#3a2d1a" stroke-width="0.6"
+            stroke-opacity="0.25"/&gt;
+    &lt;/pattern&gt;
+  &lt;/defs&gt;
+  &lt;rect x="10" y="10" width="180" height="40"
+        fill="url(#tex)" rx="3"/&gt;
+&lt;/svg&gt;</textarea>
+                        </div>
+                        <div class="live-controls">
+                            <label>Couleur de fond : <input type="color" class="live-color" value="#9c7e44"></label>
+                            <button class="live-reset" type="button">Reinitialiser</button>
+                        </div>
+                    </div>
+
+                    <div class="zoom-card live-card" id="card-emboss" data-primary="#9c7e44">
+                        <div class="card-num">4</div>
+                        <h5>Le filtre emboss (texte grave)</h5>
+                        <p data-i18n-html="story2_zoom_emboss">Une chaine de filtres SVG : <code>feOffset</code>+<code>feGaussianBlur</code>+<code>feFlood</code>+<code>feComposite</code>+<code>feMerge</code>. L'ombre se glisse derriere le texte et donne du relief sans rien redessiner.</p>
+                        <div class="live-mini">
+                            <iframe class="live-frame" sandbox="allow-same-origin" aria-label="preview"></iframe>
+                            <textarea class="live-source" spellcheck="false">&lt;svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg"&gt;
+  &lt;defs&gt;
+    &lt;filter id="emboss" x="-0.1" y="-0.1" width="1.2" height="1.4"&gt;
+      &lt;feOffset dx="1" dy="1" result="off"/&gt;
+      &lt;feGaussianBlur in="SourceAlpha" stdDeviation="0.6" result="blr"/&gt;
+      &lt;feFlood flood-color="rgba(0,0,0,0.7)" result="col"/&gt;
+      &lt;feComposite in="col" in2="blr" operator="in" result="shd"/&gt;
+      &lt;feMerge&gt;
+        &lt;feMergeNode in="shd"/&gt;
+        &lt;feMergeNode in="SourceGraphic"/&gt;
+      &lt;/feMerge&gt;
+    &lt;/filter&gt;
+  &lt;/defs&gt;
+  &lt;rect x="10" y="10" width="180" height="40" fill="#9c7e44" rx="3"/&gt;
+  &lt;text x="100" y="38" text-anchor="middle"
+        font-family="Cabin Sketch, Arial" font-weight="bold"
+        font-size="22" fill="#fff" filter="url(#emboss)"&gt;Syntaxe&lt;/text&gt;
+&lt;/svg&gt;</textarea>
+                        </div>
+                        <div class="live-controls">
+                            <label>Couleur de fond : <input type="color" class="live-color" value="#9c7e44"></label>
+                            <button class="live-reset" type="button">Reinitialiser</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p data-i18n-html="story2_anat_outro" style="margin-top:1.25rem;">Combine ces quatre techniques + un cercle stroke pour la photo + un calcul JS pour la couleur de bordure (le <a class="inline-link" href="story-part1.html">flip de luminance vu a l'acte 1</a>), et tu as un dogtag complet. C'est ca qu'on reconstruit pour chacun des onze chiens — il suffit de changer le nom, la photo et la couleur de base.</p>
+        </div>
+
+        <!-- SVG + JS: random dogtag demo -->
+        <div class="content-block" style="border-left: 4px solid #9b59b6; background: linear-gradient(135deg, rgba(155, 89, 182, 0.04), rgba(186, 1, 1, 0.04));">
+            <h3 data-i18n="story2_js_title"><i class="fa-solid fa-shuffle" style="color:#9b59b6; margin-right:0.5rem;"></i>SVG + JavaScript = combo</h3>
+            <p data-i18n-html="story2_js_p1">Une fois que ton SVG est texte, tu peux le manipuler avec n'importe quel langage. Avec un peu de JavaScript, tu peux ajouter, dupliquer, animer ou recolorer des elements en temps reel — sans jamais regenerer le fichier.</p>
+            <p data-i18n="story2_js_p2">Demonstration : un bouton qui ajoute un dogtag avec un nom et une couleur tires au hasard. C'est une dizaine de lignes de JS qui clonent le template, changent le texte et la palette, et l'inserent dans la page.</p>
+
+            <div class="js-demo">
+                <button id="add-tag-btn" type="button" data-i18n="story2_js_btn">+ Ajouter un dogtag</button>
+                <button id="reset-tags-btn" type="button" data-i18n="story2_js_reset" class="secondary">Reinitialiser</button>
+                <div id="random-tag-host"></div>
+            </div>
+
+            <p data-i18n-html="story2_js_p3" style="margin-top: 1rem;">L'IA est exceptionnellement bonne pour cabler ces deux mondes. Decrire en francais "<em>un bouton qui ajoute une nouvelle medaille avec un nom au hasard</em>", et obtenir simultanement le bon SVG, le bon JavaScript, et le bon CSS — c'est ce qui fait passer une page statique a un outil vivant.</p>
+        </div>
+
+        <!-- Takeaway -->
+        <div class="content-block">
+            <h3 data-i18n="story2_lesson_title">La lecon</h3>
+            <p data-i18n-html="story2_lesson_p1">Bon. Soyons honnetes : <strong>GPT fut lamentable</strong> pour ce besoin precis. (C'est aussi assez drole de voir une IA d'une compagnie en competition essayer de defendre une autre — donc rectifions le tir.)</p>
+            <p data-i18n-html="story2_lesson_p2">Ce qu'il faut comprendre, c'est que <strong>les bons outils permettent les bons resultats</strong>. Le format texte du SVG permet de comprendre rapidement une image et de l'affecter directement avec des variables, exactement comme on le ferait avec du code. Combine avec un outil qui rend ce code en direct (artifacts) ou qui edite tes fichiers a ta place (Claude Code), et tu passes de "generateur d'image" a "atelier".</p>
+            <p data-i18n-html="story2_lesson_p3">Le vrai gain, finalement, ce n'est pas le code genere en lui-meme — c'est la boucle d'iteration.</p>
+        </div>
+
+        <!-- End-of-act CTA -->
+        <div class="content-block" style="text-align: center;">
+            <p data-i18n="story2_end_label" style="text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-light); font-size: 0.85rem;">Fin de l'acte 2</p>
+            <a href="stories.html" data-i18n="story1_end_back" style="display: inline-block; padding: 0.65rem 1.4rem; background: var(--card-bg); color: var(--primary-blue); border: 1px solid var(--primary-blue); border-radius: var(--radius); text-decoration: none; font-weight: 600; margin-right: 0.5rem;">Retour aux histoires</a>
+            <a href="workshop.html" data-i18n="story2_end_continue" style="display: inline-block; padding: 0.65rem 1.4rem; background: var(--accent-gradient); color: white; border-radius: var(--radius); text-decoration: none; font-weight: 600;">Aller a l'atelier &rarr;</a>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Inject a boneV13 subtree into every .bone-slot, reading the palette
+        // from each parent SVG's CSS variables (same generator pattern as
+        // story-part1.html). Used by both the (removed) compare cell and the
+        // anatomy stage's bone slot.
+        (() => {
+            const SVG_NS = 'http://www.w3.org/2000/svg';
+            let counter = 0;
+            function paletteFromSvg(svg) {
+                const cs = getComputedStyle(svg);
+                const get = (name, fb) => (cs.getPropertyValue(name).trim() || fb);
+                return {
+                    s1:     get('--metal-s1', '#444'),
+                    s3:     get('--metal-s3', '#666'),
+                    s4:     get('--metal-s4', '#777'),
+                    s5:     get('--metal-s5', '#888'),
+                    s6:     get('--metal-s6', '#999'),
+                    s7:     get('--metal-s7', '#aaa'),
+                    border: get('--bone-border', '#333'),
+                };
+            }
+            function makeBone(slot) {
+                const palette = paletteFromSvg(slot.ownerSVGElement);
+                const id = 'bv13-p2-' + (++counter);
+            const wrapper = document.createElementNS(SVG_NS, 'svg');
+            wrapper.setAttribute('x', slot.dataset.x);
+            wrapper.setAttribute('y', slot.dataset.y);
+            wrapper.setAttribute('width', slot.dataset.w);
+            wrapper.setAttribute('height', slot.dataset.h);
+            wrapper.setAttribute('viewBox', '0 0 24 15');
+            wrapper.setAttribute('overflow', 'visible');
+            wrapper.innerHTML = `
+                <defs>
+                    <linearGradient id="${id}-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%"   stop-color="${palette.s3}"/>
+                        <stop offset="10%"  stop-color="${palette.s4}"/>
+                        <stop offset="25%"  stop-color="${palette.s5}"/>
+                        <stop offset="40%"  stop-color="${palette.s6}"/>
+                        <stop offset="60%"  stop-color="${palette.s6}"/>
+                        <stop offset="75%"  stop-color="${palette.s5}"/>
+                        <stop offset="80%"  stop-color="${palette.s6}"/>
+                        <stop offset="100%" stop-color="${palette.s7}"/>
+                    </linearGradient>
+                    <pattern id="${id}-tex" patternUnits="userSpaceOnUse" width="2" height="5" patternTransform="scale(0.2)">
+                        <rect width="5" height="5" fill="url(#${id}-grad)"/>
+                        <path d="M0,0 L5,5 M5,0 L0,5" stroke="${palette.s1}" stroke-width="0.15" stroke-opacity="0.1"/>
+                    </pattern>
+                    <linearGradient id="${id}-edge" x1="0%" y1="50%" x2="100%" y2="100%">
+                        <stop offset="0%"   stop-color="rgba(255,255,255,0.6)"/>
+                        <stop offset="30%"  stop-color="rgba(255,255,255,0.2)"/>
+                        <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+                    </linearGradient>
+                </defs>
+                <ellipse cx="12" cy="7" rx="8" ry="5" fill="rgba(0,0,0,0.15)"/>
+                <g transform="matrix(0.832724, 0.832724, -0.847675, 0.847675, 12.115215, -12.831682)">
+                    <path d="M15 3a3 3 0 0 1 3 3a3 3 0 1 1 -2.12 5.122l-4.758 4.758a3 3 0 1 1 -5.117 2.297l0 -.177l-.176 0a3 3 0 1 1 2.298 -5.115l4.758 -4.758a3 3 0 0 1 2.12 -5.122z"
+                          fill="url(#${id}-tex)" stroke="${palette.border}"
+                          stroke-width="0.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M15 3a3 3 0 0 1 3 3a3 3 0 1 1 -2.12 5.122l-4.758 4.758a3 3 0 1 1 -5.117 2.297l0 -.177l-.176 0a3 3 0 1 1 2.298 -5.115l4.758 -4.758a3 3 0 0 1 2.12 -5.122z"
+                          fill="none" stroke="url(#${id}-edge)"
+                          stroke-width="0.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </g>
+            `;
+                return wrapper;
+            }
+            for (const slot of document.querySelectorAll('.bone-slot')) {
+                slot.replaceWith(makeBone(slot));
+            }
+
+            // ----- Random dogtag generator -----
+            const NAMES = ['Pixel','Vector','Beta','Cookie','Echo','Fennec','Grit','Halo','Indie','Juno','Klio','Lyra','Mocha','Nimbus','Oslo','Pico','Quark','Rio','Sable','Tofu','Umi','Volt','Wren','Xeno','Yuki','Zazu'];
+            const PALETTES = [
+                {s1:'#3a2d1a', s3:'#5d4a2e', s4:'#7a6238', s5:'#9c7e44', s6:'#c39b58', s7:'#e8c281', border:'#3a2d1a'},      // gold
+                {s1:'#0a1428', s3:'#152340', s4:'#1d3056', s5:'#264070', s6:'#33548c', s7:'#4a72b3', border:'rgba(255,255,255,0.7)'}, // dark blue
+                {s1:'#4a1a3c', s3:'#7a2c5e', s4:'#a04280', s5:'#c057a0', s6:'#d97cba', s7:'#f0a8d6', border:'#4a1a3c'},      // pink
+                {s1:'#1a3a1e', s3:'#2a5a30', s4:'#3a7a40', s5:'#509c54', s6:'#6dbf72', s7:'#9ee0a3', border:'#1a3a1e'},      // green
+                {s1:'#3a1818', s3:'#5e2828', s4:'#823c3c', s5:'#a85454', s6:'#cc7373', s7:'#e8a3a3', border:'#3a1818'},      // red
+                {s1:'#2a1e3a', s3:'#46325e', s4:'#624782', s5:'#8064ab', s6:'#a486ce', s7:'#cdb6e8', border:'#2a1e3a'},      // purple
+                {s1:'#2d2d2d', s3:'#4a4a4a', s4:'#6a6a6a', s5:'#8a8a8a', s6:'#aaaaaa', s7:'#cccccc', border:'rgba(255,255,255,0.7)'}, // dark grey
+            ];
+            const host = document.getElementById('random-tag-host');
+            const addBtn = document.getElementById('add-tag-btn');
+            const resetBtn = document.getElementById('reset-tags-btn');
+            function randomTag() {
+                const name = NAMES[Math.floor(Math.random() * NAMES.length)];
+                const palette = PALETTES[Math.floor(Math.random() * PALETTES.length)];
+                const wrap = document.createElement('div');
+                wrap.className = 'rand-tag';
+                const svg = document.createElementNS(SVG_NS, 'svg');
+                svg.setAttribute('viewBox', '0 0 200 130');
+                svg.setAttribute('xmlns', SVG_NS);
+                svg.setAttribute('style', `--metal-s1:${palette.s1}; --metal-s3:${palette.s3}; --metal-s4:${palette.s4}; --metal-s5:${palette.s5}; --metal-s6:${palette.s6}; --metal-s7:${palette.s7}; --bone-border:${palette.border}`);
+                const slot = document.createElementNS(SVG_NS, 'g');
+                slot.setAttribute('class', 'bone-slot');
+                slot.setAttribute('data-x', '20');
+                slot.setAttribute('data-y', '15');
+                slot.setAttribute('data-w', '160');
+                slot.setAttribute('data-h', '100');
+                svg.appendChild(slot);
+                const text = document.createElementNS(SVG_NS, 'text');
+                text.setAttribute('x', '100');
+                text.setAttribute('y', '78');
+                text.setAttribute('text-anchor', 'middle');
+                text.setAttribute('font-family', 'Cabin Sketch, Arial');
+                text.setAttribute('font-weight', 'bold');
+                text.setAttribute('font-size', '22');
+                text.setAttribute('fill', '#fff');
+                text.setAttribute('stroke', '#000');
+                text.setAttribute('stroke-width', '3');
+                text.setAttribute('stroke-linejoin', 'round');
+                text.setAttribute('style', 'paint-order: stroke fill');
+                text.textContent = name;
+                svg.appendChild(text);
+                wrap.appendChild(svg);
+                const label = document.createElement('div');
+                label.className = 'rand-name';
+                label.textContent = name;
+                wrap.appendChild(label);
+                host.appendChild(wrap);
+                slot.replaceWith(makeBone(slot));
+            }
+            if (addBtn) addBtn.addEventListener('click', randomTag);
+            if (resetBtn) resetBtn.addEventListener('click', () => host.innerHTML = '');
+            // Seed with one tag so the area isn't empty on load
+            randomTag();
+
+            // ----- Bone evolution carousel -----
+            const carousel = document.getElementById('evo-carousel');
+            if (carousel) {
+                const bones = JSON.parse(carousel.dataset.bones);
+                const transitions = JSON.parse(carousel.dataset.transitions);
+                const frame = carousel.querySelector('.evo-frame');
+                const ta = carousel.querySelector('.evo-textarea');
+                const narr = carousel.querySelector('.evo-step-text');
+                const timeline = carousel.querySelector('.evo-timeline');
+                const prevBtn = carousel.querySelector('.evo-prev');
+                const nextBtn = carousel.querySelector('.evo-next');
+                let current = 0;
+                const sources = new Array(bones.length).fill(null);
+
+                const wrapEvo = (svgText) =>
+                    `<!DOCTYPE html><html><head><style>
+                       html,body{margin:0;height:100%;background:#1e1e24;}
+                       body{display:flex;align-items:center;justify-content:center;padding:8px;box-sizing:border-box;}
+                       svg{width:auto;height:auto;max-width:100%;max-height:100%;display:block;}
+                       svg:not([width]):not([height]){width:90%;height:90%;}
+                     </style></head><body>${svgText}</body></html>`;
+
+                // Build the timeline markers (alternating button + segment).
+                bones.forEach((b, i) => {
+                    if (i > 0) {
+                        const seg = document.createElement('span');
+                        seg.className = 'seg';
+                        timeline.appendChild(seg);
+                    }
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.setAttribute('role', 'tab');
+                    btn.setAttribute('aria-label', b.label);
+                    btn.innerHTML = `<span class="dot"></span><span class="label">${b.label}</span>`;
+                    btn.addEventListener('click', () => goTo(i));
+                    timeline.appendChild(btn);
+                });
+
+                async function loadStep(i) {
+                    if (sources[i] === null) {
+                        try {
+                            const r = await fetch(bones[i].src);
+                            sources[i] = await r.text();
+                        } catch (e) {
+                            sources[i] = `<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg"><text x="10" y="35" fill="#f88">load error: ${String(e)}</text></svg>`;
+                        }
+                    }
+                    return sources[i];
+                }
+
+                async function goTo(i) {
+                    if (i < 0 || i >= bones.length) return;
+                    current = i;
+                    const txt = await loadStep(i);
+                    ta.value = txt;
+                    frame.srcdoc = wrapEvo(txt);
+                    narr.textContent = transitions[i] || '';
+                    // Timeline state
+                    const buttons = timeline.querySelectorAll('button');
+                    buttons.forEach((b, j) => b.classList.toggle('active', j === i));
+                    const segs = timeline.querySelectorAll('.seg');
+                    segs.forEach((s, j) => s.classList.toggle('passed', j < i));
+                    prevBtn.disabled = i === 0;
+                    nextBtn.disabled = i === bones.length - 1;
+                }
+
+                prevBtn.addEventListener('click', () => goTo(current - 1));
+                nextBtn.addEventListener('click', () => goTo(current + 1));
+                ta.addEventListener('input', () => { frame.srcdoc = wrapEvo(ta.value); });
+
+                goTo(0);
+            }
+
+            // ----- Anatomy callout jumps -----
+            for (const cb of document.querySelectorAll('.anat-callout')) {
+                cb.addEventListener('click', () => {
+                    const target = document.getElementById(cb.dataset.jump);
+                    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            }
+
+            // ----- Live edit cards (anatomy techniques) -----
+            const wrapHTML = (svgText) =>
+                `<!DOCTYPE html><html><head><style>
+                   html,body{margin:0;height:100%;background:#1e1e24;}
+                   body{display:flex;align-items:center;justify-content:center;padding:6px;box-sizing:border-box;}
+                   svg{width:auto;height:auto;max-width:100%;max-height:100%;display:block;}
+                   svg:not([width]):not([height]){width:90%;height:auto;}
+                 </style></head><body>${svgText}</body></html>`;
+
+            for (const card of document.querySelectorAll('.zoom-card.live-card')) {
+                const src = card.querySelector('.live-source');
+                const frame = card.querySelector('.live-frame');
+                const picker = card.querySelector('.live-color');
+                const reset = card.querySelector('.live-reset');
+                if (!src || !frame) continue;
+                const initial = src.value;
+                let lastColor = picker ? picker.value : null;
+
+                const render = () => { frame.srcdoc = wrapHTML(src.value); };
+                src.addEventListener('input', render);
+                if (picker) {
+                    picker.addEventListener('input', () => {
+                        // Replace the previous primary color (case-insensitive) with the new one
+                        const re = new RegExp(lastColor.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+                        src.value = src.value.replace(re, picker.value);
+                        lastColor = picker.value;
+                        render();
+                    });
+                }
+                if (reset) {
+                    reset.addEventListener('click', () => {
+                        src.value = initial;
+                        if (picker) {
+                            picker.value = card.dataset.primary || picker.value;
+                            lastColor = picker.value;
+                        }
+                        render();
+                    });
+                }
+                render();
+            }
+        })();
+    </script>
+</body>
+</html>
