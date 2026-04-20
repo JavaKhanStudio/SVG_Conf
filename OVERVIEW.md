@@ -1,13 +1,18 @@
-# SVG Workshop — Photo → SVG Pipeline
+# SVG Conf — Photo → SVG Pipeline + Conference Site
 
-A local browser tool plus a Python image-processing backend, plus an agent
-skill, that together let a Claude Code agent convert source images into
-parametric SVGs ready for the workshop's live-tweakable variable model.
+A French-language conference site about SVG and AI (the public-facing
+part, served from the repo root as GitHub Pages) plus a local browser
+workshop + Python image-processing backend + agent skill that together
+let a Claude Code agent convert source images into parametric SVGs
+ready for the workshop's live-tweakable variable model.
 
-This document captures what the project is, how it's built, the decisions
-behind each piece, and the lessons that came out of building it through
-real iterations on real images. It's the source for the showcase site's
-content.
+The conference site is the static showcase of the work. The workshop
+is the tool that produced the SVGs in it, kept in the same repo so
+anyone cloning can run the live editor on the same gallery.
+
+This document captures what the project is, how it's built, the
+decisions behind each piece, and the lessons that came out of building
+it through real iterations on real images.
 
 ---
 
@@ -30,13 +35,25 @@ human to spectate, snapshot, and tweak values.
 
 ## Architecture
 
-Three pieces, opt-in layering:
+Four pieces, opt-in layering:
 
-**1. Frontend workshop** (Node, no build step). Pure ES modules. Single
-`index.html` + `app.js` + `style.css`. Watches a folder of `.svg` files
-via WebSocket, renders them in a preview pane, auto-generates control
-panels from each SVG's `:root { }` CSS-variable block, supports snapshots,
-runs without the backend.
+**0. Presentation site** (static HTML at the repo root). The public face
+— `index.html`, `gallery.html`, `concepts.html`, `stories.html`,
+`workshop.html`, etc., backed by `css/`, `js/main.js`, `parts/` (header
+/ footer includes), and `images/`. Published by GitHub Pages straight
+from the main branch root, no build step. Works offline. Embeds
+`workshop-viewer/` as a static live-editing showcase on `workshop.html`.
+
+**1. Frontend workshops** (Node, no build step, native ES modules). Two
+hosts share a `src/ws-parser.js` + `src/ws-controls.js` pair so the
+`@ws` hint format has one implementation:
+- `workshop-viewer/` — static showcase embedded by `workshop.html`.
+  Loads the manifest + gallery SVGs, renders controls, supports
+  Compare/Photo view modes + Download. No server required.
+- `workshop-app/` — interactive editor. Same controls, plus WebSocket
+  file watching, snapshot capture/replay, reference-photo overlays,
+  metrics panel, drag-to-upload. Reachable at `/workshop-app/` when
+  `server.js` is running.
 
 **2. Backend** (Python, FastAPI on port 5174). Owns all image processing.
 Five endpoints:
@@ -60,6 +77,13 @@ Five endpoints:
   the masked pixels, runs k-means k=3 to suggest a flat fill colour.
   Returns suggestions only — agent edits the SVG itself.
 - `/health` — version + capabilities advertisement.
+
+**2b. Workshop server** (`server.js`, Node). Serves the whole site at
+port 5173 (presentation at `/`, workshop-app at `/workshop-app/`),
+watches a gallery folder with chokidar, pushes change notifications
+over WebSocket, proxies the Python backend at `/api/*`, serves
+preprocessed reference variants at `/refs/*`, handles uploads at
+`/api/upload`.
 
 **3. Agent CLI + skill**. A thin Node CLI (`svgw`) wraps each backend
 endpoint as a Bash command. A Claude Code skill at
@@ -181,14 +205,6 @@ to step 4 (measure) until the metrics validate or improvement plateaus.
 | leprechaun    | Trace-as-geometry | 2      | 0.756       | 0.973     | Cartoon. Conservative trace settings unlocked outlines. |
 
 ## What's next
-
-- **Phase 6: static showcase site.** Refactor the workshop's `app.js`
-  into shared `src/` modules. Add a thin `viewer.html` shell that
-  reads a generated manifest of finished SVGs + frozen snapshots and
-  lets visitors tweak CSS variables in their browser. Build script
-  produces a `dist/` directory deployable to GitHub Pages. The full
-  workshop + backend stays the "clone and run locally" experience for
-  people who want to trace their own images.
 
 - **Diagnostic pass refinement.** `subject_bbox` currently uses the
   largest connected component, which lies when the source has tonal

@@ -5,19 +5,41 @@ A local browser-based tool for live-previewing an SVG with editable variables. D
 
 The SVG itself stays 100% valid and standalone — variables are real CSS custom properties declared in a `<style>` block. The tool is purely additive: a nicer way to explore values, never a required runtime.
 
+Two front-ends consume the same `@ws` parametric format:
+- `workshop-viewer/` — static showcase, embedded on the conference site's `workshop.html`. No backend, no file watching. Edit live, download your tweaked SVG.
+- `workshop-app/` — full interactive editor served at `/workshop-app/` by `server.js`. Adds file watching, snapshots, reference overlays, metrics.
+
+Both import parser + control builder from `src/ws-parser.js` + `src/ws-controls.js`, so hint syntax + type inference have one source of truth.
+
 ## Tech stack
-- **Frontend**: single `index.html` + `app.js` + `style.css`. No framework, no build step, native ES modules.
-- **Server**: single `server.js`, Node. Dependencies: `ws`, `chokidar`, and a minimal static file server (`serve-static` + `finalhandler`, or equivalent).
-- **Run**: `node server.js ./path/to/svg-folder` → opens on `http://localhost:5173`. If no folder arg is given, defaults to `./`.
+- **Shared modules**: `src/ws-parser.js` (pure: CSS-variable parser, hint grammar, type inference, derived-colour resolver), `src/ws-controls.js` (DOM: generic `buildControl(variable, opts)` with callback-based state access). No framework, no build step, native ES modules.
+- **Static viewer** (`workshop-viewer/viewer.js`, loaded by `workshop.html`): manifest + gallery loader, file list, view-mode toggle (SVG / Compare / Photo), download. Runs with zero server (GH Pages serves it as-is).
+- **Interactive editor** (`workshop-app/index.html` + `app.js` + `style.css`): everything above plus WebSocket file watch, snapshot capture + replay, reference-photo preprocessing + overlay, point2d draggable-dot controls, metrics panel. Depends on `server.js` at runtime.
+- **Server**: single `server.js`, Node. Dependencies: `ws`, `chokidar`. Serves the presentation site + workshop-app + workshop-viewer + gallery statically, plus `/api/*` proxy/endpoints, `/files/*` watched SVGs, `/refs/*` preprocessed variants, WebSocket upgrade at `/`.
+- **Run**: `node server.js ./gallery` → presentation at `http://localhost:5173/`, editor at `http://localhost:5173/workshop-app/`. Default folder is `./` if omitted. Double-click `start-server.bat` on Windows for a one-click launch.
 
 ## Folder layout (runtime)
 ```
-my-svg-folder/
-  eye.svg
-  bricks.svg
-  .workshop/
-    eye.snapshots.json
-    bricks.snapshots.json
+.                         # repo root, also GH Pages root
+├── index.html …          # presentation (all the .html pages)
+├── css/, js/, parts/, images/
+├── gallery/              # canonical parametric SVGs (watched by server.js)
+│   ├── puppy.svg, leprechaun.svg, …
+│   └── .workshop/
+│       ├── *.snapshots.json     # committed
+│       └── *.metrics.json, *.refs/<variant>.png   # gitignored
+├── workshop-viewer/      # static showcase embedded in workshop.html
+│   ├── viewer.js, viewer.css
+│   ├── manifest.json     # curated list of 7 gallery SVGs + reference paths
+│   └── references/*.jpg  # photos shown in Compare mode
+├── workshop-app/         # interactive editor (/workshop-app/)
+│   ├── index.html, app.js, style.css
+├── src/                  # shared ES modules
+│   ├── ws-parser.js, ws-controls.js, backend-status.js
+├── backend/              # Python backend (FastAPI on :5174)
+├── sources/, examples/   # agent pipeline inputs + original demo SVGs
+├── server.js, svgw.js    # Node entry points
+└── start-server.bat      # one-click Windows launcher
 ```
 
 ## Variable format
@@ -74,9 +96,9 @@ A trailing comment on the same line, in the form `/* @ws <type> [key=value]... *
 
 ## Server (`server.js`)
 
-- Takes a folder path as CLI arg, defaults to `./`
-- Serves static frontend assets (`index.html`, `app.js`, `style.css`) from the tool's install location
-- Serves the watched folder's `.svg` files at `/files/<name>.svg`
+- Takes a folder path as CLI arg (typically `./gallery`), defaults to `./`
+- Serves any file under the repo root statically (presentation HTML, workshop-app/, workshop-viewer/, gallery/, src/, css/, js/, parts/, images/, …). Directory URLs 301-redirect to trailing-slash form and serve `index.html` if present.
+- Serves the watched folder's `.svg` files at `/files/<name>.svg` (separate from `/gallery/*.svg` so the editor's live-reload path is distinct from the static gallery path)
 - Watches the folder with chokidar (non-recursive, `.svg` files only, ignores `.workshop/`)
 - Exposes a WebSocket on the same port:
   - On connect, sends `{ type: "list", files: [...] }`
@@ -158,14 +180,14 @@ If no `:root` declarations are found in any `<style>` block, show the SVG anyway
 - Watching subfolders recursively
 
 ## Deliverables
-1. `server.js`
-2. `index.html`
-3. `app.js`
-4. `style.css`
-5. `package.json` with `start` script
+1. `server.js`, `svgw.js`, `package.json` with `start` script
+2. `workshop-app/{index.html, app.js, style.css}` — interactive editor
+3. `workshop-viewer/{viewer.js, viewer.css, manifest.json, references/}` — static showcase
+4. `src/{ws-parser.js, ws-controls.js, backend-status.js}` — shared modules
+5. Presentation site at repo root (driven by the Formation_SVG merger — `index.html` + per-topic pages + `css/` + `js/` + `parts/` + `images/`)
 6. `README.md` — install, run, basic usage
-7. `CLAUDE.md` — already provided alongside this spec; copy it into the project root
-8. `examples/` folder with 2 sample SVGs that exercise every variable type and hint
+7. `CLAUDE.md` — the `@ws` variable format spec
+8. `examples/` with original demo SVGs (`eye.svg`, `scene.svg`, `car.svg`, …) and `gallery/` with the curated parametric set featured on the conference site
 
 ## Implementation notes / gotchas
 

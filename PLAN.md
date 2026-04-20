@@ -21,11 +21,11 @@ Initiating user request: see `TODO.txt`.
 - **Python backend (FastAPI)** — owns all image processing and measurement. Stateless HTTP service, run locally on demand.
 - **Existing JS workshop (Node static + WS)** — stays the home base. Gains a backend-status banner; non-trace features keep working when Python is down.
 - **Node CLI wrapper (`svgw`)** — thin shell wrapping backend HTTP, so the agent can use natural Bash commands during iteration.
-- **Static showcase site** — same codebase, two thin HTML shells (`index.html` workshop, `viewer.html` static viewer) sharing ES modules under `src/`. Viewer reads a generated manifest and never talks to the backend.
+- **Static showcase site** — same codebase, repo root serves the French conference site (index/gallery/concepts/stories/workshop pages + header/footer partials), `workshop-viewer/` is a static live-editing showcase embedded on `workshop.html`, `workshop-app/` is the full interactive editor reachable at `/workshop-app/` when the server runs. All three share `src/ws-parser.js` + `src/ws-controls.js`.
 - **Folder contract**:
-  - SVG files at root (workshop) or in subfolders (e.g. `projetFoD/`).
-  - Reference photos in `sources/`.
-  - Per-SVG state in `.workshop/<file>.{snapshots,metrics}.json` and `.workshop/<file>.refs/<variant>.png`.
+  - Canonical parametric SVGs in `gallery/`.
+  - Reference photos in `sources/` (agent pipeline inputs) and `workshop-viewer/references/` (presentation-side copies for Compare mode).
+  - Per-SVG state in `gallery/.workshop/<file>.{snapshots,metrics}.json` and `gallery/.workshop/<file>.refs/<variant>.png`.
   - `.workshop/` policy: commit `*.snapshots.json`, gitignore everything else.
 
 ## Decisions log (Q&A condensed)
@@ -39,7 +39,7 @@ Initiating user request: see `TODO.txt`.
 - **Agent loop** → loop lives in the agent (Claude), not in code. Skill `/svg-from-photo` documents the protocol; the agent re-runs passes itself, reading metrics between passes. No `--passes` flag, no automated multi-pass endpoint.
 - **Final SVG shape** → parametric paths in the foreground; a hidden `<g id="trace-ref" display="none">` keeps the trace for re-editing. Region colors live as CSS variables (e.g. `--body-color`), workshop-tweakable.
 - **Reference-image UX** → the existing "drop a photo on preview, gets stored as a translucent overlay in localStorage" flow is replaced. New flow: drop photo → backend preprocesses → variants stored under `.workshop/<file>.refs/`. Overlay panel gains a dropdown (original / gray / threshold / edges / depth) + opacity. localStorage no longer holds image bytes.
-- **Static showcase** → shared code with the workshop. Two thin HTML entrypoints (`index.html`, `viewer.html`) over a shared `src/` module tree. Modules that import backend HTTP simply aren't imported by the viewer build.
+- **Static showcase** → shared parser/controls in `src/`, consumed by both the static viewer (`workshop-viewer/viewer.js` loaded from `workshop.html`) and the live editor (`workshop-app/app.js`). Modules that import backend HTTP are only used by the live editor.
 - **`.workshop/` git policy** → `.workshop/*.snapshots.json` committed, everything else gitignored.
 
 ## Phases
@@ -128,16 +128,43 @@ What landed:
 - `.claude/skills/svg-from-photo/SKILL.md` documents the 8-step workflow (preprocess → trace into hidden ref → draft parametric paths → measure → revise worst region → sample colors → snapshot → notify) with halt conditions, default cadence (1 pass then ping the user), and troubleshooting notes for common failure modes.
 - Loop logic lives in agent reasoning per the architecture decision; no `--passes` flag in any tool, no automated multi-pass endpoint.
 
-### [ ] Phase 6 — Static showcase site
+### [x] Phase 6 — Static showcase site + repo merge
 
 Goal: GitHub-hostable viewer site that shares code with the workshop.
 
-- Refactor: move shared logic to `src/` ES modules. Two HTML shells:
-  - `index.html` (workshop) — imports everything: file list, watcher WS, backend status, controls, snapshots, preprocessing UI.
-  - `viewer.html` (static) — imports only: SVG render, controls, snapshot restore. Reads `dist/manifest.json` listing showcase SVGs + a frozen snapshot per file.
-- `npm run build:site` script: copies relevant files + generates manifest into `dist/`. No bundler step required if we keep modules importable as-is from a static origin.
-- GitHub Pages deploy doc.
-- Banner on the static site: "to trace your own photos, clone & run the backend".
+What landed:
+- Merged with the separate Formation_SVG presentation repo (archived as
+  `SVG_Demo_Conf`) so one repo holds both the public conference site and
+  the workshop. Repo renamed `SVG_Designer` → `SVG_Conf`.
+- Layout: presentation HTML + `css/` + `js/` + `parts/` + `images/` at
+  repo root; canonical gallery in `gallery/`; static viewer in
+  `workshop-viewer/`; interactive editor in `workshop-app/`; shared
+  parser/controls in `src/ws-parser.js` + `src/ws-controls.js`.
+- Shared modules: `parseRootVars`, `parseHint`, `inferType`,
+  `splitNumber`, `parseRange`, `isDerived`, `resolveDerived`, `mixColor`,
+  `hexToRgbTriple`, `NAMED_COLORS`, plus the generic
+  `buildControl(variable, opts)` with callback-based state access so
+  both hosts reuse it without agreeing on state shape.
+- `workshop.html` (conference page) embeds the static viewer via
+  `<script type="module" src="workshop-viewer/viewer.js">`; the manifest
+  lists the 7 showcase SVGs and each carries a `reference:` path so
+  Compare mode shows the source photo side-by-side.
+- `workshop-app/index.html` serves the full editor at `/workshop-app/`
+  when `server.js` runs. `server.js` got a generic static handler so
+  the whole site (presentation + app + viewer + gallery) serves
+  transparently from one process, plus a directory 301→trailing-slash
+  redirect for `/workshop-app`.
+- GitHub Pages enabled on `main` → `/`, published at
+  `https://javakhanstudio.github.io/SVG_Conf/`.
+- No bundler — everything loads directly as ES modules from the static
+  origin.
+- `start-server.bat` at repo root lets anyone on Windows double-click to
+  launch the workshop server without a terminal.
+
+Deferred: a landing CTA on the published site pointing to the
+workshop-app isn't useful on GH Pages (the API routes don't exist
+there), so `workshop.html` links to it in-page with a `node server.js`
+invitation instead.
 
 ## Sequencing
 
@@ -168,7 +195,7 @@ Goal: GitHub-hostable viewer site that shares code with the workshop.
 
 ## Current status
 
-**Phases 0–5 complete + 4.5 patch + 3.5 diagnostic passes.** Backend on 127.0.0.1:5174 (version 0.7.0, capabilities: preprocess, trace, measure, sample-colors-masked, diagnostic-passes).
+**Phases 0–6 complete + 4.5 patch + 3.5 diagnostic passes.** Backend on 127.0.0.1:5174 (version 0.7.0, capabilities: preprocess, trace, measure, sample-colors-masked, diagnostic-passes). Repo merged, renamed `SVG_Conf`, published at `https://javakhanstudio.github.io/SVG_Conf/`.
 
 Phase 3.5 (post-feedback): Added 3 optional diagnostic passes to `/measure` because the global metrics (outline_iou / pixel_iou / edge_ssim) are coarse averages that can hide proportion mismatches and per-region failures. Each pass is opt-in via `passes: [...]` in the request body or `--pass <name>` / `--all-passes` in the CLI. Default behavior unchanged.
 
@@ -182,8 +209,6 @@ Phase 4.5 (post-feedback): Color sampling now renders a per-region binary mask v
 
 Also patched: `svgw trace` auto-tunes `--filter_speckle` based on the source filename — drops to 2 for `canny.png`, 4 for `adaptive.png`, leaves 8 default for thresholded silhouettes. Canny edges are 1-2px hairlines and the default of 8 wiped them out (got 6 paths instead of 1195 in the first coffee.jpg run).
 
-Remaining: **Phase 6 (static showcase site)**, independent of the agent loop.
-
 ## Next action
 
-User pointed out the two improvements they wanted; both shipped + validated on coffee.svg v3. Phase 6 is the only outstanding scoped item.
+All scoped phases shipped. Open-ended follow-ups (diagnostic refinement, colour sampler v2, hand-draft assistance, skill updates, remote-access story) are listed in `OVERVIEW.md` under "What's next".
