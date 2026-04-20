@@ -306,7 +306,9 @@
         .live-mini .live-frame {
             border: 1px solid var(--border-color);
             border-radius: 6px;
-            background: white;
+            /* Match the srcdoc body bg so the brief reload between
+               edits doesn't flash white. */
+            background: #1e1e24;
             min-height: 140px;
             width: 100%;
         }
@@ -639,10 +641,10 @@
                             <textarea class="live-source" spellcheck="false">&lt;svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg"&gt;
   &lt;defs&gt;
     &lt;filter id="emboss" x="-0.1" y="-0.1" width="1.2" height="1.4"&gt;
-      &lt;feOffset dx="1" dy="1" result="off"/&gt;
-      &lt;feGaussianBlur in="SourceAlpha" stdDeviation="0.6" result="blr"/&gt;
-      &lt;feFlood flood-color="rgba(0,0,0,0.7)" result="col"/&gt;
-      &lt;feComposite in="col" in2="blr" operator="in" result="shd"/&gt;
+      &lt;feGaussianBlur in="SourceAlpha" stdDeviation="0.8" result="blr"/&gt;
+      &lt;feOffset in="blr" dx="2" dy="2" result="off"/&gt;
+      &lt;feFlood flood-color="rgba(0,0,0,0.85)" result="col"/&gt;
+      &lt;feComposite in="col" in2="off" operator="in" result="shd"/&gt;
       &lt;feMerge&gt;
         &lt;feMergeNode in="shd"/&gt;
         &lt;feMergeNode in="SourceGraphic"/&gt;
