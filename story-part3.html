@@ -84,9 +84,19 @@
         .card-anat-sticky .card-anat-inner {
             position: relative;
         }
-        .card-anat-sticky img {
+        .card-anat-sticky img,
+        .card-anat-sticky object {
             display: block; width: 100%; height: auto; border-radius: 8px;
+            pointer-events: none; /* let the overlaid markers catch clicks */
         }
+        .card-anat-toggle {
+            display: flex; align-items: center; gap: 0.5rem;
+            margin-bottom: 0.6rem; font-size: 0.88rem;
+            color: var(--text-light);
+            justify-content: center;
+        }
+        .card-anat-toggle input { cursor: pointer; }
+        .anat-markers[hidden] { display: none; }
         /* Numbered callouts overlaid on the sticky card. Each marker
            points to where the technique is visible on the card, and
            clicks scroll to the matching zoom card. */
@@ -706,14 +716,27 @@
 
             <div class="card-anat-layout">
                 <div class="card-anat-sticky">
+                    <label class="card-anat-toggle">
+                        <input type="checkbox" id="card-anat-toggle" checked>
+                        <span data-i18n="story3_anat_toggle">Afficher les reperes</span>
+                    </label>
                     <div class="card-anat-inner">
-                        <img src="sources/card_back_Showcase.svg" alt="Card back reference">
-                        <a class="anat-marker" href="#zoom-1" style="left:50%; top:8%;" title="Variables CSS">1</a>
-                        <a class="anat-marker" href="#zoom-2" style="left:14%; top:22%;" title="defs / use">2</a>
-                        <a class="anat-marker" href="#zoom-3" style="left:50%; top:58%;" title="Gradients">3</a>
-                        <a class="anat-marker" href="#zoom-4" style="left:92%; top:50%;" title="Filtres animes">4</a>
-                        <a class="anat-marker" href="#zoom-5" style="left:50%; top:44%;" title="Clip paths">5</a>
-                        <a class="anat-marker" href="#zoom-6" style="left:10%; top:6%;" title="Symetrie">6</a>
+                        <object id="card-anat-object" type="image/svg+xml" data="sources/card_back_Showcase.svg" aria-label="Card back reference"></object>
+                        <div class="anat-markers" id="anat-markers">
+                            <!-- Each marker anchors on the visual feature its technique controls. -->
+                            <!-- 1 CSS vars: upper inner border (demonstrates --pyramid-color + --bg-color at once) -->
+                            <a class="anat-marker" href="#zoom-1" style="left:50%; top:6%;" title="Variables CSS">1</a>
+                            <!-- 2 defs/use: the 18x rotated ray pattern around the pyramid -->
+                            <a class="anat-marker" href="#zoom-2" style="left:78%; top:55%;" title="defs / use">2</a>
+                            <!-- 3 Gradients: the iris + sclera radial stack -->
+                            <a class="anat-marker" href="#zoom-3" style="left:50%; top:52%;" title="Gradients">3</a>
+                            <!-- 4 Animated filters: the outer border glow-pulse -->
+                            <a class="anat-marker" href="#zoom-4" style="left:94%; top:30%;" title="Filtres animes">4</a>
+                            <!-- 5 Clip paths: top of the pyramid where bricks clip to the triangle -->
+                            <a class="anat-marker" href="#zoom-5" style="left:50%; top:40%;" title="Clip paths">5</a>
+                            <!-- 6 Symmetry: a mirrored corner ornament -->
+                            <a class="anat-marker" href="#zoom-6" style="left:14%; top:10%;" title="Symetrie">6</a>
+                        </div>
                     </div>
                 </div>
 
@@ -920,23 +943,42 @@
             const cardSvg = document.getElementById('card-back-interactive');
             if (!cardSvg) return;
 
-            // Remember the initial inline style so Reset can restore every CSS var.
-            const DEFAULTS = {
-                '--bg-color': '#1a1a2e',
-                '--pyramid-color': 'rgb(100,155,255)',
-                '--eye-color': 'rgb(100,255,155)',
-                '--edge': '#000000',
-                '--sclera': '#ffffff',
-            };
-
-            // Color pickers → CSS vars on the root SVG
-            for (const picker of document.querySelectorAll('.card-controls input[type="color"]')) {
-                picker.addEventListener('input', () => {
-                    cardSvg.style.setProperty(picker.dataset.var, picker.value);
+            // The anatomy section renders a second copy of the card as
+            // a sticky reference via <object>. Its SVG document is
+            // reachable as object.contentDocument once loaded. We sync
+            // every colour change to both the interactive card AND the
+            // sticky copy so edits in a zoom card are immediately
+            // visible right next to them.
+            let stickyCard = null;
+            const anatObj = document.getElementById('card-anat-object');
+            const VARS = ['--bg-color', '--pyramid-color', '--eye-color', '--edge', '--sclera'];
+            function applyVar(prop, val) {
+                cardSvg.style.setProperty(prop, val);
+                if (stickyCard) stickyCard.style.setProperty(prop, val);
+            }
+            if (anatObj) {
+                anatObj.addEventListener('load', () => {
+                    const doc = anatObj.contentDocument;
+                    if (!doc || !doc.documentElement) return;
+                    stickyCard = doc.documentElement;
+                    // Replay whatever the main card already has so the
+                    // sticky doesn't reset to defaults if the user
+                    // tweaked colours before scrolling down here.
+                    for (const prop of VARS) {
+                        const v = cardSvg.style.getPropertyValue(prop);
+                        if (v) stickyCard.style.setProperty(prop, v);
+                    }
                 });
             }
 
-            // Theme dropdown → swap the href on every .corner-ornament in one go
+            // Color pickers on the main card row → CSS vars on both SVGs
+            for (const picker of document.querySelectorAll('.card-controls input[type="color"]')) {
+                picker.addEventListener('input', () => applyVar(picker.dataset.var, picker.value));
+            }
+
+            // Theme dropdown → swap the href on every .corner-ornament
+            // in the interactive card. (The sticky stays on flesh; only
+            // the interactive card carries the tagged corners.)
             const themeSelect = document.getElementById('cb-theme');
             if (themeSelect) {
                 themeSelect.addEventListener('change', () => {
@@ -954,7 +996,7 @@
                     const pickerDefaults = { 'cb-bg': '#1a1a2e', 'cb-pyramid': '#649bff', 'cb-eye': '#64ff9b', 'cb-edge': '#000000' };
                     for (const [id, val] of Object.entries(pickerDefaults)) {
                         const el = document.getElementById(id);
-                        if (el) { el.value = val; cardSvg.style.setProperty(el.dataset.var, val); }
+                        if (el) { el.value = val; applyVar(el.dataset.var, val); }
                     }
                     if (themeSelect) {
                         themeSelect.value = 'flesh';
@@ -966,10 +1008,10 @@
             }
 
             // Anatomy zoom cards: each carries a data-anat-var attribute
-            // pointing at a CSS variable on the main card. Its picker
+            // pointing at a CSS variable on the card. Its picker
             // updates (a) the local demo's --demo-c, and (b) the same
-            // mapped var on #card-back-interactive so editing a concept
-            // visibly shifts the full card too.
+            // mapped var on both card copies so editing a concept
+            // visibly shifts the reference right next to it.
             for (const zoom of document.querySelectorAll('.card-zoom[data-anat-var]')) {
                 const anatVar = zoom.dataset.anatVar;
                 const picker = zoom.querySelector('.zoom-color');
@@ -978,11 +1020,18 @@
                     for (const root of zoom.querySelectorAll('.demo-root')) {
                         root.style.setProperty('--demo-c', picker.value);
                     }
-                    cardSvg.style.setProperty(anatVar, picker.value);
-                    // Keep the main-card picker row in sync so the
-                    // visible colour swatch matches what's rendered.
+                    applyVar(anatVar, picker.value);
                     const mainPicker = document.querySelector(`.card-controls input[data-var="${anatVar}"]`);
                     if (mainPicker) mainPicker.value = picker.value;
+                });
+            }
+
+            // Checkbox: hide/show the numbered markers on the sticky card.
+            const markerToggle = document.getElementById('card-anat-toggle');
+            const markerLayer = document.getElementById('anat-markers');
+            if (markerToggle && markerLayer) {
+                markerToggle.addEventListener('change', () => {
+                    markerLayer.toggleAttribute('hidden', !markerToggle.checked);
                 });
             }
         })();
