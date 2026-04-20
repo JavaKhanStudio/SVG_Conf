@@ -1,0 +1,470 @@
+<svg viewBox="0 0 300 500" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <style>
+            :root {
+            --bg-color: #1a1a2e;
+            --eye-color: rgb(100,255,155);
+            --pyramid-color: rgb(100,155,255);
+            --edge: #000000;
+            --sclera:#ffffff
+            }
+            /* Subtle layered animations: slow rotation on the radial ray
+               pattern, gentle hue drift on the whole card. Pairs with the
+               existing SMIL glow-pulse (which already pulses stdDeviation). */
+            #rays-rotating {
+                transform-origin: 150px 260px;
+                animation: cardRaysRotate 60s linear infinite;
+            }
+            svg {
+                animation: cardHueShift 45s linear infinite;
+            }
+            @keyframes cardRaysRotate {
+                from { transform: rotate(0deg); }
+                to   { transform: rotate(360deg); }
+            }
+            @keyframes cardHueShift {
+                0%   { filter: hue-rotate(0deg); }
+                100% { filter: hue-rotate(360deg); }
+            }
+        </style>
+
+        <!-- Ray -->
+        <line id="ray-large" x1="0" y1="10" x2="0" y2="-90"/>
+        <line id="ray-small" x1="0" y1="-0" x2="0" y2="-75"/>
+        <circle id="ray-dot" cx="0" cy="-80" r="1.4" fill="white"/>
+
+        <g id="ray-pattern" transform="rotate(0.0) translate(0,0)">
+            <use href="#ray-large" transform="rotate(0)"/>
+            <use href="#ray-small" transform="rotate(5)"/>
+            <use href="#ray-dot" transform="rotate(5.0)"/>
+            <use href="#ray-large" transform="rotate(10)"/>
+            <use href="#ray-small" transform="rotate(15)"/>
+            <use href="#ray-dot" transform="rotate(15.0)"/>
+        </g>
+
+        <!-- Brick -->
+        <g id="brick">
+            <rect width="21" height="21" fill="var(--pyramid-color)" stroke="var(--bg-color)" stroke-width="0.5"/>
+            <!-- Light edge (top-left) -->
+            <path d="M 0,0 L 3,3 L 3,18 L 0,21 Z" fill="white" opacity="0.2"/>
+            <!-- Dark edge (bottom-right) -->
+            <path d="M 21,0 L 18,3 L 18,18 L 21,21 Z" fill="black" opacity="0.2"/>
+        </g>
+
+        <radialGradient id="eye-shadow">
+            <stop offset="85%" style="stop-color:#000000;stop-opacity:0"/>
+            <stop offset="100%" style="stop-color:#000000;stop-opacity:0.5"/>
+        </radialGradient>
+
+        <!-- Iris gradient -->
+        <radialGradient id="iris-gradient">
+            <stop offset="0%" style="stop-color:var(--eye-color);stop-opacity:0.8"/>
+            <stop offset="82%" style="stop-color:var(--eye-color);stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:#000000;stop-opacity:0.5"/>
+        </radialGradient>
+
+        <!-- Sclera gradient - using cx/cy to shift light source -->
+        <radialGradient id="sclera-gradient" cx="30%" cy="30%">
+            <stop offset="0%" style="stop-color:#ffffff"/>
+            <stop offset="60%" style="stop-color:var(--sclera)"/>
+            <stop offset="100%" style="stop-color:#d0d0d0"/>
+        </radialGradient>
+
+        <linearGradient id="triangle-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="var(--pyramid-color)" stop-opacity="1"/>
+            <stop offset="50%" stop-color="var(--pyramid-color)" stop-opacity="0.8"/>
+            <stop offset="100%" stop-color="var(--pyramid-color)" stop-opacity="0.6"/>
+        </linearGradient>
+
+        <filter id="darken">
+            <feColorMatrix type="saturate" values="0.8"/>
+            <feComponentTransfer>
+                <feFuncR type="linear" slope="0.7"/>
+                <feFuncG type="linear" slope="0.7"/>
+                <feFuncB type="linear" slope="0.7"/>
+            </feComponentTransfer>
+        </filter>
+
+        <filter id="ray-depth">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="1"/>
+            <feOffset dx="0.5" dy="0.5" result="offsetblur"/>
+            <feComponentTransfer>
+                <feFuncA type="linear" slope="7.5"/>
+            </feComponentTransfer>
+            <feMerge>
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+
+        <filter id="glow-pulse">
+            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+            <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+            <animate attributeName="stdDeviation"
+                     values="2;7;2"
+                     dur="3s"
+                     repeatCount="indefinite"/>
+        </filter>
+
+        <filter id="edge-highlight">
+            <feMorphology operator="dilate" radius="0.5"/>
+            <feGaussianBlur stdDeviation=".3"/>
+            <feColorMatrix type="matrix" values="
+      0 0 0 0 0
+      0 0 0 0 0
+      0 0 0 0 0
+      0 0 0 0.3 0.1 "/>
+            <feMerge>
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+
+        <!-- The flesh resolve -->
+        <g id="corner-ornament-flesh" transform="translate(7,3)" stroke="url(#triangle-gradient)" fill="none"
+           stroke-linecap="round" filter="url(#edge-highlight)">
+
+            <!-- Main trunk (flowing from top-left down) -->
+            <path d="M 8,10 C 30,25 26,30 22,45 C 10,82 46,100 54,118 C 60,122 50,122 67,138" stroke-width="4"/>
+
+            <!-- Primary left branches (curving outward) -->
+            <path d="M 22,39 C 28,42 15,50 13,58 C 17,75 15,73 9,91 " stroke-width="1.7"/>
+            <path d="M 24,80 C 23,68 29,87 20,96 C 24,93 12,101 11,109" stroke-width="2.0"/>
+            <path d="M 26,85 C 40,94 25,104 20,114 C 18,122 26,141 15,140" stroke-width="1.2"/>
+            <path d="M 48,112 C 51,142 35,133 30,144 C 27,152 24,171 32,175" stroke-width="1.1"/>
+
+            <!-- Primary right branches (curving outward) -->
+            <path d="M 20,48 C 38,84 46,60 54,66 C 60,71 66,77 72,83" stroke-width="1.5"/>
+            <path d="M 28,82 C 59,78 58,84 67,96" stroke-width="1.3"/>
+            <path d="M 40,98 C 70,104 70,110 80,116 C 88,121 96,127 104,113" stroke-width="1.2"/>
+            <path d="M 55,117 C 59,121 80,127 81,136" stroke-width="1.1"/>
+
+            <!-- Top horizontal network -->
+            <!-- Main horizontal flow -->
+            <path d="M 20,20 C 40,49 60,19 90,20 C 110,21 110,22 125,23 C 135,24 145,25 143,107" stroke-width="1.8"/>
+
+            <path d="M 40,32 C 40,70 80,37 106,74" stroke-width="1.9" opacity="1.0"/>
+            <path d="M 50,52 C 70, 50 70, 37 91, 48" stroke-width="1.2" opacity="1.0"/>
+            <path d="M 90,60 C 111,80 100,97 100,94" stroke-width="1.9" opacity="1.0"/>
+
+
+            <!-- Branches from main path endpoints -->
+            <path d="M 60,27 C 85,28 98,35 102,42 C 106,49 110,55 115,61" stroke-width="1.8"/>
+            <path d="M 100,37 C 125,40 118,55 132,52 " stroke-width="1.2"/>
+
+
+        </g>
+
+        <!-- The elements purity -->
+        <polygon id="triangle" points="0,-6 -6,6 6,6"/>
+        <polygon id="triangle-small" points="0,-4 -4,4 4,4" opacity="0.8"/>
+
+        <!-- Triangles pointing down (reversed) -->
+        <polygon id="triangle-down" points="0,6 -6,-6 6,-6" opacity="0.8"/>
+        <polygon id="triangle-down-small" points="0,4 -4,-4 4,-4"/>
+
+        <g id="corner-ornament-matter" transform="translate(07,03)" stroke="var(--edge)" fill="url(#triangle-gradient)"
+           stroke-width="0.0"
+           stroke-linecap="round"
+           filter="url(#edge-highlight)">
+
+            <!-- Main triangles -->
+            <use href="#triangle-down-small" transform="translate(14.0,22)"/>
+            <use href="#triangle" transform="translate(20,24)"/>
+            <use href="#triangle-down" transform="translate(28,24)"/>
+            <use href="#triangle" transform="translate(36,24)"/>
+            <use href="#triangle-down" transform="translate(44,24)"/>
+            <use href="#triangle-small" transform="translate(50.1,25.5)"/>
+            <use href="#triangle-down-small" transform="translate(56,25.5)"/>
+            <use href="#triangle-small" transform="translate(62.0,25.5)"/>
+            <use href="#triangle-down" transform="translate(68,24)"/>
+            <use href="#triangle" transform="translate(76,24)"/>
+            <use href="#triangle-down" transform="translate(84,24)"/>
+            <use href="#triangle" transform="translate(92,24)"/>
+            <use href="#triangle-down-small" transform="translate(98,22)"/>
+            <use href="#triangle-small" transform="translate(104,21.5)"/>
+            <use href="#triangle-down-small" transform="translate(110,22)"/>
+            <use href="#triangle-small" transform="translate(116,21.5)"/>
+            <use href="#triangle-down-small" transform="translate(122,22)"/>
+            <use href="#triangle-small" transform="translate(128,21.5)"/>
+            <use href="#triangle-down-small" transform="translate(134,22)"/>
+
+            <!-- First Spire -->
+            <use href="#triangle-small" transform="translate(14,36)"/>
+            <use href="#triangle-down-small" transform="translate(20,36)"/>
+            <use href="#triangle-small" transform="translate(26,36)"/>
+            <use href="#triangle-down-small" transform="translate(32,36)"/>
+
+            <use href="#triangle" transform="translate(32,48)"/>
+            <use href="#triangle-down" transform="translate(24,48)"/>
+            <use href="#triangle" transform="translate(16,48)"/>
+
+            <use href="#triangle-small" transform="translate(22,60)"/>
+            <use href="#triangle-down-small" transform="translate(28,60)"/>
+
+            <use href="#triangle" transform="translate(28,72)"/>
+            <use href="#triangle-down" transform="translate(36,72)"/>
+
+            <use href="#triangle-small" transform="translate(36,83)"/>
+            <use href="#triangle-down-small" transform="translate(42,83)"/>
+
+            <use href="#triangle" transform="translate(32,95)"/>
+            <use href="#triangle-down" transform="translate(40,95)"/>
+
+            <use href="#triangle-down" transform="translate(32,109)"/>
+            <use href="#triangle-small" transform="translate(38,110)"/>
+
+            <use href="#triangle-down-small" transform="translate(38,119.5)"/>
+            <use href="#triangle" transform="translate(32,122)"/>
+
+            <use href="#triangle-down" transform="translate(32,136)"/>
+
+            <use href="#triangle" transform="translate(27,142)"/>
+            <use href="#triangle-down" transform="translate(27,156)"/>
+
+            <use href="#triangle" transform="translate(22,162)"/>
+            <use href="#triangle-down" transform="translate(22,176)"/>
+
+
+            <!-- Second Spire -->
+            <use href="#triangle-down" transform="translate(76,37.5)"/>
+            <use href="#triangle" transform="translate(84,37)"/>
+            <use href="#triangle-down" transform="translate(92,37.5)"/>
+
+            <use href="#triangle-small" transform="translate(78,52)"/>
+            <use href="#triangle-down" transform="translate(84,50.5)"/>
+            <use href="#triangle-small" transform="translate(90,52)"/>
+
+            <use href="#triangle-down-small" transform="translate(78,61)"/>
+            <use href="#triangle" transform="translate(84,63)"/>
+            <use href="#triangle-down-small" transform="translate(90,61)"/>
+            <use href="#triangle-small" transform="translate(95.5,61)"/>
+
+
+            <use href="#triangle-down" transform="translate(84,77)"/>
+            <use href="#triangle-down-small" transform="translate(95.5,70.5)"/>
+
+            <use href="#triangle-small" transform="translate(95.5,80)"/>
+
+            <use href="#triangle-down-small" transform="translate(95.5,90)"/>
+
+            <use href="#triangle-small" transform="translate(95.5,100)"/>
+
+            <use href="#triangle-down-small" transform="translate(95.5,110)"/>
+
+            <!-- Third Spire -->
+            <use href="#triangle-small" transform="translate(138,25.5)"/>
+
+            <use href="#triangle-down-small" transform="translate(138,34.5)"/>
+
+            <use href="#triangle-small" transform="translate(134,37.5)"/>
+            <use href="#triangle-down-small" transform="translate(134,47)"/>
+
+            <use href="#triangle-small" transform="translate(138,50)"/>
+
+            <use href="#triangle-down-small" transform="translate(138,59)"/>
+
+            <use href="#triangle-small" transform="translate(138,67)"/>
+            <use href="#triangle-down-small" transform="translate(138,76)"/>
+
+            <use href="#triangle-small" transform="translate(134,79.5)"/>
+            <use href="#triangle-down-small" transform="translate(134,89)"/>
+        </g>
+
+
+        <!-- The soul ascendance -->
+        <!-- Abstract eye shapes for soul theme -->
+        <clipPath id="half-eye-clip">
+            <!-- Rectangle covering left half -->
+            <rect x="-20" y="-20" width="20" height="40" transform="rotate(270)"/>
+        </clipPath>
+
+
+        <g id="soul-eye" filter="url(#ray-depth)">
+            <ellipse cx="0" cy="0" rx="12" ry="8" fill="url(#triangle-gradient)"/>
+            <circle cx="0" cy="0" r="7" fill="var(--bg-color)"/>
+            <circle cx="0" cy="0" r="2.5" fill="white" opacity="1.0" filter="url(#glow-pulse)"/>
+        </g>
+
+        <g id="soul-eye-half" clip-path="url(#half-eye-clip)">
+            <ellipse cx="0" cy="0" rx="12" ry="8" fill="url(#triangle-gradient)" stroke="var(--edge)"
+                     stroke-width="1.5"/>
+            <circle cx="0" cy="0" r="7" fill="var(--bg-color)"/>
+            <circle cx="0" cy="0" r="2.5" fill="white" opacity="1.0" filter="url(#glow-pulse)"/>
+        </g>
+
+
+        <g id="corner-ornament-soul" transform="translate(7,3)" fill="none">
+
+            <!-- Start point -->
+            <use href="#soul-eye" transform="translate(22,26) rotate(40) scale(1.0)"/>
+
+            <!-- First Branch -->
+            <use href="#soul-eye" transform="translate(47,23) rotate(20) scale(0.9)"/>
+
+            <use href="#soul-eye" transform="translate(72,23) rotate(10) scale(0.8)"/>
+            <use href="#soul-eye" transform="translate(60,43) rotate(30) scale(0.8)"/>
+
+            <use href="#soul-eye" transform="translate(69,61) rotate(40) scale(0.6)"/>
+
+            <use href="#soul-eye" transform="translate(85,63) rotate(40) scale(0.5)"/>
+            <use href="#soul-eye" transform="translate(73,76) rotate(70) scale(0.5)"/>
+
+            <use href="#soul-eye" transform="translate(99,71) rotate(20) scale(0.4)"/>
+            <use href="#soul-eye" transform="translate(107,82) rotate(60) scale(0.4)"/>
+            <use href="#soul-eye" transform="translate(111,68) rotate(-20) scale(0.4)"/>
+
+
+            <use href="#soul-eye" transform="translate(95,22) rotate(5) scale(0.7)"/>
+
+            <use href="#soul-eye" transform="translate(116,22) rotate(2.5) scale(0.6)"/>
+
+            <use href="#soul-eye" transform="translate(135,22) rotate(0) scale(0.5)"/>
+
+
+            <!-- Second Branch -->
+            <use href="#soul-eye" transform="translate(30,52) rotate(60) scale(0.9)"/>
+            <use href="#soul-eye" transform="translate(30,78) rotate(70) scale(0.8)"/>
+            <use href="#soul-eye" transform="translate(48,65) rotate(50) scale(0.55)"/>
+
+            <use href="#soul-eye" transform="translate(25,102) rotate(80) scale(0.7)"/>
+
+            <use href="#soul-eye" transform="translate(21,123) rotate(90) scale(0.6)"/>
+            <use href="#soul-eye" transform="translate(40,113) rotate(60) scale(0.6)"/>
+
+            <use href="#soul-eye" transform="translate(40,129) rotate(75) scale(0.5)"/>
+            <use href="#soul-eye" transform="translate(55,119) rotate(45) scale(0.5)"/>
+
+            <use href="#soul-eye" transform="translate(18,141) rotate(100) scale(0.5)"/>
+
+            <use href="#soul-eye" transform="translate(14,156) rotate(105) scale(0.45)"/>
+            <use href="#soul-eye" transform="translate(24,154) rotate(70) scale(0.3)"/>
+
+            <use href="#soul-eye" transform="translate(12,170) rotate(90) scale(0.4)"/>
+
+            <!-- Middle Half -->
+            <use href="#soul-eye-half" transform="translate(143,43) rotate(90) scale(0.9)"/>
+            <use href="#soul-eye-half" transform="translate(143,74) rotate(90) scale(0.7)"/>
+            <use href="#soul-eye-half" transform="translate(143,100) rotate(90) scale(0.5)"/>
+        </g>
+
+    </defs>
+
+    <!-- Background -->
+    <rect width="300" height="500" fill="var(--bg-color)" rx="10"/>
+
+    <!-- Outer Border (at the edge with small gap) -->
+    <rect x="5" y="5" width="290" height="490" fill="none" stroke="var(--pyramid-color)" stroke-width="1" rx="8"
+          filter="url(#glow-pulse)"/>
+
+    <!-- Inner Border (smaller, further in) -->
+    <rect x="12" y="12" width="276" height="476" fill="none" stroke="var(--pyramid-color)" stroke-width="1.5" rx="6"
+          filter="url(#glow-pulse)"/>
+
+    <!-- Corner Ornaments (using the defined ornament with transforms) -->
+    <use href="#corner-ornament-flesh"/>
+    <use href="#corner-ornament-flesh" transform="translate(300,0) scale(-1,1)"/>
+    <use href="#corner-ornament-flesh" transform="translate(0,500) scale(1,-1)"/>
+    <use href="#corner-ornament-flesh" transform="translate(300,500) scale(-1,-1)"/>
+
+    <!-- Central All-Seeing Eye -->
+    <g transform="translate(150,260) scale(1.4)">
+        <!-- Pyramid with brick pattern -->
+        <g>
+            <!-- Pyramid outline and fill -->
+            <defs>
+                <clipPath id="pyramid-clip">
+                    <path d="M 0,-70 L -60,35 L 60,35 Z"/>
+                </clipPath>
+            </defs>
+
+            <g id="rays-rotating" stroke="var(--eye-color)" fill="none" stroke-width="1" transform="translate(0,0)"
+               filter="url(#glow-pulse)">
+                <use href="#ray-pattern" transform="rotate(0)"/>
+                <use href="#ray-pattern" transform="rotate(20)"/>
+                <use href="#ray-pattern" transform="rotate(40)"/>
+                <use href="#ray-pattern" transform="rotate(60)"/>
+                <use href="#ray-pattern" transform="rotate(80)"/>
+                <use href="#ray-pattern" transform="rotate(100)"/>
+                <use href="#ray-pattern" transform="rotate(120)"/>
+                <use href="#ray-pattern" transform="rotate(140)"/>
+                <use href="#ray-pattern" transform="rotate(160)"/>
+                <use href="#ray-pattern" transform="rotate(180)"/>
+                <use href="#ray-pattern" transform="rotate(200)"/>
+                <use href="#ray-pattern" transform="rotate(220)"/>
+                <use href="#ray-pattern" transform="rotate(240)"/>
+                <use href="#ray-pattern" transform="rotate(260)"/>
+                <use href="#ray-pattern" transform="rotate(280)"/>
+                <use href="#ray-pattern" transform="rotate(300)"/>
+                <use href="#ray-pattern" transform="rotate(320)"/>
+                <use href="#ray-pattern" transform="rotate(340)"/>
+            </g>
+
+            <!-- Brick pattern inside pyramid -->
+            <g clip-path="url(#pyramid-clip)">
+                <!-- Fill base eye -->
+                <path d="M 0,-70 L -60,35 L 60,35 Z" fill="var(--pyramid-color)" opacity="0.3"/>
+
+                <!-- Row 1 (top - 1 brick, centered) -->
+                <use href="#brick" x="-10.5" y="-70"/>
+
+                <!-- Row 2 (3 bricks) -->
+                <use href="#brick" x="-31.5" y="-49"/>
+                <use href="#brick" x="-10.5" y="-49"/>
+                <use href="#brick" x="10.5" y="-49"/>
+
+                <!-- Row 3 (4 bricks) -->
+                <use href="#brick" x="-42" y="-28"/>
+                <use href="#brick" x="-21" y="-28"/>
+                <use href="#brick" x="0" y="-28"/>
+                <use href="#brick" x="21" y="-28"/>
+
+                <!-- Row 4 (5 bricks) -->
+                <use href="#brick" x="-52.5" y="-7"/>
+                <use href="#brick" x="-31.5" y="-7"/>
+                <use href="#brick" x="-10.5" y="-7"/>
+                <use href="#brick" x="10.5" y="-7"/>
+                <use href="#brick" x="31.5" y="-7"/>
+
+                <!-- Row 5 (6 bricks) -->
+                <use href="#brick" x="-60.5" y="14"/>
+                <use href="#brick" x="-39.5" y="14"/>
+                <use href="#brick" x="-18.5" y="14"/>
+                <use href="#brick" x="0.5" y="14"/>
+                <use href="#brick" x="17.5" y="14"/>
+                <use href="#brick" x="38.5" y="14"/>
+            </g>
+
+            <!-- Pyramid outline -->
+            <path d="M 0,-70 L -60,35 L 60,35 Z" fill="none" stroke="var(--edge)" stroke-width="2"/>
+        </g>
+
+        <!-- Eye -->
+        <!-- Eye shadow (smaller, tighter around the eye) -->
+        <ellipse cx="0" cy="0" rx="38" ry="28" fill="url(#eye-shadow)"/>
+
+        <g fill="var(--eye-color)">
+            <!-- Eye with gradient sclera -->
+            <ellipse cx="0" cy="0" rx="35" ry="24" fill="url(#sclera-gradient)" stroke="var(--edge)" stroke-width="2"
+                     filter="url(#glow-pulse)"/>
+
+            <!-- Iris with gradient -->
+            <circle cx="0" cy="0" r="16" fill="url(#iris-gradient)" filter="url(#glow-pulse)"/>
+            <circle cx="0" cy="0" r="16" fill="none" stroke="var(--edge)" stroke-width="1.5"/>
+
+            <g stroke="var(--eye-color)" fill="none" opacity="1" filter="url(#darken) url(#glow-pulse)">
+                <circle cx="0" cy="0" r="10" stroke-width="2.5" stroke-dasharray="2,1"/>
+                <circle cx="0" cy="0" r="13" stroke-width="2.5" stroke-dasharray="1.5,1.5"/>
+            </g>
+
+            <!-- Pupil -->
+            <circle cx="0" cy="0" r="6" fill="#000000"/>
+
+            <!-- Highlight -->
+            <circle cx="-2" cy="-2" r="2" fill="var(--bg-color)" opacity="1.0"/>
+        </g>
+    </g>
+</svg>

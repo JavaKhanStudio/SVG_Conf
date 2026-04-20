@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acte 3 - Formation SVG</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" href="images/LogoHeaderSBP.png" type="image/png">
+    <style>
+        .act-label {
+            text-transform: uppercase; letter-spacing: 0.15em;
+            color: var(--text-light); font-size: 0.85rem;
+            margin-bottom: 0.25rem;
+        }
+        /* Interactive card stage */
+        .card-demo-layout {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 1.5rem;
+            align-items: start;
+            margin-top: 1rem;
+        }
+        @media (max-width: 860px) {
+            .card-demo-layout { grid-template-columns: 1fr; }
+        }
+        .card-stage {
+            background: #0a0a1a;
+            border-radius: var(--radius);
+            padding: 1rem;
+            box-shadow: var(--shadow);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .card-stage svg {
+            display: block; width: 100%; max-width: 320px; height: auto;
+            border-radius: 10px;
+        }
+        .card-controls { display: flex; flex-direction: column; gap: 0.75rem; }
+        .card-controls .control-row {
+            display: flex; align-items: center; gap: 0.75rem;
+            font-size: 0.92rem;
+        }
+        .card-controls .control-row label {
+            flex: 1; font-weight: 600;
+        }
+        .card-controls input[type="color"] {
+            width: 54px; height: 34px; padding: 0;
+            border: 1px solid var(--border-color); border-radius: 4px;
+            cursor: pointer;
+        }
+        .card-controls select {
+            padding: 0.4rem 0.6rem; font-size: 0.95rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px; background: var(--card-bg);
+        }
+        .card-controls button {
+            align-self: flex-start;
+            padding: 0.4rem 0.9rem;
+            background: var(--card-bg);
+            color: var(--primary-blue);
+            border: 1px solid var(--primary-blue);
+            border-radius: 6px; font-size: 0.88rem;
+            cursor: pointer;
+        }
+        /* Anatomy layout — sticky reference img + 6 zoom cards */
+        .card-anat-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 1.5rem;
+            align-items: start;
+            margin-top: 1rem;
+        }
+        @media (max-width: 900px) {
+            .card-anat-layout { grid-template-columns: 1fr; }
+            .card-anat-sticky { position: static !important; }
+        }
+        .card-anat-sticky {
+            position: sticky; top: 80px;
+            background: #0a0a1a;
+            border-radius: var(--radius);
+            padding: 0.75rem;
+            box-shadow: var(--shadow);
+        }
+        .card-anat-sticky img {
+            display: block; width: 100%; height: auto; border-radius: 8px;
+        }
+        .card-anat-cards {
+            display: flex; flex-direction: column; gap: 1.25rem;
+        }
+        .card-zoom {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1rem 1.25rem;
+            position: relative;
+        }
+        .card-zoom .card-num {
+            position: absolute;
+            top: -12px; left: 1rem;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; font-weight: 700;
+            box-shadow: var(--shadow);
+        }
+        .card-zoom h5 {
+            color: var(--primary-blue);
+            font-size: 1.05rem;
+            margin: 0.4rem 0 0.5rem 2rem;
+        }
+        .card-zoom p {
+            font-size: 0.92rem;
+            color: var(--text-color);
+            margin-bottom: 0.75rem;
+        }
+        .card-zoom .demo {
+            background: #1e1e24;
+            border-radius: 6px;
+            padding: 0.75rem;
+            display: flex; align-items: center; justify-content: center;
+            min-height: 120px;
+        }
+        .card-zoom .demo svg {
+            display: block; max-width: 100%; max-height: 160px; height: auto;
+        }
+        .card-zoom .demo.grid-2 {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;
+        }
+        /* Animated money shot */
+        .card-animated-stage {
+            display: flex; justify-content: center;
+            padding: 2rem 1rem;
+            background: radial-gradient(circle at center, #10102a 0%, #050510 100%);
+            border-radius: var(--radius);
+            margin: 1rem 0;
+            animation: cardLevitate 6s ease-in-out infinite;
+        }
+        .card-animated-stage object {
+            display: block; width: 320px; height: auto;
+            border-radius: 10px;
+            filter: drop-shadow(0 20px 40px rgba(100,155,255,0.3));
+        }
+        @keyframes cardLevitate {
+            0%, 100% { transform: translateY(0); }
+            50%      { transform: translateY(-12px); }
+        }
+        .license-note {
+            text-align: center; font-size: 0.82rem;
+            color: var(--text-light); font-style: italic;
+            margin-top: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+        <div class="page-hero">
+            <p class="act-label" data-i18n="story3_label">Acte 3</p>
+            <h2 data-i18n="story3_hero_title">Creation SVG complete</h2>
+            <p data-i18n="story3_hero_subtitle">Ce que l'IA ne fait pas (encore) toute seule</p>
+        </div>
+
+        <!-- Concept -->
+        <div class="content-block">
+            <h3 data-i18n="story3_concept_title">Une carte a deux faces</h3>
+            <p data-i18n="story3_concept_p1">Autre projet, autre jour. Je voulais permettre aux gens de tirer une carte de tarot. Probleme : selectionner directement une image generee par IA me semblait trop lache. Une carte, c'est deux faces.</p>
+            <p data-i18n="story3_concept_p2">Logique : le devant montrerait l'arcane (AI-generated), et la carte se retournerait au clic grace a un composant CSS 3D. Mais que mettre au dos ? Encore une image IA ? Non, je voulais quelque chose de personnel, un SVG qui puisse evoluer avec les choix de l'utilisateur.</p>
+            <p data-i18n="story3_concept_p3">L'IA est excellente pour imaginer une face avant. Pour le dos je voulais coder un langage visuel coherent, reutilisable, parametrable. Bienvenue dans un SVG de 451 lignes.</p>
+        </div>
+
+        <!-- Interactive card -->
+        <div class="content-block">
+            <h3 data-i18n="story3_card_title">La carte</h3>
+            <p data-i18n-html="story3_card_desc">Joue avec les couleurs et les themes. Chaque theme redessine les quatre coins avec un autre set d'ornements : <strong>Chair</strong> (organique), <strong>Matiere</strong> (geometrique) ou <strong>Ame</strong> (mystique).</p>
+
+            <div class="card-demo-layout">
+                <div class="card-stage">
+                    <svg id="card-back-interactive" viewBox="0 0 300 500" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <style>
+            :root {
+            --bg-color: #1a1a2e;
+            --eye-color: rgb(100,255,155);
+            --pyramid-color: rgb(100,155,255);
+            --edge: #000000;
+            --sclera:#ffffff
+            }
+        </style>
+
+        <!-- Ray -->
+        <line id="ray-large" x1="0" y1="10" x2="0" y2="-90"/>
+        <line id="ray-small" x1="0" y1="-0" x2="0" y2="-75"/>
+        <circle id="ray-dot" cx="0" cy="-80" r="1.4" fill="white"/>
+
+        <g id="ray-pattern" transform="rotate(0.0) translate(0,0)">
+            <use href="#ray-large" transform="rotate(0)"/>
+            <use href="#ray-small" transform="rotate(5)"/>
+            <use href="#ray-dot" transform="rotate(5.0)"/>
+            <use href="#ray-large" transform="rotate(10)"/>
+            <use href="#ray-small" transform="rotate(15)"/>
+            <use href="#ray-dot" transform="rotate(15.0)"/>
+        </g>
+
+        <!-- Brick -->
+        <g id="brick">
+            <rect width="21" height="21" fill="var(--pyramid-color)" stroke="var(--bg-color)" stroke-width="0.5"/>
+            <!-- Light edge (top-left) -->
+            <path d="M 0,0 L 3,3 L 3,18 L 0,21 Z" fill="white" opacity="0.2"/>
+            <!-- Dark edge (bottom-right) -->
+            <path d="M 21,0 L 18,3 L 18,18 L 21,21 Z" fill="black" opacity="0.2"/>
+        </g>
+
+        <radialGradient id="eye-shadow">
+            <stop offset="85%" style="stop-color:#000000;stop-opacity:0"/>
+            <stop offset="100%" style="stop-color:#000000;stop-opacity:0.5"/>
+        </radialGradient>
+
+        <!-- Iris gradient -->
+        <radialGradient id="iris-gradient">
+            <stop offset="0%" style="stop-color:var(--eye-color);stop-opacity:0.8"/>
+            <stop offset="82%" style="stop-color:var(--eye-color);stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:#000000;stop-opacity:0.5"/>
+        </radialGradient>
+
+        <!-- Sclera gradient - using cx/cy to shift light source -->
+        <radialGradient id="sclera-gradient" cx="30%" cy="30%">
+            <stop offset="0%" style="stop-color:#ffffff"/>
+            <stop offset="60%" style="stop-color:var(--sclera)"/>
+            <stop offset="100%" style="stop-color:#d0d0d0"/>
+        </radialGradient>
+
+        <linearGradient id="triangle-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="var(--pyramid-color)" stop-opacity="1"/>
+            <stop offset="50%" stop-color="var(--pyramid-color)" stop-opacity="0.8"/>
+            <stop offset="100%" stop-color="var(--pyramid-color)" stop-opacity="0.6"/>
+        </linearGradient>
+
+        <filter id="darken">
+            <feColorMatrix type="saturate" values="0.8"/>
+            <feComponentTransfer>
+                <feFuncR type="linear" slope="0.7"/>
+                <feFuncG type="linear" slope="0.7"/>
+                <feFuncB type="linear" slope="0.7"/>
+            </feComponentTransfer>
+        </filter>
+
+        <filter id="ray-depth">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="1"/>
+            <feOffset dx="0.5" dy="0.5" result="offsetblur"/>
+            <feComponentTransfer>
+                <feFuncA type="linear" slope="7.5"/>
+            </feComponentTransfer>
+            <feMerge>
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+
+        <filter id="glow-pulse">
+            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+            <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+            <animate attributeName="stdDeviation"
+                     values="2;7;2"
+                     dur="3s"
+                     repeatCount="indefinite"/>
+        </filter>
+
+        <filter id="edge-highlight">
+            <feMorphology operator="dilate" radius="0.5"/>
+            <feGaussianBlur stdDeviation=".3"/>
+            <feColorMatrix type="matrix" values="
+      0 0 0 0 0
+      0 0 0 0 0
+      0 0 0 0 0
+      0 0 0 0.3 0.1 "/>
+            <feMerge>
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+
+        <!-- The flesh resolve -->
+        <g id="corner-ornament-flesh" transform="translate(7,3)" stroke="url(#triangle-gradient)" fill="none"
+           stroke-linecap="round" filter="url(#edge-highlight)">
+
+            <!-- Main trunk (flowing from top-left down) -->
+            <path d="M 8,10 C 30,25 26,30 22,45 C 10,82 46,100 54,118 C 60,122 50,122 67,138" stroke-width="4"/>
+
+            <!-- Primary left branches (curving outward) -->
+            <path d="M 22,39 C 28,42 15,50 13,58 C 17,75 15,73 9,91 " stroke-width="1.7"/>
+            <path d="M 24,80 C 23,68 29,87 20,96 C 24,93 12,101 11,109" stroke-width="2.0"/>
+            <path d="M 26,85 C 40,94 25,104 20,114 C 18,122 26,141 15,140" stroke-width="1.2"/>
+            <path d="M 48,112 C 51,142 35,133 30,144 C 27,152 24,171 32,175" stroke-width="1.1"/>
+
+            <!-- Primary right branches (curving outward) -->
+            <path d="M 20,48 C 38,84 46,60 54,66 C 60,71 66,77 72,83" stroke-width="1.5"/>
+            <path d="M 28,82 C 59,78 58,84 67,96" stroke-width="1.3"/>
+            <path d="M 40,98 C 70,104 70,110 80,116 C 88,121 96,127 104,113" stroke-width="1.2"/>
+            <path d="M 55,117 C 59,121 80,127 81,136" stroke-width="1.1"/>
+
+            <!-- Top horizontal network -->
+            <!-- Main horizontal flow -->
+            <path d="M 20,20 C 40,49 60,19 90,20 C 110,21 110,22 125,23 C 135,24 145,25 143,107" stroke-width="1.8"/>
+
+            <path d="M 40,32 C 40,70 80,37 106,74" stroke-width="1.9" opacity="1.0"/>
+            <path d="M 50,52 C 70, 50 70, 37 91, 48" stroke-width="1.2" opacity="1.0"/>
+            <path d="M 90,60 C 111,80 100,97 100,94" stroke-width="1.9" opacity="1.0"/>
+
+
+            <!-- Branches from main path endpoints -->
+            <path d="M 60,27 C 85,28 98,35 102,42 C 106,49 110,55 115,61" stroke-width="1.8"/>
+            <path d="M 100,37 C 125,40 118,55 132,52 " stroke-width="1.2"/>
+
+
+        </g>
+
+        <!-- The elements purity -->
+        <polygon id="triangle" points="0,-6 -6,6 6,6"/>
+        <polygon id="triangle-small" points="0,-4 -4,4 4,4" opacity="0.8"/>
+
+        <!-- Triangles pointing down (reversed) -->
+        <polygon id="triangle-down" points="0,6 -6,-6 6,-6" opacity="0.8"/>
+        <polygon id="triangle-down-small" points="0,4 -4,-4 4,-4"/>
+
+        <g id="corner-ornament-matter" transform="translate(07,03)" stroke="var(--edge)" fill="url(#triangle-gradient)"
+           stroke-width="0.0"
+           stroke-linecap="round"
+           filter="url(#edge-highlight)">
+
+            <!-- Main triangles -->
+            <use href="#triangle-down-small" transform="translate(14.0,22)"/>
+            <use href="#triangle" transform="translate(20,24)"/>
+            <use href="#triangle-down" transform="translate(28,24)"/>
+            <use href="#triangle" transform="translate(36,24)"/>
+            <use href="#triangle-down" transform="translate(44,24)"/>
+            <use href="#triangle-small" transform="translate(50.1,25.5)"/>
+            <use href="#triangle-down-small" transform="translate(56,25.5)"/>
+            <use href="#triangle-small" transform="translate(62.0,25.5)"/>
+            <use href="#triangle-down" transform="translate(68,24)"/>
+            <use href="#triangle" transform="translate(76,24)"/>
+            <use href="#triangle-down" transform="translate(84,24)"/>
+            <use href="#triangle" transform="translate(92,24)"/>
+            <use href="#triangle-down-small" transform="translate(98,22)"/>
+            <use href="#triangle-small" transform="translate(104,21.5)"/>
+            <use href="#triangle-down-small" transform="translate(110,22)"/>
+            <use href="#triangle-small" transform="translate(116,21.5)"/>
+            <use href="#triangle-down-small" transform="translate(122,22)"/>
+            <use href="#triangle-small" transform="translate(128,21.5)"/>
+            <use href="#triangle-down-small" transform="translate(134,22)"/>
+
+            <!-- First Spire -->
+            <use href="#triangle-small" transform="translate(14,36)"/>
+            <use href="#triangle-down-small" transform="translate(20,36)"/>
+            <use href="#triangle-small" transform="translate(26,36)"/>
+            <use href="#triangle-down-small" transform="translate(32,36)"/>
+
+            <use href="#triangle" transform="translate(32,48)"/>
+            <use href="#triangle-down" transform="translate(24,48)"/>
+            <use href="#triangle" transform="translate(16,48)"/>
+
+            <use href="#triangle-small" transform="translate(22,60)"/>
+            <use href="#triangle-down-small" transform="translate(28,60)"/>
+
+            <use href="#triangle" transform="translate(28,72)"/>
+            <use href="#triangle-down" transform="translate(36,72)"/>
+
+            <use href="#triangle-small" transform="translate(36,83)"/>
+            <use href="#triangle-down-small" transform="translate(42,83)"/>
+
+            <use href="#triangle" transform="translate(32,95)"/>
+            <use href="#triangle-down" transform="translate(40,95)"/>
+
+            <use href="#triangle-down" transform="translate(32,109)"/>
+            <use href="#triangle-small" transform="translate(38,110)"/>
+
+            <use href="#triangle-down-small" transform="translate(38,119.5)"/>
+            <use href="#triangle" transform="translate(32,122)"/>
+
+            <use href="#triangle-down" transform="translate(32,136)"/>
+
+            <use href="#triangle" transform="translate(27,142)"/>
+            <use href="#triangle-down" transform="translate(27,156)"/>
+
+            <use href="#triangle" transform="translate(22,162)"/>
+            <use href="#triangle-down" transform="translate(22,176)"/>
+
+
+            <!-- Second Spire -->
+            <use href="#triangle-down" transform="translate(76,37.5)"/>
+            <use href="#triangle" transform="translate(84,37)"/>
+            <use href="#triangle-down" transform="translate(92,37.5)"/>
+
+            <use href="#triangle-small" transform="translate(78,52)"/>
+            <use href="#triangle-down" transform="translate(84,50.5)"/>
+            <use href="#triangle-small" transform="translate(90,52)"/>
+
+            <use href="#triangle-down-small" transform="translate(78,61)"/>
+            <use href="#triangle" transform="translate(84,63)"/>
+            <use href="#triangle-down-small" transform="translate(90,61)"/>
+            <use href="#triangle-small" transform="translate(95.5,61)"/>
+
+
+            <use href="#triangle-down" transform="translate(84,77)"/>
+            <use href="#triangle-down-small" transform="translate(95.5,70.5)"/>
+
+            <use href="#triangle-small" transform="translate(95.5,80)"/>
+
+            <use href="#triangle-down-small" transform="translate(95.5,90)"/>
+
+            <use href="#triangle-small" transform="translate(95.5,100)"/>
+
+            <use href="#triangle-down-small" transform="translate(95.5,110)"/>
+
+            <!-- Third Spire -->
+            <use href="#triangle-small" transform="translate(138,25.5)"/>
+
+            <use href="#triangle-down-small" transform="translate(138,34.5)"/>
+
+            <use href="#triangle-small" transform="translate(134,37.5)"/>
+            <use href="#triangle-down-small" transform="translate(134,47)"/>
+
+            <use href="#triangle-small" transform="translate(138,50)"/>
+
+            <use href="#triangle-down-small" transform="translate(138,59)"/>
+
+            <use href="#triangle-small" transform="translate(138,67)"/>
+            <use href="#triangle-down-small" transform="translate(138,76)"/>
+
+            <use href="#triangle-small" transform="translate(134,79.5)"/>
+            <use href="#triangle-down-small" transform="translate(134,89)"/>
+        </g>
+
+
+        <!-- The soul ascendance -->
+        <!-- Abstract eye shapes for soul theme -->
+        <clipPath id="half-eye-clip">
+            <!-- Rectangle covering left half -->
+            <rect x="-20" y="-20" width="20" height="40" transform="rotate(270)"/>
+        </clipPath>
+
+
+        <g id="soul-eye" filter="url(#ray-depth)">
+            <ellipse cx="0" cy="0" rx="12" ry="8" fill="url(#triangle-gradient)"/>
+            <circle cx="0" cy="0" r="7" fill="var(--bg-color)"/>
+            <circle cx="0" cy="0" r="2.5" fill="white" opacity="1.0" filter="url(#glow-pulse)"/>
+        </g>
+
+        <g id="soul-eye-half" clip-path="url(#half-eye-clip)">
+            <ellipse cx="0" cy="0" rx="12" ry="8" fill="url(#triangle-gradient)" stroke="var(--edge)"
+                     stroke-width="1.5"/>
+            <circle cx="0" cy="0" r="7" fill="var(--bg-color)"/>
+            <circle cx="0" cy="0" r="2.5" fill="white" opacity="1.0" filter="url(#glow-pulse)"/>
+        </g>
+
+
+        <g id="corner-ornament-soul" transform="translate(7,3)" fill="none">
+
+            <!-- Start point -->
+            <use href="#soul-eye" transform="translate(22,26) rotate(40) scale(1.0)"/>
+
+            <!-- First Branch -->
+            <use href="#soul-eye" transform="translate(47,23) rotate(20) scale(0.9)"/>
+
+            <use href="#soul-eye" transform="translate(72,23) rotate(10) scale(0.8)"/>
+            <use href="#soul-eye" transform="translate(60,43) rotate(30) scale(0.8)"/>
+
+            <use href="#soul-eye" transform="translate(69,61) rotate(40) scale(0.6)"/>
+
+            <use href="#soul-eye" transform="translate(85,63) rotate(40) scale(0.5)"/>
+            <use href="#soul-eye" transform="translate(73,76) rotate(70) scale(0.5)"/>
+
+            <use href="#soul-eye" transform="translate(99,71) rotate(20) scale(0.4)"/>
+            <use href="#soul-eye" transform="translate(107,82) rotate(60) scale(0.4)"/>
+            <use href="#soul-eye" transform="translate(111,68) rotate(-20) scale(0.4)"/>
+
+
+            <use href="#soul-eye" transform="translate(95,22) rotate(5) scale(0.7)"/>
+
+            <use href="#soul-eye" transform="translate(116,22) rotate(2.5) scale(0.6)"/>
+
+            <use href="#soul-eye" transform="translate(135,22) rotate(0) scale(0.5)"/>
+
+
+            <!-- Second Branch -->
+            <use href="#soul-eye" transform="translate(30,52) rotate(60) scale(0.9)"/>
+            <use href="#soul-eye" transform="translate(30,78) rotate(70) scale(0.8)"/>
+            <use href="#soul-eye" transform="translate(48,65) rotate(50) scale(0.55)"/>
+
+            <use href="#soul-eye" transform="translate(25,102) rotate(80) scale(0.7)"/>
+
+            <use href="#soul-eye" transform="translate(21,123) rotate(90) scale(0.6)"/>
+            <use href="#soul-eye" transform="translate(40,113) rotate(60) scale(0.6)"/>
+
+            <use href="#soul-eye" transform="translate(40,129) rotate(75) scale(0.5)"/>
+            <use href="#soul-eye" transform="translate(55,119) rotate(45) scale(0.5)"/>
+
+            <use href="#soul-eye" transform="translate(18,141) rotate(100) scale(0.5)"/>
+
+            <use href="#soul-eye" transform="translate(14,156) rotate(105) scale(0.45)"/>
+            <use href="#soul-eye" transform="translate(24,154) rotate(70) scale(0.3)"/>
+
+            <use href="#soul-eye" transform="translate(12,170) rotate(90) scale(0.4)"/>
+
+            <!-- Middle Half -->
+            <use href="#soul-eye-half" transform="translate(143,43) rotate(90) scale(0.9)"/>
+            <use href="#soul-eye-half" transform="translate(143,74) rotate(90) scale(0.7)"/>
+            <use href="#soul-eye-half" transform="translate(143,100) rotate(90) scale(0.5)"/>
+        </g>
+
+    </defs>
+
+    <!-- Background -->
+    <rect width="300" height="500" fill="var(--bg-color)" rx="10"/>
+
+    <!-- Outer Border (at the edge with small gap) -->
+    <rect x="5" y="5" width="290" height="490" fill="none" stroke="var(--pyramid-color)" stroke-width="1" rx="8"
+          filter="url(#glow-pulse)"/>
+
+    <!-- Inner Border (smaller, further in) -->
+    <rect x="12" y="12" width="276" height="476" fill="none" stroke="var(--pyramid-color)" stroke-width="1.5" rx="6"
+          filter="url(#glow-pulse)"/>
+
+    <!-- Corner Ornaments (using the defined ornament with transforms) -->
+    <use class="corner-ornament" href="#corner-ornament-flesh"/>
+    <use class="corner-ornament" href="#corner-ornament-flesh" transform="translate(300,0) scale(-1,1)"/>
+    <use class="corner-ornament" href="#corner-ornament-flesh" transform="translate(0,500) scale(1,-1)"/>
+    <use class="corner-ornament" href="#corner-ornament-flesh" transform="translate(300,500) scale(-1,-1)"/>
+
+    <!-- Central All-Seeing Eye -->
+    <g transform="translate(150,260) scale(1.4)">
+        <!-- Pyramid with brick pattern -->
+        <g>
+            <!-- Pyramid outline and fill -->
+            <defs>
+                <clipPath id="pyramid-clip">
+                    <path d="M 0,-70 L -60,35 L 60,35 Z"/>
+                </clipPath>
+            </defs>
+
+            <g stroke="var(--eye-color)" fill="none" stroke-width="1" transform="translate(0,0)"
+               filter="url(#glow-pulse)">
+                <use href="#ray-pattern" transform="rotate(0)"/>
+                <use href="#ray-pattern" transform="rotate(20)"/>
+                <use href="#ray-pattern" transform="rotate(40)"/>
+                <use href="#ray-pattern" transform="rotate(60)"/>
+                <use href="#ray-pattern" transform="rotate(80)"/>
+                <use href="#ray-pattern" transform="rotate(100)"/>
+                <use href="#ray-pattern" transform="rotate(120)"/>
+                <use href="#ray-pattern" transform="rotate(140)"/>
+                <use href="#ray-pattern" transform="rotate(160)"/>
+                <use href="#ray-pattern" transform="rotate(180)"/>
+                <use href="#ray-pattern" transform="rotate(200)"/>
+                <use href="#ray-pattern" transform="rotate(220)"/>
+                <use href="#ray-pattern" transform="rotate(240)"/>
+                <use href="#ray-pattern" transform="rotate(260)"/>
+                <use href="#ray-pattern" transform="rotate(280)"/>
+                <use href="#ray-pattern" transform="rotate(300)"/>
+                <use href="#ray-pattern" transform="rotate(320)"/>
+                <use href="#ray-pattern" transform="rotate(340)"/>
+            </g>
+
+            <!-- Brick pattern inside pyramid -->
+            <g clip-path="url(#pyramid-clip)">
+                <!-- Fill base eye -->
+                <path d="M 0,-70 L -60,35 L 60,35 Z" fill="var(--pyramid-color)" opacity="0.3"/>
+
+                <!-- Row 1 (top - 1 brick, centered) -->
+                <use href="#brick" x="-10.5" y="-70"/>
+
+                <!-- Row 2 (3 bricks) -->
+                <use href="#brick" x="-31.5" y="-49"/>
+                <use href="#brick" x="-10.5" y="-49"/>
+                <use href="#brick" x="10.5" y="-49"/>
+
+                <!-- Row 3 (4 bricks) -->
+                <use href="#brick" x="-42" y="-28"/>
+                <use href="#brick" x="-21" y="-28"/>
+                <use href="#brick" x="0" y="-28"/>
+                <use href="#brick" x="21" y="-28"/>
+
+                <!-- Row 4 (5 bricks) -->
+                <use href="#brick" x="-52.5" y="-7"/>
+                <use href="#brick" x="-31.5" y="-7"/>
+                <use href="#brick" x="-10.5" y="-7"/>
+                <use href="#brick" x="10.5" y="-7"/>
+                <use href="#brick" x="31.5" y="-7"/>
+
+                <!-- Row 5 (6 bricks) -->
+                <use href="#brick" x="-60.5" y="14"/>
+                <use href="#brick" x="-39.5" y="14"/>
+                <use href="#brick" x="-18.5" y="14"/>
+                <use href="#brick" x="0.5" y="14"/>
+                <use href="#brick" x="17.5" y="14"/>
+                <use href="#brick" x="38.5" y="14"/>
+            </g>
+
+            <!-- Pyramid outline -->
+            <path d="M 0,-70 L -60,35 L 60,35 Z" fill="none" stroke="var(--edge)" stroke-width="2"/>
+        </g>
+
+        <!-- Eye -->
+        <!-- Eye shadow (smaller, tighter around the eye) -->
+        <ellipse cx="0" cy="0" rx="38" ry="28" fill="url(#eye-shadow)"/>
+
+        <g fill="var(--eye-color)">
+            <!-- Eye with gradient sclera -->
+            <ellipse cx="0" cy="0" rx="35" ry="24" fill="url(#sclera-gradient)" stroke="var(--edge)" stroke-width="2"
+                     filter="url(#glow-pulse)"/>
+
+            <!-- Iris with gradient -->
+            <circle cx="0" cy="0" r="16" fill="url(#iris-gradient)" filter="url(#glow-pulse)"/>
+            <circle cx="0" cy="0" r="16" fill="none" stroke="var(--edge)" stroke-width="1.5"/>
+
+            <g stroke="var(--eye-color)" fill="none" opacity="1" filter="url(#darken) url(#glow-pulse)">
+                <circle cx="0" cy="0" r="10" stroke-width="2.5" stroke-dasharray="2,1"/>
+                <circle cx="0" cy="0" r="13" stroke-width="2.5" stroke-dasharray="1.5,1.5"/>
+            </g>
+
+            <!-- Pupil -->
+            <circle cx="0" cy="0" r="6" fill="#000000"/>
+
+            <!-- Highlight -->
+            <circle cx="-2" cy="-2" r="2" fill="var(--bg-color)" opacity="1.0"/>
+        </g>
+    </g>
+</svg>
+                </div>
+                <div class="card-controls">
+                    <div class="control-row">
+                        <label for="cb-bg" data-i18n="story3_card_color_bg">Fond :</label>
+                        <input type="color" id="cb-bg" value="#1a1a2e" data-var="--bg-color">
+                    </div>
+                    <div class="control-row">
+                        <label for="cb-pyramid" data-i18n="story3_card_color_pyramid">Pyramide :</label>
+                        <input type="color" id="cb-pyramid" value="#649bff" data-var="--pyramid-color">
+                    </div>
+                    <div class="control-row">
+                        <label for="cb-eye" data-i18n="story3_card_color_eye">Oeil :</label>
+                        <input type="color" id="cb-eye" value="#64ff9b" data-var="--eye-color">
+                    </div>
+                    <div class="control-row">
+                        <label for="cb-edge" data-i18n="story3_card_color_edge">Contour :</label>
+                        <input type="color" id="cb-edge" value="#000000" data-var="--edge">
+                    </div>
+                    <div class="control-row">
+                        <label for="cb-theme" data-i18n="story3_card_theme">Theme :</label>
+                        <select id="cb-theme">
+                            <option value="flesh" data-i18n="story3_card_theme_flesh">Chair</option>
+                            <option value="matter" data-i18n="story3_card_theme_matter">Matiere</option>
+                            <option value="soul" data-i18n="story3_card_theme_soul">Ame</option>
+                        </select>
+                    </div>
+                    <button id="cb-reset" type="button" data-i18n="story3_card_reset">Reinitialiser</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Anatomy -->
+        <div class="content-block">
+            <h3 data-i18n="story3_anat_title">Anatomie de la carte</h3>
+            <p data-i18n="story3_anat_desc">Six techniques SVG qui composent la carte. Chacune s'utilise independamment et se combine avec les autres, c'est ce qui fait la richesse du format.</p>
+
+            <div class="card-anat-layout">
+                <div class="card-anat-sticky">
+                    <img src="sources/card_back_Showcase.svg" alt="Card back reference">
+                </div>
+
+                <div class="card-anat-cards">
+                    <!-- 1. CSS Variables -->
+                    <div class="card-zoom">
+                        <div class="card-num">1</div>
+                        <h5 data-i18n="story3_card1_title">Variables CSS</h5>
+                        <p data-i18n-html="story3_card1_desc">Un seul <code>:root { }</code> dans le SVG expose cinq couleurs. Tout ce qui reference <code>var(--couleur)</code> se met a jour en temps reel, sans regenerer le fichier.</p>
+                        <div class="demo">
+                            <svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+                                <style>
+                                    .demo-css-vars { --accent: #64ff9b; --accent-dark: #1a7a4a; }
+                                </style>
+                                <g class="demo-css-vars">
+                                    <rect x="10" y="10" width="180" height="60" rx="6" fill="var(--accent-dark)"/>
+                                    <rect x="10" y="10" width="180" height="60" rx="6" fill="none" stroke="var(--accent)" stroke-width="2"/>
+                                    <text x="100" y="47" text-anchor="middle" fill="var(--accent)" font-family="ui-monospace, monospace" font-size="16" font-weight="bold">var(--accent)</text>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- 2. defs + use -->
+                    <div class="card-zoom">
+                        <div class="card-num">2</div>
+                        <h5 data-i18n="story3_card2_title">&lt;defs&gt; et &lt;use&gt;</h5>
+                        <p data-i18n-html="story3_card2_desc">Une forme est definie une fois dans <code>&lt;defs&gt;</code> puis instanciee avec <code>&lt;use href="#id"&gt;</code> avec un transform different. La meme brique, rayon ou triangle est reutilise des dizaines de fois sans gonfler le fichier.</p>
+                        <div class="demo">
+                            <svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <polygon id="demo-tri" points="0,-10 -8,6 8,6" fill="#649bff" stroke="#000" stroke-width="0.5"/>
+                                </defs>
+                                <use href="#demo-tri" transform="translate(30,40)"/>
+                                <use href="#demo-tri" transform="translate(60,40) scale(1.3)"/>
+                                <use href="#demo-tri" transform="translate(100,40) scale(0.8) rotate(45)"/>
+                                <use href="#demo-tri" transform="translate(140,40) rotate(180)"/>
+                                <use href="#demo-tri" transform="translate(175,40) scale(1.2)"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- 3. Gradients -->
+                    <div class="card-zoom">
+                        <div class="card-num">3</div>
+                        <h5 data-i18n="story3_card3_title">Gradients</h5>
+                        <p data-i18n-html="story3_card3_desc">Quatre gradients superposes (radiaux pour l'iris et la sclere, lineaires pour les ornements) construisent la profondeur. L'iris seul combine 3 stops avec opacites variables.</p>
+                        <div class="demo grid-2">
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <radialGradient id="demo-radial" cx="35%" cy="35%">
+                                        <stop offset="0%" stop-color="#fff"/>
+                                        <stop offset="60%" stop-color="#64ff9b"/>
+                                        <stop offset="100%" stop-color="#1a7a4a"/>
+                                    </radialGradient>
+                                </defs>
+                                <circle cx="50" cy="50" r="40" fill="url(#demo-radial)"/>
+                            </svg>
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="demo-linear" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" stop-color="#649bff" stop-opacity="1"/>
+                                        <stop offset="100%" stop-color="#649bff" stop-opacity="0.3"/>
+                                    </linearGradient>
+                                </defs>
+                                <polygon points="50,10 90,85 10,85" fill="url(#demo-linear)"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- 4. Filters + SMIL animation -->
+                    <div class="card-zoom">
+                        <div class="card-num">4</div>
+                        <h5 data-i18n="story3_card4_title">Filtres animes</h5>
+                        <p data-i18n-html="story3_card4_desc">Les chaines <code>feGaussianBlur</code> + <code>feMerge</code> donnent le halo. L'element <code>&lt;animate&gt;</code> de SMIL fait pulser la valeur <code>stdDeviation</code> entre 2 et 7 sur 3 secondes, en boucle.</p>
+                        <div class="demo">
+                            <svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <filter id="demo-glow">
+                                        <feGaussianBlur stdDeviation="3" result="blur"/>
+                                        <feMerge>
+                                            <feMergeNode in="blur"/>
+                                            <feMergeNode in="SourceGraphic"/>
+                                        </feMerge>
+                                        <animate attributeName="stdDeviation" values="1;6;1" dur="2s" repeatCount="indefinite"/>
+                                    </filter>
+                                </defs>
+                                <rect x="20" y="20" width="160" height="40" rx="8" fill="none" stroke="#64ff9b" stroke-width="2" filter="url(#demo-glow)"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- 5. Clip paths -->
+                    <div class="card-zoom">
+                        <div class="card-num">5</div>
+                        <h5 data-i18n="story3_card5_title">Clip paths</h5>
+                        <p data-i18n-html="story3_card5_desc">La pyramide est un triangle, rempli de briques rectangulaires. Un <code>&lt;clipPath&gt;</code> au contour triangulaire decoupe les briques qui depassent : on dessine un rectangle bete, le clip fait le reste.</p>
+                        <div class="demo">
+                            <svg viewBox="0 0 200 110" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <clipPath id="demo-clip">
+                                        <polygon points="100,10 180,100 20,100"/>
+                                    </clipPath>
+                                </defs>
+                                <g clip-path="url(#demo-clip)">
+                                    <rect x="20" y="20" width="25" height="25" fill="#649bff"/>
+                                    <rect x="50" y="20" width="25" height="25" fill="#64ff9b"/>
+                                    <rect x="80" y="20" width="25" height="25" fill="#649bff"/>
+                                    <rect x="110" y="20" width="25" height="25" fill="#64ff9b"/>
+                                    <rect x="140" y="20" width="25" height="25" fill="#649bff"/>
+                                    <rect x="20" y="50" width="25" height="25" fill="#64ff9b"/>
+                                    <rect x="50" y="50" width="25" height="25" fill="#649bff"/>
+                                    <rect x="80" y="50" width="25" height="25" fill="#64ff9b"/>
+                                    <rect x="110" y="50" width="25" height="25" fill="#649bff"/>
+                                    <rect x="140" y="50" width="25" height="25" fill="#64ff9b"/>
+                                    <rect x="20" y="80" width="25" height="25" fill="#649bff"/>
+                                    <rect x="50" y="80" width="25" height="25" fill="#64ff9b"/>
+                                    <rect x="80" y="80" width="25" height="25" fill="#649bff"/>
+                                    <rect x="110" y="80" width="25" height="25" fill="#64ff9b"/>
+                                    <rect x="140" y="80" width="25" height="25" fill="#649bff"/>
+                                </g>
+                                <polygon points="100,10 180,100 20,100" fill="none" stroke="#fff" stroke-width="2"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- 6. Symmetry via transform -->
+                    <div class="card-zoom">
+                        <div class="card-num">6</div>
+                        <h5 data-i18n="story3_card6_title">Symetrie via transform</h5>
+                        <p data-i18n-html="story3_card6_desc">L'ornement d'un coin est dessine une fois, puis duplique aux trois autres avec <code>scale(-1,1)</code>, <code>scale(1,-1)</code>, <code>scale(-1,-1)</code>. Change un coin, tous les autres suivent.</p>
+                        <div class="demo">
+                            <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <g id="demo-corner" stroke="#64ff9b" stroke-width="2" fill="none" stroke-linecap="round">
+                                        <path d="M 10,10 L 40,10 M 10,10 L 10,40"/>
+                                        <circle cx="10" cy="10" r="3" fill="#649bff" stroke="none"/>
+                                    </g>
+                                </defs>
+                                <use href="#demo-corner"/>
+                                <use href="#demo-corner" transform="translate(200,0) scale(-1,1)"/>
+                                <use href="#demo-corner" transform="translate(0,120) scale(1,-1)"/>
+                                <use href="#demo-corner" transform="translate(200,120) scale(-1,-1)"/>
+                                <text x="100" y="66" text-anchor="middle" fill="#649bff" font-family="ui-monospace, monospace" font-size="10">1 path, 4 copies</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Animated money shot -->
+        <div class="content-block">
+            <h3 data-i18n="story3_animated_title">Et si on l'animait ?</h3>
+            <p data-i18n="story3_animated_desc">Meme carte, mais avec quelques animations CSS : une rotation lente sur le motif de rayons, une derive de teinte sur la palette, une levitation discrete. Le SVG, c'est du texte qui peut tout faire.</p>
+
+            <div class="card-animated-stage">
+                <object type="image/svg+xml" data="sources/card_back_animated.svg" aria-label="Animated card back"></object>
+            </div>
+            <p class="license-note" data-i18n="story3_license">&copy; Simon Bedard. SVG partage a des fins educatives. Usage commercial interdit.</p>
+        </div>
+
+        <!-- End CTA -->
+        <div class="content-block" style="text-align: center;">
+            <p class="act-label" data-i18n="story3_end_label">Fin de l'acte 3</p>
+            <p data-i18n="story3_end_p" style="font-size: 1.05rem; margin: 1rem 0;">Voila. Trois actes, un fil rouge : l'IA aide a construire, mais les decisions de design restent humaines.</p>
+            <a href="stories.html" data-i18n="story1_end_back" style="display: inline-block; padding: 0.65rem 1.4rem; background: var(--card-bg); color: var(--primary-blue); border: 1px solid var(--primary-blue); border-radius: var(--radius); text-decoration: none; font-weight: 600; margin-right: 0.5rem;">Retour aux histoires</a>
+            <a href="workshop.html" data-i18n="story3_end_continue" style="display: inline-block; padding: 0.65rem 1.4rem; background: var(--accent-gradient); color: white; border-radius: var(--radius); text-decoration: none; font-weight: 600;">Aller a l'atelier &rarr;</a>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="js/main.js"></script>
+    <script>
+        (() => {
+            const cardSvg = document.getElementById('card-back-interactive');
+            if (!cardSvg) return;
+
+            // Remember the initial inline style so Reset can restore every CSS var.
+            const DEFAULTS = {
+                '--bg-color': '#1a1a2e',
+                '--pyramid-color': 'rgb(100,155,255)',
+                '--eye-color': 'rgb(100,255,155)',
+                '--edge': '#000000',
+                '--sclera': '#ffffff',
+            };
+
+            // Color pickers → CSS vars on the root SVG
+            for (const picker of document.querySelectorAll('.card-controls input[type="color"]')) {
+                picker.addEventListener('input', () => {
+                    cardSvg.style.setProperty(picker.dataset.var, picker.value);
+                });
+            }
+
+            // Theme dropdown → swap the href on every .corner-ornament in one go
+            const themeSelect = document.getElementById('cb-theme');
+            if (themeSelect) {
+                themeSelect.addEventListener('change', () => {
+                    const target = `#corner-ornament-${themeSelect.value}`;
+                    for (const u of cardSvg.querySelectorAll('.corner-ornament')) {
+                        u.setAttribute('href', target);
+                    }
+                });
+            }
+
+            // Reset snaps every picker + the theme back to defaults
+            const resetBtn = document.getElementById('cb-reset');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                    const pickerDefaults = { 'cb-bg': '#1a1a2e', 'cb-pyramid': '#649bff', 'cb-eye': '#64ff9b', 'cb-edge': '#000000' };
+                    for (const [id, val] of Object.entries(pickerDefaults)) {
+                        const el = document.getElementById(id);
+                        if (el) { el.value = val; cardSvg.style.setProperty(el.dataset.var, val); }
+                    }
+                    if (themeSelect) {
+                        themeSelect.value = 'flesh';
+                        for (const u of cardSvg.querySelectorAll('.corner-ornament')) {
+                            u.setAttribute('href', '#corner-ornament-flesh');
+                        }
+                    }
+                });
+            }
+        })();
+    </script>
+</body>
+</html>
