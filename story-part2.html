@@ -480,25 +480,18 @@
 
             <div class="evo-carousel" id="evo-carousel"
                  data-bones='[
-                    {"src":"images/story/bones/01-bone.svg","label":"v1","desc":"le contour brut"},
-                    {"src":"images/story/bones/02-boneV4.svg","label":"v4","desc":"le placeholder du nom"},
-                    {"src":"images/story/bones/03-boneV5.svg","label":"v5","desc":"premier rendu metallique"},
-                    {"src":"images/story/bones/04-boneV8.svg","label":"v8","desc":"+ texture et emboss"},
-                    {"src":"images/story/bones/05-boneV13.svg","label":"v13","desc":"la version finale"}
-                 ]'
-                 data-transitions='[
-                    "Point de depart : un simple trace au stylo. Pas de fond, pas de texte, juste la silhouette pour valider la forme.",
-                    "v1 -> v4 : le contour devient une vraie forme d&#39;os, et un placeholder \"Name of the dog\" apparait. Premier signe que ca va devenir une medaille.",
-                    "v4 -> v5 : le contour devient solide, on remplit l&#39;interieur d&#39;un gradient metallique uniforme, le nom est rendu lisiblement par-dessus.",
-                    "v5 -> v8 : un pattern de texture diagonal apparait dans le metal, et le nom prend un effet d&#39;emboss SVG (filtre &lt;feOffset&gt;+&lt;feGaussianBlur&gt;+&lt;feMerge&gt;).",
-                    "v8 -> v13 : polish final. Edge highlight via un gradient en overlay sur le bord, bordure plus contrastee, l&#39;eclat plus credible. C&#39;est cette version qui est utilisee dans l&#39;atelier."
+                    {"src":"images/story/bones/01-bone.svg","label":"v1"},
+                    {"src":"images/story/bones/02-boneV4.svg","label":"v4"},
+                    {"src":"images/story/bones/03-boneV5.svg","label":"v5"},
+                    {"src":"images/story/bones/04-boneV8.svg","label":"v8"},
+                    {"src":"images/story/bones/05-boneV13.svg","label":"v13"}
                  ]'>
                 <div class="evo-stage">
                     <div class="evo-render">
                         <iframe class="evo-frame" sandbox="allow-same-origin" aria-label="bone preview"></iframe>
                     </div>
                     <div class="evo-source">
-                        <div class="evo-source-label">SVG source, modifiable</div>
+                        <div class="evo-source-label" data-i18n="story2_evo_source_label">SVG source, modifiable</div>
                         <textarea class="evo-textarea" spellcheck="false"></textarea>
                     </div>
                 </div>
@@ -559,7 +552,7 @@
                 <div class="anat-cards">
                     <div class="zoom-card live-card" id="card-grad" data-primary="#c39b58">
                         <div class="card-num">1</div>
-                        <h5>Le gradient metallique</h5>
+                        <h5 data-i18n="story2_card_grad_title">Le gradient metallique</h5>
                         <p data-i18n-html="story2_zoom_grad">Un <code>linearGradient</code> avec plusieurs stops, une sequence sombre&rarr;clair&rarr;sombre, donne l'illusion du metal poli. Joue avec la couleur du milieu.</p>
                         <div class="live-mini">
                             <iframe class="live-frame" sandbox="allow-same-origin" aria-label="preview"></iframe>
@@ -575,15 +568,15 @@
 &lt;/svg&gt;</textarea>
                         </div>
                         <div class="live-controls">
-                            <label>Reflet : <input type="color" class="live-color" value="#c39b58" data-anat-var="--metal-s6"></label>
-                            <label>Ombre : <input type="color" class="live-color" value="#5d4a2e" data-anat-var="--metal-s3"></label>
-                            <button class="live-reset" type="button">Reinitialiser</button>
+                            <label><span data-i18n="story2_card_reflet">Reflet :</span> <input type="color" class="live-color" value="#c39b58" data-anat-var="--metal-s6"></label>
+                            <label><span data-i18n="story2_card_ombre">Ombre :</span> <input type="color" class="live-color" value="#5d4a2e" data-anat-var="--metal-s3"></label>
+                            <button class="live-reset" type="button" data-i18n="story2_card_reset">Reinitialiser</button>
                         </div>
                     </div>
 
                     <div class="zoom-card live-card" id="card-edge" data-primary="#7a6238">
                         <div class="card-num">2</div>
-                        <h5>L'edge highlight (2 paths)</h5>
+                        <h5 data-i18n="story2_card_edge_title">L'edge highlight (2 paths)</h5>
                         <p data-i18n-html="story2_zoom_edge">L'os est dessine <strong>deux fois</strong> sur le meme path. La premiere copie a le metal en fill. La deuxieme, par-dessus, n'a aucun fill, juste un <code>stroke</code> blanc-vers-transparent. Ca simule un reflet sur le bord.</p>
                         <div class="live-mini">
                             <iframe class="live-frame" sandbox="allow-same-origin" aria-label="preview"></iframe>
@@ -600,14 +593,14 @@
 &lt;/svg&gt;</textarea>
                         </div>
                         <div class="live-controls">
-                            <label>Couleur du metal : <input type="color" class="live-color" value="#7a6238" data-anat-var="--metal-s4"></label>
-                            <button class="live-reset" type="button">Reinitialiser</button>
+                            <label><span data-i18n="story2_card_metal">Couleur du metal :</span> <input type="color" class="live-color" value="#7a6238" data-anat-var="--metal-s4"></label>
+                            <button class="live-reset" type="button" data-i18n="story2_card_reset">Reinitialiser</button>
                         </div>
                     </div>
 
                     <div class="zoom-card live-card" id="card-tex" data-primary="#9c7e44">
                         <div class="card-num">3</div>
-                        <h5>Le pattern de texture</h5>
+                        <h5 data-i18n="story2_card_tex_title">Le pattern de texture</h5>
                         <p data-i18n-html="story2_zoom_pattern">Un <code>&lt;pattern&gt;</code> minuscule, repete sans fin. Deux croix diagonales fines donnent l'effet "metal brosse" sans alourdir le fichier.</p>
                         <div class="live-mini">
                             <iframe class="live-frame" sandbox="allow-same-origin" aria-label="preview"></iframe>
@@ -626,15 +619,15 @@
 &lt;/svg&gt;</textarea>
                         </div>
                         <div class="live-controls">
-                            <label>Fond : <input type="color" class="live-color" value="#9c7e44" data-anat-var="--metal-s5"></label>
-                            <label>Diagonales : <input type="color" class="live-color" value="#3a2d1a" data-anat-var="--metal-s1"></label>
-                            <button class="live-reset" type="button">Reinitialiser</button>
+                            <label><span data-i18n="story2_card_fond">Fond :</span> <input type="color" class="live-color" value="#9c7e44" data-anat-var="--metal-s5"></label>
+                            <label><span data-i18n="story2_card_diagonales">Diagonales :</span> <input type="color" class="live-color" value="#3a2d1a" data-anat-var="--metal-s1"></label>
+                            <button class="live-reset" type="button" data-i18n="story2_card_reset">Reinitialiser</button>
                         </div>
                     </div>
 
                     <div class="zoom-card live-card" id="card-emboss" data-primary="#9c7e44">
                         <div class="card-num">4</div>
-                        <h5>Le filtre emboss (texte grave)</h5>
+                        <h5 data-i18n="story2_card_emboss_title">Le filtre emboss (texte grave)</h5>
                         <p data-i18n-html="story2_zoom_emboss">Une chaine de filtres SVG : <code>feOffset</code>+<code>feGaussianBlur</code>+<code>feFlood</code>+<code>feComposite</code>+<code>feMerge</code>. L'ombre se glisse derriere le texte et donne du relief sans rien redessiner.</p>
                         <div class="live-mini">
                             <iframe class="live-frame" sandbox="allow-same-origin" aria-label="preview"></iframe>
@@ -658,9 +651,9 @@
 &lt;/svg&gt;</textarea>
                         </div>
                         <div class="live-controls">
-                            <label>Fond : <input type="color" class="live-color" value="#9c7e44" data-anat-var="--metal-s5"></label>
-                            <label>Ombre : <input type="color" class="live-color" value="#000000" data-anat-var="--bone-border"></label>
-                            <button class="live-reset" type="button">Reinitialiser</button>
+                            <label><span data-i18n="story2_card_fond">Fond :</span> <input type="color" class="live-color" value="#9c7e44" data-anat-var="--metal-s5"></label>
+                            <label><span data-i18n="story2_card_ombre">Ombre :</span> <input type="color" class="live-color" value="#000000" data-anat-var="--metal-s3"></label>
+                            <button class="live-reset" type="button" data-i18n="story2_card_reset">Reinitialiser</button>
                         </div>
                     </div>
                 </div>
@@ -829,7 +822,9 @@
             const carousel = document.getElementById('evo-carousel');
             if (carousel) {
                 const bones = JSON.parse(carousel.dataset.bones);
-                const transitions = JSON.parse(carousel.dataset.transitions);
+                // Transitions live in js/main.js translations under story2_evo_tr_0..4
+                // so they switch language with the toggle.
+                const transitionFor = (i) => (window.t ? t('story2_evo_tr_' + i) : '');
                 const frame = carousel.querySelector('.evo-frame');
                 const ta = carousel.querySelector('.evo-textarea');
                 const narr = carousel.querySelector('.evo-step-text');
@@ -885,7 +880,7 @@
                     const txt = await loadStep(i);
                     ta.value = txt;
                     frame.srcdoc = wrapEvo(txt);
-                    narr.textContent = transitions[i] || '';
+                    narr.textContent = transitionFor(i) || '';
                     // Timeline state
                     const buttons = timeline.querySelectorAll('button');
                     buttons.forEach((b, j) => b.classList.toggle('active', j === i));
@@ -898,6 +893,10 @@
                 prevBtn.addEventListener('click', () => goTo(current - 1));
                 nextBtn.addEventListener('click', () => goTo(current + 1));
                 ta.addEventListener('input', () => { frame.srcdoc = wrapEvo(ta.value); });
+                // Re-render the narration when the language toggle fires.
+                document.addEventListener('langchange', () => {
+                    narr.textContent = transitionFor(current) || '';
+                });
 
                 goTo(0);
             }

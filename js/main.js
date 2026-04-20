@@ -273,6 +273,12 @@ const translations = {
         story2_compare_desc: "Memes coords, meme taille, aucune retouche, juste les fichiers SVG produits par chaque IA.",
         story2_evo_title: "L'evolution de l'os",
         story2_evo_desc: `Treize versions au total dans le repo. Voici cinq etapes choisies pour leur saut visuel, meme nom, meme palette, juste pour voir comment chaque iteration ajoute une couche.`,
+        story2_evo_source_label: "SVG source, modifiable",
+        story2_evo_tr_0: "Point de depart : un simple trace au stylo. Pas de fond, pas de texte, juste la silhouette pour valider la forme.",
+        story2_evo_tr_1: `v1 -> v4 : le contour devient une vraie forme d'os, et un placeholder "Name of the dog" apparait. Premier signe que ca va devenir une medaille.`,
+        story2_evo_tr_2: "v4 -> v5 : le contour devient solide, on remplit l'interieur d'un gradient metallique uniforme, le nom est rendu lisiblement par-dessus.",
+        story2_evo_tr_3: "v5 -> v8 : un pattern de texture diagonal apparait dans le metal, et le nom prend un effet d'emboss SVG (filtre <feOffset>+<feGaussianBlur>+<feMerge>).",
+        story2_evo_tr_4: "v8 -> v13 : polish final. Edge highlight via un gradient en overlay sur le bord, bordure plus contrastee, l'eclat plus credible. C'est cette version qui est utilisee dans l'atelier.",
         story2_evo_v1: "le contour brut",
         story2_evo_v4: "le placeholder du nom",
         story2_evo_v5: "premier rendu metallique",
@@ -286,6 +292,16 @@ const translations = {
         story2_anat_desc: "Le dogtag complet, puis on zoom sur chaque technique qui le compose.",
         story2_anat_toggle: "Afficher les reperes",
         story2_anat_zoom_title: "Quatre techniques, en zoom",
+        story2_card_grad_title: "Le gradient metallique",
+        story2_card_edge_title: "L'edge highlight (2 paths)",
+        story2_card_tex_title: "Le pattern de texture",
+        story2_card_emboss_title: "Le filtre emboss (texte grave)",
+        story2_card_reflet: "Reflet :",
+        story2_card_ombre: "Ombre :",
+        story2_card_metal: "Couleur du metal :",
+        story2_card_fond: "Fond :",
+        story2_card_diagonales: "Diagonales :",
+        story2_card_reset: "Reinitialiser",
         story2_zoom_grad: `Un <code>linearGradient</code> diagonal avec <strong>8 stops</strong> au lieu des 2-3 habituels. La sequence va du sombre au clair, repique au mid, redescend, puis termine sur le tres clair. C'est cette alternance qui donne l'illusion du metal poli, les yeux interpretent ces variations comme des reflets.`,
         story2_zoom_edge: `L'os est dessine <strong>deux fois</strong> sur le meme path. La premiere copie a le gradient metallique en fill et la bordure sombre. La deuxieme, par-dessus, n'a <em>aucun</em> fill, juste un <code>stroke</code> peint avec un gradient blanc-vers-transparent. C'est ce double-passage qui simule un reflet de lumiere sur le bord superieur de l'os.`,
         story2_zoom_pattern: `Un <code>pattern</code> minuscule (2&times;5 unites, repete sans fin) avec deux croix diagonales tres tenues. Vu de loin, ca donne l'effet "metal brosse" sans alourdir le fichier, un seul element <code>&lt;pattern&gt;</code> remplace des milliers de petits paths.`,
@@ -580,6 +596,12 @@ const translations = {
         story2_compare_desc: "Same coords, same size, no retouching, just the SVG files each AI produced.",
         story2_evo_title: "Evolution of the bone",
         story2_evo_desc: `Thirteen versions total in the repo. Here are five chosen for their visual leap, same name, same palette, just to see what each iteration layers on.`,
+        story2_evo_source_label: "SVG source, editable",
+        story2_evo_tr_0: "Starting point: a simple pen trace. No fill, no text, just the silhouette to validate the shape.",
+        story2_evo_tr_1: `v1 -> v4: the outline becomes a real bone shape and a "Name of the dog" placeholder appears. First sign this is going to become a tag.`,
+        story2_evo_tr_2: "v4 -> v5: the outline turns solid, the interior is filled with a uniform metallic gradient, and the name reads clearly on top.",
+        story2_evo_tr_3: "v5 -> v8: a diagonal texture pattern appears in the metal, and the name gets an SVG emboss effect (filter <feOffset>+<feGaussianBlur>+<feMerge>).",
+        story2_evo_tr_4: "v8 -> v13: final polish. Edge highlight via a gradient overlay on the border, more contrasted outline, more believable shine. This is the version used in the workshop.",
         story2_evo_v1: "raw outline",
         story2_evo_v4: "name placeholder added",
         story2_evo_v5: "first metallic render",
@@ -593,6 +615,16 @@ const translations = {
         story2_anat_desc: "The full dogtag, then zooms on each technique that builds it.",
         story2_anat_toggle: "Show markers",
         story2_anat_zoom_title: "Four techniques, in zoom",
+        story2_card_grad_title: "The metallic gradient",
+        story2_card_edge_title: "Edge highlight (2 paths)",
+        story2_card_tex_title: "The texture pattern",
+        story2_card_emboss_title: "The emboss filter (engraved text)",
+        story2_card_reflet: "Highlight:",
+        story2_card_ombre: "Shadow:",
+        story2_card_metal: "Metal color:",
+        story2_card_fond: "Background:",
+        story2_card_diagonales: "Diagonals:",
+        story2_card_reset: "Reset",
         story2_zoom_grad: `A diagonal <code>linearGradient</code> with <strong>8 stops</strong> instead of the usual 2-3. The sequence goes dark to light, dips back to mid, drops, then ends on the very light. That alternation is what creates the polished-metal illusion, eyes read the variations as reflections.`,
         story2_zoom_edge: `The bone is drawn <strong>twice</strong> on the same path. The first copy has the metallic fill and the dark border. The second, on top, has <em>no</em> fill, just a <code>stroke</code> painted with a white-to-transparent gradient. That double-pass simulates light catching the upper edge of the bone.`,
         story2_zoom_pattern: `A tiny <code>pattern</code> (2&times;5 units, infinite tile) with two faint diagonal crosses. From far away it gives the "brushed metal" feel without bloating the file, a single <code>&lt;pattern&gt;</code> element replaces thousands of tiny paths.`,
@@ -644,6 +676,9 @@ function setLanguage(lang) {
     translatePage();
     const btn = document.querySelector('.lang-toggle');
     if (btn) btn.textContent = lang === 'fr' ? 'EN' : 'FR';
+    // Let page-specific widgets (carousels, narration, etc.) re-read
+    // translations that live outside data-i18n attributes.
+    document.dispatchEvent(new CustomEvent('langchange', { detail: { lang } }));
 }
 
 function toggleLanguage() {
