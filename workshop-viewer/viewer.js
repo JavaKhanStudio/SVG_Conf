@@ -20,8 +20,11 @@
 const $ = sel => document.querySelector(sel);
 
 // Paths are relative to the host page (workshop.html at site root),
-// not to this script — so prefix everything with the workshop folder.
-const BASE = 'workshop/';
+// not to this script. BASE is where the viewer's own assets live
+// (manifest + reference photos). GALLERY_BASE is the canonical SVG
+// source folder, shared with the live workshop app.
+const BASE = 'workshop-viewer/';
+const GALLERY_BASE = 'gallery/';
 
 const state = {
   files: [],
@@ -72,13 +75,13 @@ async function selectFile(name) {
 function updateSourceLink(name) {
   const link = $('#source-link');
   if (!link) return;
-  link.href = `${BASE}gallery/${encodeURIComponent(name)}`;
+  link.href = `${GALLERY_BASE}${encodeURIComponent(name)}`;
   link.hidden = false;
 }
 
 // ============================================================ SVG load + parse
 async function loadSvg(name) {
-  const text = await fetch(`${BASE}gallery/${encodeURIComponent(name)}`).then(r => r.text());
+  const text = await fetch(`${GALLERY_BASE}${encodeURIComponent(name)}`).then(r => r.text());
   const doc = new DOMParser().parseFromString(text, 'image/svg+xml');
   const svgEl = doc.documentElement;
   if (svgEl.nodeName !== 'svg') return;

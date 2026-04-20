@@ -117,19 +117,25 @@ const server = http.createServer(async (req, res) => {
   const pathname = url.pathname;
 
   try {
-    // Static frontend
+    // Static frontend. The repo root holds the presentation site;
+    // the interactive workshop app lives under /workshop-app/.
+    // Both share gallery/ and src/. Serve any file under __dirname
+    // so the whole site works transparently.
     if (req.method === 'GET' && (pathname === '/' || pathname === '/index.html')) {
       return serveStatic(res, path.join(__dirname, 'index.html'));
     }
-    if (req.method === 'GET' && (pathname === '/app.js' || pathname === '/style.css')) {
-      return serveStatic(res, path.join(__dirname, pathname.slice(1)));
+    if (req.method === 'GET' && pathname === '/workshop-app/') {
+      return serveStatic(res, path.join(__dirname, 'workshop-app/index.html'));
     }
-
-    // Shared frontend modules (used by both index.html and the future viewer.html).
-    if (req.method === 'GET' && pathname.startsWith('/src/')) {
+    if (req.method === 'GET' && !pathname.startsWith('/api/') && !pathname.startsWith('/files/') && !pathname.startsWith('/refs/') && !pathname.startsWith('/ws')) {
       const rel = pathname.slice(1);
-      if (rel.includes('..')) return send(res, 400, 'Bad path');
-      return serveStatic(res, path.join(__dirname, rel));
+      if (!rel || rel.includes('..')) return send(res, 400, 'Bad path');
+      const full = path.join(__dirname, rel);
+      if (!full.startsWith(__dirname)) return send(res, 400, 'Bad path');
+      try {
+        const stat = await fsp.stat(full);
+        if (stat.isFile()) return serveStatic(res, full);
+      } catch { /* fall through to 404 below */ }
     }
 
     // Watched SVG files

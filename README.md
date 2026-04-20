@@ -1,19 +1,32 @@
-# SVG Workshop
+# SVG Conf
 
-Local browser-based tool for live-previewing SVGs with editable CSS variables, plus an optional Python backend for the photo→SVG agent pipeline (preprocessing, tracing, measurement, color sampling).
+Companion repo for the "SVG and AI" presentation. Two things live here:
 
-See `CLAUDE.md` for the SVG variable format. See `PLAN.md` for the build roadmap.
+1. **The presentation site** (static HTML) — what visitors see on GitHub Pages.
+2. **The interactive workshop** (Node server + optional Python backend) — the live-editing tool people can run locally if they clone the repo.
 
-## Workshop only (Node)
+The static site works with no dependencies; starting `server.js` adds the interactive workshop on the same port.
 
-The workshop on its own — open SVGs, tweak CSS variables, snapshot, replay.
+## Presentation site
+
+Just open `index.html` in a browser, or serve the folder statically:
+
+```
+python -m http.server 8080
+```
+
+Then visit http://localhost:8080. The published build is at `https://javakhanstudio.github.io/SVG_Conf/`.
+
+## Interactive workshop (Node)
+
+Live-edit any SVG's CSS variables, take snapshots, replay them.
 
 ```
 npm install
-node server.js ./examples
+node server.js ./gallery
 ```
 
-Then open http://localhost:5173. With no folder argument, watches the current directory.
+Open http://localhost:5173 for the presentation site, or http://localhost:5173/workshop-app/ to launch the live editor.
 
 ## Full pipeline (Node + Python backend)
 
@@ -26,8 +39,8 @@ pip install -r backend/requirements.txt
 
 Run both processes (in separate terminals):
 ```
-node server.js ./examples         # workshop, port 5173
-backend/start.sh                  # backend, port 5174  (use backend\start.bat on Windows)
+node server.js ./gallery          # web + workshop, port 5173
+backend/start.sh                  # backend, port 5174  (backend\start.bat on Windows)
 ```
 
 When the backend is down, a red banner appears at the top of the workshop. Core workshop features (load, edit, snapshot) keep working without it.
@@ -47,26 +60,26 @@ More subcommands (`preprocess`, `trace`, `measure`, `colors`) land as later phas
 ## Folder layout
 
 ```
-project-root/
-  examples/                    # original demo SVGs that ship with the workshop
-    eye.svg, scene.svg, car.svg ...
-  gallery/                     # SVGs produced by the agent pipeline
-    coffee.svg, bundaberg.svg, puppy.svg ...
-  sources/                     # reference photos for the pipeline
-    coffee.jpg, bundaberg.jpg, puppy.jpg ...
-  gallery/.workshop/           # per-SVG runtime state (auto-created)
-    coffee.svg.snapshots.json     # committed
-    coffee.svg.metrics.json       # gitignored
-    coffee.svg.refs/              # gitignored — preprocessed PNG variants
-      gray.png, canny.png, otsu.png ...
-  backend/                     # Python backend (FastAPI on :5174)
-  src/                         # shared frontend modules
-  .claude/skills/              # agent skills (svg-from-photo)
+.
+├── index.html, gallery.html, concepts.html, ...   # presentation pages (GH Pages root)
+├── css/, js/, parts/, images/                     # presentation assets
+├── gallery/                                       # canonical SVG sources (shared)
+│   ├── puppy.svg, leprechaun.svg, stone.svg, ...
+│   └── .workshop/                                 # per-SVG runtime state (auto-created)
+│       ├── *.snapshots.json                       # committed
+│       └── *.metrics.json, *.refs/                # gitignored
+├── workshop-viewer/                               # static viewer (used by workshop.html)
+│   ├── viewer.js, viewer.css, manifest.json
+│   └── references/                                # source photos shown in Compare mode
+├── workshop-app/                                  # interactive editor (needs server.js)
+│   ├── index.html, app.js, style.css
+├── backend/                                       # Python backend (FastAPI on :5174)
+├── src/                                           # shared frontend modules
+├── sources/                                       # raw reference photos for the pipeline
+├── examples/                                      # original demo SVGs
+├── server.js, svgw.js                             # Node entry points
+├── CLAUDE.md, PLAN.md, SPEC.md, OVERVIEW.md
+└── .claude/skills/                                # agent skills (svg-from-photo)
 ```
 
-Run the workshop on whichever folder you want to browse:
-```
-node server.js ./gallery     # see the session results
-node server.js ./examples    # see the original demo SVGs
-node server.js ./            # watch everything at the project root
-```
+See `CLAUDE.md` for the `@ws` SVG variable format. See `PLAN.md` / `SPEC.md` for the build roadmap.
