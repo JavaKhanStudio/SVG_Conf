@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio - Formation SVG</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/studio.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" href="images/LogoHeaderSBP.png" type="image/png">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+        <div class="page-hero">
+            <h2 data-i18n="studio_title">Studio</h2>
+            <p data-i18n="studio_subtitle">Editeur SVG direct. Selectionne un element, ajuste ses parametres, fais glisser les points de controle Bezier, sauvegarde avec versionnage automatique.</p>
+        </div>
+
+        <div class="studio-shell" id="studio-shell">
+            <aside class="studio-col studio-left">
+                <section class="studio-panel">
+                    <h3 data-i18n="studio_source">Source</h3>
+                    <div id="drop-zone" class="drop-zone" data-i18n="studio_drop">Depose un fichier SVG ici</div>
+                    <div class="path-loader">
+                        <input id="path-input" type="text" placeholder="./studio-work/banana.svg">
+                        <button id="load-path-btn" data-i18n="studio_load">Charger</button>
+                    </div>
+                    <button id="new-btn" class="block-btn" data-i18n="studio_new">Nouveau SVG vide</button>
+                </section>
+
+                <section class="studio-panel">
+                    <h3>studio-work/</h3>
+                    <div id="folder-status" class="muted">Serveur local requis.</div>
+                    <ul id="folder-list" class="folder-list"></ul>
+                </section>
+
+                <section class="studio-panel">
+                    <h3 data-i18n="studio_elements">Elements</h3>
+                    <div class="panel-actions">
+                        <button id="autotag-btn" title="Assigner un id aux elements non etiquetes">Auto-tag</button>
+                    </div>
+                    <ul id="element-tree" class="element-tree"></ul>
+                </section>
+            </aside>
+
+            <section class="studio-stage" id="studio-stage">
+                <div class="stage-toolbar">
+                    <span id="filename-display" class="filename-display muted">aucun fichier</span>
+                    <span class="spacer"></span>
+                    <button id="undo-btn" title="Annuler (Ctrl+Z)">&#x21ba; Undo</button>
+                    <button id="save-btn" class="primary">Save (Vx)</button>
+                    <button id="download-btn">Download</button>
+                </div>
+                <div id="preview-wrap" class="preview-wrap">
+                    <div id="preview-host" class="preview-host"></div>
+                </div>
+                <div id="save-log" class="save-log"></div>
+            </section>
+
+            <aside class="studio-col studio-right">
+                <section class="studio-panel">
+                    <h3 id="inspector-title" data-i18n="studio_inspector">Inspecteur</h3>
+                    <div id="inspector" class="inspector">
+                        <p class="muted" data-i18n="studio_inspector_empty">Clique un element dans l'arbre ou l'apercu.</p>
+                    </div>
+                </section>
+
+                <section class="studio-panel">
+                    <h3 data-i18n="studio_palette">Palette</h3>
+                    <div id="palette" class="palette"></div>
+                </section>
+
+                <section class="studio-panel">
+                    <h3>:root variables</h3>
+                    <div id="cssvars" class="cssvars"></div>
+                </section>
+            </aside>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="js/main.js"></script>
+    <script type="module" src="js/studio/main.js"></script>
+</body>
+</html>

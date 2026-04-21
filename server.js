@@ -118,14 +118,15 @@ const server = http.createServer(async (req, res) => {
 
   try {
     // Static frontend. The repo root holds the presentation site;
-    // the interactive workshop app lives under /workshop-app/.
-    // Both share gallery/ and src/. Serve any file under __dirname
-    // so the whole site works transparently.
+    // the Blackroom (photo→SVG tracer) lives under /blackroom/ and
+    // the creative Studio at /studio.html. All three share gallery/
+    // and src/. Serve any file under __dirname so the whole site
+    // works transparently.
     if (req.method === 'GET' && (pathname === '/' || pathname === '/index.html')) {
       return serveStatic(res, path.join(__dirname, 'index.html'));
     }
-    if (req.method === 'GET' && pathname === '/workshop-app/') {
-      return serveStatic(res, path.join(__dirname, 'workshop-app/index.html'));
+    if (req.method === 'GET' && pathname === '/blackroom/') {
+      return serveStatic(res, path.join(__dirname, 'blackroom/index.html'));
     }
     if (req.method === 'GET' && !pathname.startsWith('/api/') && !pathname.startsWith('/files/') && !pathname.startsWith('/refs/') && !pathname.startsWith('/ws')) {
       const rel = pathname.slice(1);
@@ -272,6 +273,51 @@ const server = http.createServer(async (req, res) => {
       }
       const text = await backendRes.text();
       return send(res, backendRes.status, text, { 'Content-Type': MIME['.json'] });
+    }
+
+    // Studio: list SVGs in studio-work/.
+    if (req.method === 'GET' && pathname === '/api/studio/list') {
+      const dir = path.join(__dirname, 'studio-work');
+      try { await fsp.mkdir(dir, { recursive: true }); } catch {}
+      let files = [];
+      try {
+        const entries = await fsp.readdir(dir, { withFileTypes: true });
+        files = entries.filter(e => e.isFile() && e.name.toLowerCase().endsWith('.svg'))
+                       .map(e => e.name).sort();
+      } catch {}
+      return send(res, 200, JSON.stringify({ ok: true, files }), { 'Content-Type': MIME['.json'] });
+    }
+
+    // Studio: save with _Vn versioning.
+    // Body: { base: "banana", svg: "<svg...>" }
+    // Writes studio-work/<base>_V<n+1>.svg where n = max existing _Vn for that base, or 0.
+    if (req.method === 'POST' && pathname === '/api/studio/save') {
+      const raw = await readBody(req, 50 * 1024 * 1024);
+      let body;
+      try { body = JSON.parse(raw.toString('utf8')); }
+      catch { return send(res, 400, JSON.stringify({ error: 'bad json' }), { 'Content-Type': MIME['.json'] }); }
+      const base = typeof body?.base === 'string' ? body.base.trim() : '';
+      const svg = typeof body?.svg === 'string' ? body.svg : '';
+      if (!base || !/^[\w\-. ]+$/.test(base)) {
+        return send(res, 400, JSON.stringify({ error: 'bad base' }), { 'Content-Type': MIME['.json'] });
+      }
+      if (!svg.includes('<svg')) {
+        return send(res, 400, JSON.stringify({ error: 'bad svg' }), { 'Content-Type': MIME['.json'] });
+      }
+      const dir = path.join(__dirname, 'studio-work');
+      await fsp.mkdir(dir, { recursive: true });
+      let entries = [];
+      try { entries = await fsp.readdir(dir); } catch {}
+      const re = new RegExp('^' + base.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&') + '_V(\\d+)\\.svg$', 'i');
+      let maxV = 0;
+      for (const e of entries) {
+        const m = re.exec(e);
+        if (m) { const n = parseInt(m[1], 10); if (n > maxV) maxV = n; }
+      }
+      const nextV = maxV + 1;
+      const file = `${base}_V${nextV}.svg`;
+      await fsp.writeFile(path.join(dir, file), svg, 'utf8');
+      return send(res, 200, JSON.stringify({ ok: true, file, version: nextV }), { 'Content-Type': MIME['.json'] });
     }
 
     // Upload

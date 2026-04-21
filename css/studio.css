@@ -1,0 +1,404 @@
+/* Studio — direct-manipulation SVG editor. */
+
+.studio-shell {
+    display: grid;
+    grid-template-columns: 280px 1fr 340px;
+    gap: 0.75rem;
+    margin: 1rem auto;
+    max-width: 1600px;
+    padding: 0 0.75rem;
+    height: calc(100vh - 220px);
+    min-height: 560px;
+}
+
+.studio-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    overflow-y: auto;
+    padding-right: 2px;
+}
+
+.studio-stage {
+    display: flex;
+    flex-direction: column;
+    background: #111827;
+    border-radius: var(--radius, 8px);
+    overflow: hidden;
+    min-width: 0;
+}
+
+.studio-panel {
+    background: #ffffff;
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: var(--radius, 8px);
+    padding: 0.65rem 0.75rem;
+}
+
+.studio-panel h3 {
+    margin: 0 0 0.45rem;
+    font-size: 0.88rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--primary-blue, #0752CF);
+}
+
+.studio-panel .panel-actions {
+    display: flex;
+    gap: 0.35rem;
+    margin-bottom: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.studio-panel button,
+.stage-toolbar button {
+    font: inherit;
+    font-size: 0.82rem;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+    background: #f9fafb;
+    cursor: pointer;
+    color: #111827;
+}
+
+.studio-panel button:hover,
+.stage-toolbar button:hover {
+    background: #eef2ff;
+}
+
+.studio-panel button.block-btn {
+    display: block;
+    width: 100%;
+    margin-top: 0.3rem;
+}
+
+.stage-toolbar button.primary {
+    background: var(--primary-blue, #0752CF);
+    color: white;
+    border-color: var(--primary-blue, #0752CF);
+}
+
+.stage-toolbar button.primary:hover {
+    background: #053a91;
+}
+
+.stage-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.6rem;
+    background: #1f2937;
+    color: #e5e7eb;
+    border-bottom: 1px solid #374151;
+    flex-wrap: wrap;
+}
+
+.stage-toolbar .spacer { flex: 1; }
+
+.filename-display {
+    font-family: ui-monospace, "Cascadia Code", monospace;
+    font-size: 0.85rem;
+    color: #e5e7eb;
+}
+
+.drop-zone {
+    padding: 1.1rem 0.5rem;
+    border: 2px dashed #cbd5e1;
+    border-radius: 6px;
+    text-align: center;
+    color: #64748b;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.drop-zone.drag { background: #eef2ff; border-color: var(--primary-blue, #0752CF); color: #0752CF; }
+
+.path-loader {
+    display: flex;
+    gap: 0.3rem;
+    margin-top: 0.45rem;
+}
+
+.path-loader input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+    font-size: 0.82rem;
+    font-family: ui-monospace, "Cascadia Code", monospace;
+}
+
+.preview-wrap {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        linear-gradient(45deg, #1c2431 25%, transparent 25%),
+        linear-gradient(-45deg, #1c2431 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #1c2431 75%),
+        linear-gradient(-45deg, transparent 75%, #1c2431 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, 10px 0px;
+    background-color: #111827;
+    overflow: auto;
+}
+
+.preview-host {
+    position: relative;
+}
+
+.preview-host svg {
+    display: block;
+    max-width: min(90vw, 1100px);
+    max-height: 100%;
+    background: white;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+
+/* Studio overlay graphics live inside the SVG itself as a <g id="__studio_overlay__">
+   so they share the target viewBox. We style them here. */
+.preview-host svg .__studio_outline {
+    fill: none;
+    stroke: #f59e0b;
+    stroke-width: 2;
+    stroke-dasharray: 4 3;
+    vector-effect: non-scaling-stroke;
+    pointer-events: none;
+}
+
+.preview-host svg .__studio_handle {
+    fill: #0ea5e9;
+    stroke: white;
+    stroke-width: 1.2;
+    vector-effect: non-scaling-stroke;
+    cursor: grab;
+}
+
+.preview-host svg .__studio_handle.control {
+    fill: #a78bfa;
+}
+
+.preview-host svg .__studio_link {
+    stroke: #a78bfa;
+    stroke-width: 1;
+    stroke-dasharray: 2 2;
+    vector-effect: non-scaling-stroke;
+    fill: none;
+    pointer-events: none;
+}
+
+.save-log {
+    max-height: 72px;
+    overflow-y: auto;
+    padding: 0.35rem 0.6rem;
+    font-family: ui-monospace, "Cascadia Code", monospace;
+    font-size: 0.78rem;
+    color: #9ca3af;
+    background: #0b0f19;
+    border-top: 1px solid #374151;
+}
+
+.save-log .ok { color: #34d399; }
+.save-log .err { color: #f87171; }
+
+.element-tree {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 50vh;
+    overflow-y: auto;
+    font-size: 0.82rem;
+}
+
+.element-tree li {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.18rem 0.3rem;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.element-tree li:hover { background: #eef2ff; }
+.element-tree li.selected { background: #fde68a; font-weight: 600; }
+
+.element-tree .tag {
+    font-family: ui-monospace, monospace;
+    color: #0752CF;
+    font-weight: 600;
+}
+
+.element-tree .name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #374151;
+    font-family: ui-monospace, monospace;
+}
+
+.element-tree .tree-btn {
+    font-size: 0.7rem;
+    padding: 0.08rem 0.28rem;
+    border: 1px solid #cbd5e1;
+    background: white;
+    border-radius: 3px;
+    cursor: pointer;
+    color: #64748b;
+}
+
+.element-tree .tree-btn.danger { color: #b91c1c; }
+
+.element-tree .depth { display: inline-block; width: 8px; }
+
+.folder-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.82rem;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.folder-list li {
+    padding: 0.2rem 0.35rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: ui-monospace, monospace;
+    color: #1f2937;
+}
+
+.folder-list li:hover { background: #eef2ff; }
+.folder-list li.current { background: #fde68a; font-weight: 600; }
+
+.inspector {
+    font-size: 0.85rem;
+}
+
+.inspector .field {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 0.4rem;
+    align-items: center;
+    margin: 0.28rem 0;
+}
+
+.inspector .field label {
+    font-size: 0.78rem;
+    color: #374151;
+    font-family: ui-monospace, monospace;
+}
+
+.inspector .field input[type="text"],
+.inspector .field input[type="number"],
+.inspector .field textarea,
+.inspector .field select {
+    width: 100%;
+    padding: 0.22rem 0.35rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    font-family: ui-monospace, monospace;
+    box-sizing: border-box;
+}
+
+.inspector .field textarea {
+    min-height: 70px;
+    resize: vertical;
+}
+
+.inspector .field-row {
+    display: flex;
+    gap: 0.3rem;
+    align-items: center;
+}
+
+.inspector .field-row input[type="range"] { flex: 1; }
+.inspector .field-row .val {
+    min-width: 48px;
+    text-align: right;
+    font-family: ui-monospace, monospace;
+    font-size: 0.78rem;
+    color: #4b5563;
+}
+
+.inspector .section-title {
+    margin: 0.7rem 0 0.25rem;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    color: #6b7280;
+    letter-spacing: 0.05em;
+}
+
+.palette {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+
+.palette .swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-size: 0.72rem;
+    font-family: ui-monospace, monospace;
+    color: #1f2937;
+    cursor: pointer;
+}
+
+.palette .swatch .dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid rgba(0,0,0,0.2);
+}
+
+.palette .swatch .count {
+    color: #6b7280;
+}
+
+.cssvars .var-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.3rem;
+    align-items: center;
+    padding: 0.2rem 0;
+}
+
+.cssvars .var-name {
+    font-family: ui-monospace, monospace;
+    font-size: 0.78rem;
+    color: #374151;
+}
+
+.cssvars input[type="color"] {
+    width: 38px;
+    height: 26px;
+    padding: 0;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.muted { color: #6b7280; font-size: 0.82rem; }
+
+@media (max-width: 1200px) {
+    .studio-shell {
+        grid-template-columns: 240px 1fr 300px;
+    }
+}
+
+@media (max-width: 900px) {
+    .studio-shell {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+    .studio-stage { min-height: 420px; }
+}

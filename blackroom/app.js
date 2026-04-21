@@ -1,4 +1,4 @@
-// SVG Workshop frontend
+// The Blackroom - photo to SVG tracer frontend.
 // Single-file app. No framework, no build step.
 //
 // Parser + generic control builder are shared with workshop-viewer/

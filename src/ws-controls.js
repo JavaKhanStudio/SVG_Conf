@@ -7,8 +7,8 @@
 // a read-only derived-colour swatch.
 //
 // Host-specific concerns stay out:
-//   - point2d groups are coordinated by the host (workshop-app has an
-//     overlay + drag logic for them; workshop-viewer has none).
+//   - point2d groups are coordinated by the host (blackroom has an
+//     overlay + drag logic for them; the static viewer has none).
 //   - state mutation, persistence, and re-render after change happen in
 //     the host's setValue callback.
 //

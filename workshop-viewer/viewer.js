@@ -5,7 +5,7 @@
 // edits as inline style overrides on the rendered SVG.  Persists
 // per-file values to localStorage.
 //
-// Stripped from the full workshop-app/:
+// Stripped from the full Blackroom (blackroom/):
 //   - no WebSocket file watching  (static deployment, no server)
 //   - no upload / snapshot save   (no backend)
 //   - no backend health banner    (no backend)
@@ -13,7 +13,7 @@
 //   - no point2d controls         (none of the gallery SVGs use them)
 //
 // Parser + control builder come from /src/ws-parser.js and
-// /src/ws-controls.js — shared with workshop-app/ so the two hosts
+// /src/ws-controls.js — shared with blackroom/ so the two hosts
 // can't drift on hint syntax or type inference.
 
 import {

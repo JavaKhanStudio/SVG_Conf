@@ -1,4 +1,4 @@
-"""Smoke-test the merged site + workshop-app with Playwright.
+"""Smoke-test the merged site + Blackroom with Playwright.
 
 Reports per-page: final URL, title, visible body length, JS/console
 errors, failed network requests.
@@ -12,7 +12,8 @@ PAGES = [
     "/stories.html",
     "/gallery.html",
     "/workshop.html",
-    "/workshop-app/",
+    "/blackroom/",
+    "/studio.html",
 ]
 
 

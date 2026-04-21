@@ -1,7 +1,7 @@
 // Shared @ws parser for the SVG workshop.
 //
 // Both the static showcase viewer (workshop-viewer/) and the interactive
-// editor (workshop-app/) consume the same SVG source format: CSS custom
+// editor (blackroom/) consume the same SVG source format: CSS custom
 // properties inside :root { }, optionally annotated with a trailing
 // /* @ws ... */ comment that upgrades the default control.  This module
 // is the single parse+inference implementation both hosts import, so

@@ -5,7 +5,8 @@ cd /d "%~dp0"
 title SVG_Conf server (localhost:5173)
 echo.
 echo   Presentation: http://localhost:5173/
-echo   Live editor:  http://localhost:5173/workshop-app/
+echo   Studio:       http://localhost:5173/studio.html
+echo   Blackroom:    http://localhost:5173/blackroom/
 echo.
 echo   Close this window (or Ctrl+C) to stop the server.
 echo.
