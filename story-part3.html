@@ -70,16 +70,31 @@
             align-items: start;
             margin-top: 1rem;
         }
-        @media (max-width: 900px) {
-            .card-anat-layout { grid-template-columns: 1fr; }
-            .card-anat-sticky { position: static !important; }
-        }
         .card-anat-sticky {
             position: sticky; top: 80px;
             background: #0a0a1a;
             border-radius: var(--radius);
             padding: 0.75rem;
             box-shadow: var(--shadow);
+        }
+        /* Collapse below 900px: keep the card visible as a small floating
+           thumbnail bottom-right so the reader can see what's referenced
+           while scrolling through the zoom cards. */
+        @media (max-width: 900px) {
+            .card-anat-layout { grid-template-columns: 1fr; }
+            .card-anat-sticky {
+                position: fixed;
+                top: auto;
+                bottom: 12px;
+                right: 12px;
+                left: auto;
+                width: 130px;
+                z-index: 90;
+                padding: 4px;
+                box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+            }
+            .card-anat-sticky .card-anat-toggle,
+            .card-anat-sticky .live-controls { display: none; }
         }
         .card-anat-sticky .card-anat-inner {
             position: relative;

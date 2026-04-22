@@ -249,13 +249,36 @@
             align-items: start;
             margin-top: 1rem;
         }
-        @media (max-width: 900px) {
-            .anat-layout { grid-template-columns: 1fr; }
-            .anat-sticky { position: static !important; }
-        }
         .anat-sticky {
             position: sticky;
             top: calc(50vh - 200px);
+        }
+        /* Below 900px the two-column layout collapses; keep the dogtag
+           visible as a small floating thumbnail bottom-right so the user
+           can still see what's being discussed while scrolling. */
+        @media (max-width: 900px) {
+            .anat-layout { grid-template-columns: 1fr; }
+            .anat-sticky {
+                position: fixed;
+                top: auto;
+                bottom: 12px;
+                right: 12px;
+                left: auto;
+                width: 130px;
+                z-index: 90;
+                background: var(--card-bg);
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                padding: 4px;
+                box-shadow: 0 4px 18px rgba(0,0,0,0.3);
+            }
+            .anat-sticky .anat-stage {
+                padding: 4px;
+                box-shadow: none;
+            }
+            .anat-sticky .anat-stage svg { max-width: 100%; }
+            .anat-sticky .anat-toggle,
+            .anat-sticky .live-controls { display: none; }
         }
         /* Clickable callouts on the dogtag */
         .anat-callouts .anat-callout { cursor: pointer; }
