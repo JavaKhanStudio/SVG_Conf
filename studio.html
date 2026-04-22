@@ -8,6 +8,51 @@
     <link rel="stylesheet" href="css/studio.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="icon" href="images/LogoHeaderSBP.png" type="image/png">
+    <style>
+        .skill-pipeline {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1rem;
+            margin: 1.25rem 0 0.5rem;
+        }
+        .skill-step {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 0.9rem 1rem 1rem;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        .skill-step-num {
+            position: absolute;
+            top: -12px; left: 0.9rem;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #9b59b6, var(--primary-blue));
+            color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; font-weight: 700;
+            box-shadow: var(--shadow);
+        }
+        .skill-step h5 {
+            color: #9b59b6;
+            font-size: 0.98rem;
+            margin: 0.4rem 0 0.5rem 2rem;
+        }
+        .skill-step p {
+            font-size: 0.88rem;
+            color: var(--text-color);
+            margin: 0;
+            line-height: 1.5;
+        }
+        .skill-step code {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 0.05rem 0.3rem;
+            border-radius: 3px;
+            font-size: 0.82rem;
+        }
+    </style>
 </head>
 <body>
     <div id="header-placeholder"></div>
@@ -78,6 +123,57 @@
                     <div id="cssvars" class="cssvars"></div>
                 </section>
             </aside>
+        </div>
+
+        <!-- svg-from-scratch skill pipeline -->
+        <div class="content-block" style="border-left: 4px solid #9b59b6; background: linear-gradient(135deg, rgba(155, 89, 182, 0.04), rgba(7, 82, 207, 0.04));">
+            <h3 data-i18n="studio_skill_title"><i class="fa-solid fa-robot" style="color:#9b59b6; margin-right:0.5rem;"></i>Quand une IA utilise Studio</h3>
+            <p data-i18n-html="studio_skill_intro">Studio expose un vrai pipeline pour qu'un agent IA dessine un SVG parametrique a partir d'une description (pas d'une photo). Tout est decrit dans <code>.claude/skills/svg-from-scratch/SKILL.md</code> : l'agent ecrit dans <code>studio-work/</code>, renvoie un lien charge automatiquement, et itere sur les <code>_Vn</code> que tu sauves.</p>
+
+            <div class="skill-pipeline">
+                <div class="skill-step">
+                    <div class="skill-step-num">1</div>
+                    <h5 data-i18n="studio_skill_s1_title">Brief</h5>
+                    <p data-i18n-html="studio_skill_s1_desc">Tu decris le sujet (&laquo; un lapin diabolique &raquo;), le format (icon, carte), le style. L'agent pose une question s'il en a vraiment besoin &mdash; une seule.</p>
+                </div>
+                <div class="skill-step">
+                    <div class="skill-step-num">2</div>
+                    <h5 data-i18n="studio_skill_s2_title">Scaffold v1</h5>
+                    <p data-i18n-html="studio_skill_s2_desc">L'agent ecrit <code>studio-work/&lt;base&gt;.svg</code> &mdash; silhouette + palette, sparse volontairement. Jamais directement dans <code>images/</code> ou <code>sources/</code>.</p>
+                </div>
+                <div class="skill-step">
+                    <div class="skill-step-num">3</div>
+                    <h5 data-i18n="studio_skill_s3_title">Handoff</h5>
+                    <p data-i18n-html="studio_skill_s3_desc">Reponse avec le deep link <code>studio.html?path=./studio-work/&lt;base&gt;.svg</code>. Studio auto-charge, pas besoin de taper le chemin.</p>
+                </div>
+                <div class="skill-step">
+                    <div class="skill-step-num">4</div>
+                    <h5 data-i18n="studio_skill_s4_title">Tu ajustes</h5>
+                    <p data-i18n-html="studio_skill_s4_desc">Drag les anchors bleus et controles violets des paths, tweak les <code>:root</code> vars a droite, masque des elements via &#x1F441;, connecte / deconnecte une couleur a une variable.</p>
+                </div>
+                <div class="skill-step">
+                    <div class="skill-step-num">5</div>
+                    <h5 data-i18n="studio_skill_s5_title">Save (Vx)</h5>
+                    <p data-i18n-html="studio_skill_s5_desc">Clic sur <code>Save</code> ecrit <code>&lt;base&gt;_V1.svg</code>, puis <code>_V2</code>, etc. Versionnage auto, pas de perte, annulation par fichier.</p>
+                </div>
+                <div class="skill-step">
+                    <div class="skill-step-num">6</div>
+                    <h5 data-i18n="studio_skill_s6_title">L'agent reprend</h5>
+                    <p data-i18n-html="studio_skill_s6_desc">L'agent lit ton <code>_Vn</code>, voit tes ajustements, ecrit une v(n+1) en ajoutant un niveau de detail. Il <strong>attend</strong> ton Save avant d'iterer &mdash; pas de boucle autonome.</p>
+                </div>
+                <div class="skill-step">
+                    <div class="skill-step-num">7</div>
+                    <h5 data-i18n="studio_skill_s7_title">Animer</h5>
+                    <p data-i18n-html="studio_skill_s7_desc">Animations = <code>@keyframes</code> parametres par des <code>:root</code> vars (duration, easing, intensite). Le panneau <code>:root</code> expose les knobs automatiquement, le bouton &#x23F8; fige tout pour screenshotter.</p>
+                </div>
+                <div class="skill-step">
+                    <div class="skill-step-num">8</div>
+                    <h5 data-i18n="studio_skill_s8_title">Promotion</h5>
+                    <p data-i18n-html="studio_skill_s8_desc">Quand c'est bon : deplacement de <code>studio-work/</code> vers la vraie destination &mdash; <code>images/&lt;cat&gt;/</code> pour la galerie, <code>sources/</code> pour une reference d'histoire, <code>gallery/</code> pour Black Room.</p>
+                </div>
+            </div>
+
+            <p data-i18n-html="studio_skill_outro" style="margin-top:1rem;">Le pattern : <strong>l'agent dessine, tu corriges visuellement, l'agent apprend tes corrections</strong>. Pas de Photoshop, pas de pinceau : l'interface est un inspector d'attributs et tes Saves sont le feedback. Source complet : <a class="inline-link" href="https://github.com/JavaKhanStudio/SVG_Conf/blob/main/.claude/skills/svg-from-scratch/SKILL.md" target="_blank" rel="noopener"><code>.claude/skills/svg-from-scratch/SKILL.md</code></a>.</p>
         </div>
     </main>
 
