@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <title>Ninja</title>
+
+  <!-- Sol -->
+  <rect x="0" y="260" width="400" height="40" fill="#2b2d3a"/>
+  <!-- Lune -->
+  <circle cx="330" cy="70" r="30" fill="#f3e9c4"/>
+  <circle cx="320" cy="64" r="26" fill="#2b2d3a"/>
+
+  <!-- Ombre au sol -->
+  <ellipse cx="200" cy="262" rx="60" ry="6" fill="#1a1b25" opacity="0.6"/>
+
+  <!-- Jambes -->
+  <rect x="175" y="210" width="18" height="50" rx="4" fill="#1f2230"/>
+  <rect x="207" y="210" width="18" height="50" rx="4" fill="#1f2230"/>
+  <!-- Bandes aux chevilles -->
+  <rect x="173" y="248" width="22" height="5" fill="#b33028"/>
+  <rect x="205" y="248" width="22" height="5" fill="#b33028"/>
+  <!-- Pieds (tabi) -->
+  <path d="M168 260 Q170 252 195 253 L195 262 Z" fill="#14151d"/>
+  <path d="M232 260 Q230 252 205 253 L205 262 Z" fill="#14151d"/>
+
+  <!-- Corps -->
+  <path d="M160 140 Q200 130 240 140 L235 215 Q200 222 165 215 Z" fill="#262a3a"/>
+  <!-- Ceinture -->
+  <rect x="158" y="185" width="84" height="14" fill="#b33028"/>
+  <rect x="195" y="185" width="10" height="14" fill="#8a1f19"/>
+  <!-- Noeud de ceinture -->
+  <path d="M205 199 L218 225 L210 226 L213 235 L198 220 Z" fill="#b33028"/>
+
+  <!-- Bras gauche (tient le katana au fourreau) -->
+  <path d="M162 145 Q140 170 135 200 L150 205 Q158 180 172 160 Z" fill="#262a3a"/>
+  <!-- Bras droit levé avec shuriken -->
+  <path d="M238 145 Q268 130 290 100 L280 88 Q255 110 228 135 Z" fill="#262a3a"/>
+
+  <!-- Main droite -->
+  <circle cx="283" cy="92" r="9" fill="#e8c9a6"/>
+  <!-- Main gauche -->
+  <circle cx="140" cy="204" r="9" fill="#e8c9a6"/>
+
+  <!-- Fourreau du katana dans le dos/cote -->
+  <g transform="rotate(-20 150 180)">
+    <rect x="90" y="172" width="110" height="8" rx="3" fill="#14151d"/>
+    <rect x="88" y="170" width="10" height="12" fill="#b33028"/>
+    <rect x="195" y="168" width="6" height="16" fill="#8a7248"/>
+  </g>
+
+  <!-- Tête (capuche) -->
+  <ellipse cx="200" cy="110" rx="38" ry="42" fill="#262a3a"/>
+  <!-- Masque : bande des yeux -->
+  <rect x="163" y="100" width="74" height="20" fill="#1a1b25"/>
+  <!-- Yeux -->
+  <ellipse cx="186" cy="110" rx="6" ry="4" fill="#f7f3ec"/>
+  <ellipse cx="214" cy="110" rx="6" ry="4" fill="#f7f3ec"/>
+  <circle cx="187" cy="111" r="2.2" fill="#1a1a1a"/>
+  <circle cx="215" cy="111" r="2.2" fill="#1a1a1a"/>
+  <!-- Sourcils froncés -->
+  <path d="M178 100 L194 104" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+  <path d="M222 104 L206 100" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Bandeau (hachimaki) qui flotte -->
+  <path d="M160 92 L240 92 L240 100 L160 100 Z" fill="#b33028"/>
+  <path d="M240 92 Q265 88 280 70 L278 82 Q262 96 240 100 Z" fill="#b33028"/>
+  <circle cx="200" cy="96" r="4" fill="#f7f3ec"/>
+  <circle cx="200" cy="96" r="2" fill="#b33028"/>
+
+  <!-- Shuriken dans la main droite -->
+  <g transform="translate(283 82) rotate(20)">
+    <path d="M0 -14 L4 -4 L14 0 L4 4 L0 14 L-4 4 L-14 0 L-4 -4 Z" fill="#8a8f9c" stroke="#14151d" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="2" fill="#14151d"/>
+  </g>
+
+  <!-- Petites étoiles dans le ciel -->
+  <g fill="#f3e9c4">
+    <circle cx="50" cy="40" r="1.5"/>
+    <circle cx="90" cy="70" r="1.2"/>
+    <circle cx="130" cy="45" r="1.5"/>
+    <circle cx="370" cy="130" r="1.2"/>
+    <circle cx="30" cy="120" r="1.5"/>
+  </g>
+</svg>

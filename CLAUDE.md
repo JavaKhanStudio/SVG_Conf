@@ -2,6 +2,20 @@
 
 This project is a tool for live-previewing SVGs with editable variables. When asked to add, modify, or remove tweakable values in an SVG, follow the conventions below.
 
+## ⚠️ When the user asks you to make / design / sketch an SVG from scratch
+
+There is a dedicated skill for this: **`svg-from-scratch`**. Follow its 3 hard rules — they apply whether or not you explicitly invoke the skill:
+
+1. **Write to `studio-work/<base>.svg`, and only there.** Never `images/`, `sources/`, `gallery/`, or the repo root on the first draft. Those are promotion destinations that come AFTER the user approves the final version via a Save in Studio. Writing the v1 directly to `images/elements/mouton.svg` (for example) is wrong — it bypasses the Studio iteration loop entirely.
+2. **After writing, reply with the Studio handoff.** Include the exact URL `http://localhost:5100/studio.html`, tell the user to paste `./studio-work/<base>.svg` in the path field, click *Charger*, drag what's off, click *Save*. Saying "visible in the preview panel" is not enough — the user needs the Studio URL and load instructions.
+3. **Stop and wait.** After handoff, do NOT iterate autonomously. The user's Save produces `<base>_V<n>.svg`; only then read it and write the next version.
+
+**DO NOT confuse the harness preview with Studio.** When Claude Code's UI shows a "Launch preview panel" or a side pane rendering a file you just wrote, that is the *harness* showing a file preview. It is NOT Studio. Studio is a separate browser page served at `http://localhost:5100/studio.html` that has a 3-pane editor with an Inspector, Bezier handle dragging, and `_Vn` versioned save — none of that is in the harness preview. Saying "visible in the preview panel" and stopping there skips the whole point of this workflow. Always explicitly direct the user to the Studio URL with the load instructions.
+
+If the user provides a source photo, use `svg-from-photo` instead, not this flow.
+
+Full workflow is in `.claude/skills/svg-from-scratch/SKILL.md` — read it when you invoke the skill.
+
 ## The core idea
 
 Tweakable values live as **CSS custom properties** in a `:root { }` rule inside a `<style>` element that is a **direct child of the root `<svg>`**. The style block should be the **first child element** of the SVG so it's the first thing a human reader sees when opening the file.

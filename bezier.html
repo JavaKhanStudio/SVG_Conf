@@ -14,6 +14,24 @@
         .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; }
         .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
         .bezier-command { font-family: monospace; background: var(--code-bg); color: var(--code-text); padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.9rem; text-align: center; margin-top: 1rem; word-break: break-all; }
+        /* Path-command reference grid */
+        .cmd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; margin-top: 1.2rem; }
+        .cmd-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 0.75rem; text-align: center; box-shadow: var(--shadow); }
+        .cmd-card h4 { margin: 0 0 0.25rem; font-family: ui-monospace, monospace; font-size: 1.1rem; color: var(--primary-blue); }
+        .cmd-card .cmd-name { font-size: 0.78rem; color: var(--text-light); margin-bottom: 0.35rem; font-style: italic; }
+        .cmd-card svg { display: block; margin: 0 auto 0.35rem; background: #fafafa; border-radius: 4px; }
+        .cmd-card p { font-size: 0.82rem; color: var(--text-color); margin: 0; }
+        /* AI curve section */
+        .ai-curve-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 1.5rem; align-items: start; }
+        @media (max-width: 800px) { .ai-curve-layout { grid-template-columns: 1fr; } }
+        .ai-curve-svg-wrap { background: #fafafa; border-radius: var(--radius); padding: 1rem; display: flex; justify-content: center; }
+        .ai-curve-svg-wrap svg { width: 100%; max-width: 420px; height: auto; }
+        .ai-toggle-list { list-style: none; padding: 0; margin: 0; }
+        .ai-toggle-list li { display: flex; align-items: center; gap: 0.6rem; padding: 0.35rem 0.6rem; border-radius: 4px; font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.82rem; background: var(--code-bg); color: var(--code-text); margin-bottom: 0.3rem; }
+        .ai-toggle-list li input[type="checkbox"] { cursor: pointer; transform: scale(1.15); accent-color: var(--primary-blue); flex-shrink: 0; }
+        .ai-toggle-list li .swatch { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.2); }
+        .ai-toggle-list li label { flex: 1; cursor: pointer; overflow-x: auto; white-space: nowrap; }
+        .ai-toggle-list li.off { opacity: 0.45; }
     </style>
 </head>
 <body>
@@ -108,35 +126,194 @@
             </div>
         </div>
 
+        <!-- Path command reference -->
+        <div class="content-block">
+            <h3 data-i18n="bez_cmd_title">Les commandes d'un path</h3>
+            <p data-i18n-html="bez_cmd_desc">Toutes les lettres utilisables dans l'attribut <code>d</code> d'un <code>&lt;path&gt;</code>. En majuscule = coordonnees absolues, en minuscule = coordonnees relatives au point courant.</p>
+
+            <div class="cmd-grid">
+                <div class="cmd-card">
+                    <h4>M x,y</h4>
+                    <div class="cmd-name" data-i18n="bez_cmd_m_name">Move to</div>
+                    <svg viewBox="0 0 100 60" width="100" height="60" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="30" r="5" fill="#BA0101"/>
+                        <text x="58" y="34" font-size="9" fill="#666">pen lifts</text>
+                    </svg>
+                    <p data-i18n="bez_cmd_m_desc">Pose le stylo sans tracer.</p>
+                </div>
+                <div class="cmd-card">
+                    <h4>L x,y</h4>
+                    <div class="cmd-name" data-i18n="bez_cmd_l_name">Line to</div>
+                    <svg viewBox="0 0 100 60" width="100" height="60" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="20" y1="45" x2="80" y2="15" stroke="#0752CF" stroke-width="2"/>
+                        <circle cx="20" cy="45" r="3" fill="#BA0101"/>
+                        <circle cx="80" cy="15" r="3" fill="#BA0101"/>
+                    </svg>
+                    <p data-i18n="bez_cmd_l_desc">Trace une ligne droite.</p>
+                </div>
+                <div class="cmd-card">
+                    <h4>H x</h4>
+                    <div class="cmd-name" data-i18n="bez_cmd_h_name">Horizontal</div>
+                    <svg viewBox="0 0 100 60" width="100" height="60" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="15" y1="30" x2="85" y2="30" stroke="#0752CF" stroke-width="2"/>
+                        <circle cx="15" cy="30" r="3" fill="#BA0101"/>
+                        <circle cx="85" cy="30" r="3" fill="#BA0101"/>
+                    </svg>
+                    <p data-i18n="bez_cmd_h_desc">Ligne horizontale (y inchange).</p>
+                </div>
+                <div class="cmd-card">
+                    <h4>V y</h4>
+                    <div class="cmd-name" data-i18n="bez_cmd_v_name">Vertical</div>
+                    <svg viewBox="0 0 100 60" width="100" height="60" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="50" y1="8" x2="50" y2="52" stroke="#0752CF" stroke-width="2"/>
+                        <circle cx="50" cy="8" r="3" fill="#BA0101"/>
+                        <circle cx="50" cy="52" r="3" fill="#BA0101"/>
+                    </svg>
+                    <p data-i18n="bez_cmd_v_desc">Ligne verticale (x inchange).</p>
+                </div>
+                <div class="cmd-card">
+                    <h4>Q cpx,cpy x,y</h4>
+                    <div class="cmd-name" data-i18n="bez_cmd_q_name">Quadratic</div>
+                    <svg viewBox="0 0 100 60" width="100" height="60" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="15" y1="50" x2="50" y2="10" stroke="#ddd" stroke-dasharray="3"/>
+                        <line x1="50" y1="10" x2="85" y2="50" stroke="#ddd" stroke-dasharray="3"/>
+                        <path d="M15,50 Q50,10 85,50" fill="none" stroke="#0752CF" stroke-width="2"/>
+                        <circle cx="15" cy="50" r="3" fill="#BA0101"/>
+                        <circle cx="50" cy="10" r="3" fill="#f39c12"/>
+                        <circle cx="85" cy="50" r="3" fill="#BA0101"/>
+                    </svg>
+                    <p data-i18n="bez_cmd_q_desc">1 point de controle + fin.</p>
+                </div>
+                <div class="cmd-card">
+                    <h4>T x,y</h4>
+                    <div class="cmd-name" data-i18n="bez_cmd_t_name">Smooth quad</div>
+                    <svg viewBox="0 0 100 60" width="100" height="60" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10,50 Q25,10 50,30 T90,30" fill="none" stroke="#0752CF" stroke-width="2"/>
+                        <circle cx="10" cy="50" r="3" fill="#BA0101"/>
+                        <circle cx="50" cy="30" r="3" fill="#9b59b6"/>
+                        <circle cx="90" cy="30" r="3" fill="#BA0101"/>
+                    </svg>
+                    <p data-i18n="bez_cmd_t_desc">Chaine une Q (CP reflete).</p>
+                </div>
+                <div class="cmd-card">
+                    <h4>C c1 c2 x,y</h4>
+                    <div class="cmd-name" data-i18n="bez_cmd_c_name">Cubic</div>
+                    <svg viewBox="0 0 100 60" width="100" height="60" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="15" y1="50" x2="30" y2="10" stroke="#ddd" stroke-dasharray="3"/>
+                        <line x1="70" y1="10" x2="85" y2="50" stroke="#ddd" stroke-dasharray="3"/>
+                        <path d="M15,50 C30,10 70,10 85,50" fill="none" stroke="#0752CF" stroke-width="2"/>
+                        <circle cx="15" cy="50" r="3" fill="#BA0101"/>
+                        <circle cx="30" cy="10" r="3" fill="#2ecc71"/>
+                        <circle cx="70" cy="10" r="3" fill="#9b59b6"/>
+                        <circle cx="85" cy="50" r="3" fill="#BA0101"/>
+                    </svg>
+                    <p data-i18n="bez_cmd_c_desc">2 points de controle + fin.</p>
+                </div>
+                <div class="cmd-card">
+                    <h4>S c2 x,y</h4>
+                    <div class="cmd-name" data-i18n="bez_cmd_s_name">Smooth cubic</div>
+                    <svg viewBox="0 0 100 60" width="100" height="60" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10,50 C20,10 40,10 50,30 S80,50 90,30" fill="none" stroke="#0752CF" stroke-width="2"/>
+                        <circle cx="10" cy="50" r="3" fill="#BA0101"/>
+                        <circle cx="50" cy="30" r="3" fill="#9b59b6"/>
+                        <circle cx="90" cy="30" r="3" fill="#BA0101"/>
+                    </svg>
+                    <p data-i18n="bez_cmd_s_desc">Chaine une C (CP1 reflete).</p>
+                </div>
+                <div class="cmd-card">
+                    <h4>A rx ry ... x,y</h4>
+                    <div class="cmd-name" data-i18n="bez_cmd_a_name">Arc elliptique</div>
+                    <svg viewBox="0 0 100 60" width="100" height="60" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15,45 A35,25 0 0 1 85,45" fill="none" stroke="#0752CF" stroke-width="2"/>
+                        <circle cx="15" cy="45" r="3" fill="#BA0101"/>
+                        <circle cx="85" cy="45" r="3" fill="#BA0101"/>
+                    </svg>
+                    <p data-i18n="bez_cmd_a_desc">Arc d'ellipse (7 parametres).</p>
+                </div>
+                <div class="cmd-card">
+                    <h4>Z</h4>
+                    <div class="cmd-name" data-i18n="bez_cmd_z_name">Close path</div>
+                    <svg viewBox="0 0 100 60" width="100" height="60" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20,10 L80,10 L50,50 Z" fill="rgba(7,82,207,0.15)" stroke="#0752CF" stroke-width="2"/>
+                        <circle cx="20" cy="10" r="3" fill="#BA0101"/>
+                    </svg>
+                    <p data-i18n="bez_cmd_z_desc">Revient au dernier M (ferme).</p>
+                </div>
+            </div>
+            <p style="margin-top:1rem; font-size:0.9rem; color:var(--text-light); text-align:center;" data-i18n-html="bez_cmd_footer">Astuce : les minuscules <code>m l h v q t c s a z</code> font la meme chose en <em>relatif</em> au point courant.</p>
+        </div>
+
+        <!-- Multi-part draggable chain -->
+        <div class="content-block">
+            <h3 data-i18n="bez_chain_title">Chaine multi-segments (C + C)</h3>
+            <p data-i18n="bez_chain_desc">Deux cubiques chainees se partagent un point de jonction. Glisse n'importe quel point : depart, controles de la premiere courbe, jonction centrale, controles de la seconde courbe, arrivee. C'est exactement comme ca que l'IA construit une fleur entiere : segment par segment.</p>
+
+            <div class="legend">
+                <div class="legend-item"><div class="legend-dot" style="background:#BA0101;"></div> <span data-i18n="bezier_legend_start_end">Depart / Fin</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background:#e74c3c;"></div> <span data-i18n="bez_legend_join">Jonction (P1)</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background:#2ecc71;"></div> <span data-i18n="bezier_legend_cp1">Controle 1</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background:#9b59b6;"></div> <span data-i18n="bezier_legend_cp2">Controle 2</span></div>
+            </div>
+
+            <svg id="chain-svg" class="bezier-canvas" viewBox="0 0 600 300" width="100%" style="max-width:600px; max-height:300px;" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <pattern id="chgrid" width="30" height="30" patternUnits="userSpaceOnUse">
+                        <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#f0f0f0" stroke-width="0.5"/>
+                    </pattern>
+                </defs>
+                <rect width="600" height="300" fill="url(#chgrid)"/>
+                <!-- control lines for segment A -->
+                <line id="ch-l1a" x1="60" y1="240" x2="120" y2="60" stroke="#ddd" stroke-width="1.5" stroke-dasharray="6"/>
+                <line id="ch-l1b" x1="240" y1="60" x2="300" y2="150" stroke="#ddd" stroke-width="1.5" stroke-dasharray="6"/>
+                <!-- control lines for segment B -->
+                <line id="ch-l2a" x1="300" y1="150" x2="360" y2="240" stroke="#ddd" stroke-width="1.5" stroke-dasharray="6"/>
+                <line id="ch-l2b" x1="480" y1="240" x2="540" y2="60" stroke="#ddd" stroke-width="1.5" stroke-dasharray="6"/>
+                <!-- the chained curve -->
+                <path id="ch-curve" d="M60,240 C120,60 240,60 300,150 C360,240 480,240 540,60" fill="none" stroke="#0752CF" stroke-width="3"/>
+                <!-- points -->
+                <circle id="ch-p0"  cx="60"  cy="240" r="8"  fill="#BA0101" style="cursor:grab;"/>
+                <circle id="ch-c1a" cx="120" cy="60"  r="9"  fill="#2ecc71" stroke="#27ae60" stroke-width="2" style="cursor:grab;"/>
+                <circle id="ch-c1b" cx="240" cy="60"  r="9"  fill="#9b59b6" stroke="#8e44ad" stroke-width="2" style="cursor:grab;"/>
+                <circle id="ch-p1"  cx="300" cy="150" r="9"  fill="#e74c3c" stroke="#c0392b" stroke-width="2" style="cursor:grab;"/>
+                <circle id="ch-c2a" cx="360" cy="240" r="9"  fill="#2ecc71" stroke="#27ae60" stroke-width="2" style="cursor:grab;"/>
+                <circle id="ch-c2b" cx="480" cy="240" r="9"  fill="#9b59b6" stroke="#8e44ad" stroke-width="2" style="cursor:grab;"/>
+                <circle id="ch-p2"  cx="540" cy="60"  r="8"  fill="#BA0101" style="cursor:grab;"/>
+            </svg>
+
+            <div class="bezier-command" id="chain-command">
+                <span data-i18n="bez_command">Commande SVG :</span> M60,240 C120,60 240,60 300,150 C360,240 480,240 540,60
+            </div>
+        </div>
+
         <!-- Real LLM-generated path -->
         <div class="content-block" style="border-left: 4px solid #9b59b6; background: linear-gradient(135deg, rgba(155, 89, 182, 0.04), rgba(7, 82, 207, 0.04));">
             <h3 data-i18n="bez_ai_title"><i class="fa-solid fa-robot" style="color:#9b59b6; margin-right:0.5rem;"></i>Une courbe ecrite par une IA</h3>
-            <p data-i18n-html="bez_ai_desc">Voici la fleur en cloche d'une heather, dessinee par Claude. Toute la corolle est un seul <code>&lt;path&gt;</code> compose de <strong>commandes Q (quadratiques)</strong> chainees, exactement ce que tu as appris a manipuler plus haut.</p>
+            <p data-i18n-html="bez_ai_desc">Voici la fleur en cloche d'une heather, dessinee par Claude. Chaque ligne SVG ci-dessous est un element de l'image. Decoche une case pour voir ce qui disparait : la tige, la corolle, les nervures ou les etamines.</p>
 
-            <div class="split-layout" style="margin-top:1.5rem;">
-                <div class="svg-display" style="background:#fafafa;">
-                    <svg viewBox="0 0 100 100" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M50 80 Q50 70 50 60" fill="none" stroke="#7A8C38" stroke-width="1.5"/>
-                        <path d="M50 60 Q55 60 58 55 Q60 50 58 45 Q55 40 50 40 Q45 40 42 45 Q40 50 42 55 Q45 60 50 60"
+            <div class="ai-curve-layout" style="margin-top:1.5rem;">
+                <div class="ai-curve-svg-wrap">
+                    <svg id="ai-curve" viewBox="30 30 40 60" xmlns="http://www.w3.org/2000/svg">
+                        <path data-ai-part="stem" d="M50 80 Q50 70 50 60" fill="none" stroke="#7A8C38" stroke-width="1.5"/>
+                        <path data-ai-part="corolla" d="M50 60 Q55 60 58 55 Q60 50 58 45 Q55 40 50 40 Q45 40 42 45 Q40 50 42 55 Q45 60 50 60"
                               fill="#E6A5B9" stroke="#D4879C" stroke-width="0.8"/>
-                        <path d="M50 60 Q50 55 50 40" fill="none" stroke="#D4879C" stroke-width="0.3" opacity="0.7"/>
-                        <path d="M55 58 Q55 50 55 42" fill="none" stroke="#D4879C" stroke-width="0.3" opacity="0.7"/>
-                        <path d="M45 58 Q45 50 45 42" fill="none" stroke="#D4879C" stroke-width="0.3" opacity="0.7"/>
-                        <circle cx="50" cy="45" r="0.8" fill="#FFD700"/>
-                        <circle cx="48" cy="47" r="0.6" fill="#FFD700"/>
-                        <circle cx="52" cy="47" r="0.6" fill="#FFD700"/>
+                        <path data-ai-part="vein-center" d="M50 60 Q50 55 50 40" fill="none" stroke="#D4879C" stroke-width="0.3" opacity="0.85"/>
+                        <path data-ai-part="vein-right" d="M55 58 Q55 50 55 42" fill="none" stroke="#D4879C" stroke-width="0.3" opacity="0.85"/>
+                        <path data-ai-part="vein-left" d="M45 58 Q45 50 45 42" fill="none" stroke="#D4879C" stroke-width="0.3" opacity="0.85"/>
+                        <circle data-ai-part="stamen-c" cx="50" cy="45" r="0.8" fill="#FFD700"/>
+                        <circle data-ai-part="stamen-l" cx="48" cy="47" r="0.6" fill="#FFD700"/>
+                        <circle data-ai-part="stamen-r" cx="52" cy="47" r="0.6" fill="#FFD700"/>
                     </svg>
                 </div>
-                <div class="code-block">
-                    <span class="code-label">d</span>
-                    <code><span class="tag">M</span> 50 60
-<span class="tag">Q</span> 55 60 58 55
-<span class="tag">Q</span> 60 50 58 45
-<span class="tag">Q</span> 55 40 50 40
-<span class="tag">Q</span> 45 40 42 45
-<span class="tag">Q</span> 40 50 42 55
-<span class="tag">Q</span> 45 60 50 60</code>
-                </div>
+                <ul class="ai-toggle-list" id="ai-toggle-list">
+                    <li><input type="checkbox" id="ai-tog-stem" checked data-ai-part="stem"><span class="swatch" style="background:#7A8C38"></span><label for="ai-tog-stem"><span data-i18n="bez_ai_stem">Tige :</span> &lt;path d="M50 80 Q50 70 50 60" /&gt;</label></li>
+                    <li><input type="checkbox" id="ai-tog-corolla" checked data-ai-part="corolla"><span class="swatch" style="background:#E6A5B9"></span><label for="ai-tog-corolla"><span data-i18n="bez_ai_corolla">Corolle :</span> &lt;path d="M50 60 Q… Q…" /&gt; (6 Q)</label></li>
+                    <li><input type="checkbox" id="ai-tog-vein-center" checked data-ai-part="vein-center"><span class="swatch" style="background:#D4879C"></span><label for="ai-tog-vein-center"><span data-i18n="bez_ai_vein_c">Nervure centrale :</span> M50 60 Q50 55 50 40</label></li>
+                    <li><input type="checkbox" id="ai-tog-vein-right" checked data-ai-part="vein-right"><span class="swatch" style="background:#D4879C"></span><label for="ai-tog-vein-right"><span data-i18n="bez_ai_vein_r">Nervure droite :</span> M55 58 Q55 50 55 42</label></li>
+                    <li><input type="checkbox" id="ai-tog-vein-left" checked data-ai-part="vein-left"><span class="swatch" style="background:#D4879C"></span><label for="ai-tog-vein-left"><span data-i18n="bez_ai_vein_l">Nervure gauche :</span> M45 58 Q45 50 45 42</label></li>
+                    <li><input type="checkbox" id="ai-tog-stamen-c" checked data-ai-part="stamen-c"><span class="swatch" style="background:#FFD700"></span><label for="ai-tog-stamen-c"><span data-i18n="bez_ai_stamen_c">Etamine centrale :</span> &lt;circle cx="50" cy="45" r="0.8" /&gt;</label></li>
+                    <li><input type="checkbox" id="ai-tog-stamen-l" checked data-ai-part="stamen-l"><span class="swatch" style="background:#FFD700"></span><label for="ai-tog-stamen-l"><span data-i18n="bez_ai_stamen_l">Etamine gauche :</span> &lt;circle cx="48" cy="47" r="0.6" /&gt;</label></li>
+                    <li><input type="checkbox" id="ai-tog-stamen-r" checked data-ai-part="stamen-r"><span class="swatch" style="background:#FFD700"></span><label for="ai-tog-stamen-r"><span data-i18n="bez_ai_stamen_r">Etamine droite :</span> &lt;circle cx="52" cy="47" r="0.6" /&gt;</label></li>
+                </ul>
             </div>
 
             <p data-i18n-html="bez_ai_takeaway" style="margin-top:1rem;">Chaque <code>Q</code> = un point de controle + un point d'arrivee. Sept commandes, une fleur. C'est ca qui rend les SVGs si interessants pour l'IA : <strong>sortie courte, structure claire, modifiable a la main</strong>. Tu pourrais ouvrir ce fichier et changer une couleur, deplacer un petale, ou ajouter une etamine, sans regenerer quoi que ce soit. Voir d'autres exemples dans la <a class="inline-link" href="gallery.html">galerie</a>.</p>
@@ -145,7 +322,7 @@
         <!-- Cheatsheet reference -->
         <div class="content-block" style="text-align:center;">
             <h3 data-i18n="anat_cheatsheet">Aide-memoire Bezier</h3>
-            <div class="svg-display" style="max-height: 500px; overflow-y: auto;">
+            <div class="svg-display">
                 <img src="images/cheatSheets/cs_bezier.svg" alt="Bezier Cheat Sheet" style="width:100%; max-width:700px;">
             </div>
         </div>
@@ -262,6 +439,43 @@
         }
 
         makeDraggable(document.getElementById('cubic-svg'), [cStart, cCp1, cCp2, cEnd], updateCubic);
+
+        // ===== Chained Cubic (multi-part) =====
+        const chP0 =  { el: document.getElementById('ch-p0'),  x: 60,  y: 240 };
+        const chC1a = { el: document.getElementById('ch-c1a'), x: 120, y: 60 };
+        const chC1b = { el: document.getElementById('ch-c1b'), x: 240, y: 60 };
+        const chP1 =  { el: document.getElementById('ch-p1'),  x: 300, y: 150 };
+        const chC2a = { el: document.getElementById('ch-c2a'), x: 360, y: 240 };
+        const chC2b = { el: document.getElementById('ch-c2b'), x: 480, y: 240 };
+        const chP2 =  { el: document.getElementById('ch-p2'),  x: 540, y: 60 };
+
+        function updateChain() {
+            const d = `M${chP0.x},${chP0.y} C${chC1a.x},${chC1a.y} ${chC1b.x},${chC1b.y} ${chP1.x},${chP1.y} C${chC2a.x},${chC2a.y} ${chC2b.x},${chC2b.y} ${chP2.x},${chP2.y}`;
+            document.getElementById('ch-curve').setAttribute('d', d);
+            const setLine = (id, x1, y1, x2, y2) => {
+                const el = document.getElementById(id);
+                el.setAttribute('x1', x1); el.setAttribute('y1', y1);
+                el.setAttribute('x2', x2); el.setAttribute('y2', y2);
+            };
+            setLine('ch-l1a', chP0.x, chP0.y, chC1a.x, chC1a.y);
+            setLine('ch-l1b', chC1b.x, chC1b.y, chP1.x, chP1.y);
+            setLine('ch-l2a', chP1.x, chP1.y, chC2a.x, chC2a.y);
+            setLine('ch-l2b', chC2b.x, chC2b.y, chP2.x, chP2.y);
+            document.getElementById('chain-command').innerHTML =
+                `<span>Commande SVG :</span> M${chP0.x},${chP0.y} C${chC1a.x},${chC1a.y} ${chC1b.x},${chC1b.y} ${chP1.x},${chP1.y} C${chC2a.x},${chC2a.y} ${chC2b.x},${chC2b.y} ${chP2.x},${chP2.y}`;
+        }
+
+        makeDraggable(document.getElementById('chain-svg'), [chP0, chC1a, chC1b, chP1, chC2a, chC2b, chP2], updateChain);
+
+        // ===== AI flower per-element toggles =====
+        document.querySelectorAll('#ai-toggle-list input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', () => {
+                const part = cb.dataset.aiPart;
+                const target = document.querySelector(`#ai-curve [data-ai-part="${part}"]`);
+                if (target) target.style.display = cb.checked ? '' : 'none';
+                cb.closest('li').classList.toggle('off', !cb.checked);
+            });
+        });
     </script>
 </body>
 </html>

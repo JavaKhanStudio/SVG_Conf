@@ -46,6 +46,11 @@
         .feature-icon.red {
             color: var(--primary-red);
         }
+
+        /* Live interactive shape (merged from live-demo.html) */
+        .live-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        @media (max-width: 900px) { .live-grid { grid-template-columns: 1fr; } }
+        #live-svg-container { min-height: 350px; display: flex; align-items: center; justify-content: center; background: repeating-conic-gradient(#f0f0f0 0% 25%, #fff 0% 50%) 50% / 20px 20px; border-radius: var(--radius); border: 1px solid var(--border-color); }
     </style>
 </head>
 
@@ -117,6 +122,73 @@
 [#0752CF] [#ffffff] [#0752CF] [#fff]
 [#0752CF] [#0752CF] [#0752CF] [#fff]
 [#ffffff] [#ffffff] [#ffffff] [#fff]</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive shape (merged from live-demo.html) -->
+        <div class="content-block">
+            <h3 data-i18n="live_shape_title">Forme interactive</h3>
+            <p data-i18n="live_shape_desc">Utilisez les controles ci-dessous pour modifier les proprietes de cette forme SVG en temps reel.</p>
+
+            <div class="live-grid">
+                <div>
+                    <div class="controls" style="flex-direction:column;">
+                        <div class="control-group" style="flex-direction:row; align-items:center; gap:1rem;">
+                            <label data-i18n="live_shape">Forme</label>
+                            <select id="ctrl-shape" onchange="updateLiveShape()">
+                                <option value="circle" data-i18n="live_circle">Cercle</option>
+                                <option value="rect" data-i18n="live_rect">Rectangle</option>
+                                <option value="polygon" data-i18n="live_polygon">Polygone</option>
+                                <option value="star" data-i18n="live_star">Etoile</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label><span data-i18n="live_fill">Remplissage</span></label>
+                            <div style="display:flex; align-items:center; gap:0.5rem;">
+                                <input type="color" id="ctrl-fill" value="#0752CF" oninput="updateLiveShape()">
+                                <span class="control-value" id="fill-val">#0752CF</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label><span data-i18n="live_stroke">Contour</span></label>
+                            <div style="display:flex; align-items:center; gap:0.5rem;">
+                                <input type="color" id="ctrl-stroke" value="#BA0101" oninput="updateLiveShape()">
+                                <span class="control-value" id="stroke-val">#BA0101</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label><span data-i18n="live_strokew">Epaisseur</span>: <span class="control-value" id="strokew-val">3</span></label>
+                            <input type="range" id="ctrl-strokew" min="0" max="15" value="3" oninput="updateLiveShape()">
+                        </div>
+                        <div class="control-group">
+                            <label><span data-i18n="live_opacity">Opacite</span>: <span class="control-value" id="opacity-val">1</span></label>
+                            <input type="range" id="ctrl-opacity" min="0" max="100" value="100" oninput="updateLiveShape()">
+                        </div>
+                        <div class="control-group">
+                            <label><span data-i18n="live_rotation">Rotation</span>: <span class="control-value" id="rotation-val">0</span>&deg;</label>
+                            <input type="range" id="ctrl-rotation" min="0" max="360" value="0" oninput="updateLiveShape()">
+                        </div>
+                        <div class="control-group">
+                            <label><span data-i18n="live_scale">Echelle</span>: <span class="control-value" id="scale-val">1</span></label>
+                            <input type="range" id="ctrl-scale" min="20" max="200" value="100" oninput="updateLiveShape()">
+                        </div>
+                        <div class="control-group" id="radius-group">
+                            <label><span data-i18n="live_radius">Rayon</span>: <span class="control-value" id="radius-val">60</span></label>
+                            <input type="range" id="ctrl-radius" min="10" max="90" value="60" oninput="updateLiveShape()">
+                        </div>
+                        <div class="control-group" id="sides-group" style="display:none;">
+                            <label><span data-i18n="live_sides">Cotes</span>: <span class="control-value" id="sides-val">5</span></label>
+                            <input type="range" id="ctrl-sides" min="3" max="12" value="5" oninput="updateLiveShape()">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div id="live-svg-container">
+                        <svg id="live-svg" viewBox="0 0 200 200" width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="100" cy="100" r="60" fill="#0752CF" stroke="#BA0101" stroke-width="3"/>
+                        </svg>
+                    </div>
                 </div>
             </div>
         </div>
@@ -238,6 +310,76 @@
         }
 
         drawRaster();
+
+        // ----- Interactive shape (merged from live-demo.html) -----
+        function polygonPoints(cx, cy, r, sides) {
+            const pts = [];
+            for (let i = 0; i < sides; i++) {
+                const angle = (i * 2 * Math.PI / sides) - Math.PI / 2;
+                pts.push(`${(cx + r * Math.cos(angle)).toFixed(1)},${(cy + r * Math.sin(angle)).toFixed(1)}`);
+            }
+            return pts.join(' ');
+        }
+
+        function starPoints(cx, cy, outerR, innerR, points) {
+            const pts = [];
+            for (let i = 0; i < points * 2; i++) {
+                const r = i % 2 === 0 ? outerR : innerR;
+                const angle = (i * Math.PI / points) - Math.PI / 2;
+                pts.push(`${(cx + r * Math.cos(angle)).toFixed(1)},${(cy + r * Math.sin(angle)).toFixed(1)}`);
+            }
+            return pts.join(' ');
+        }
+
+        function updateLiveShape() {
+            const shape = document.getElementById('ctrl-shape').value;
+            const fill = document.getElementById('ctrl-fill').value;
+            const stroke = document.getElementById('ctrl-stroke').value;
+            const strokew = document.getElementById('ctrl-strokew').value;
+            const opacity = (document.getElementById('ctrl-opacity').value / 100).toFixed(2);
+            const rotation = document.getElementById('ctrl-rotation').value;
+            const scale = (document.getElementById('ctrl-scale').value / 100).toFixed(2);
+            const radius = document.getElementById('ctrl-radius').value;
+            const sides = document.getElementById('ctrl-sides').value;
+
+            document.getElementById('fill-val').textContent = fill;
+            document.getElementById('stroke-val').textContent = stroke;
+            document.getElementById('strokew-val').textContent = strokew;
+            document.getElementById('opacity-val').textContent = opacity;
+            document.getElementById('rotation-val').textContent = rotation;
+            document.getElementById('scale-val').textContent = scale;
+            document.getElementById('radius-val').textContent = radius;
+            document.getElementById('sides-val').textContent = sides;
+
+            document.getElementById('radius-group').style.display = (shape === 'circle' || shape === 'star') ? '' : 'none';
+            document.getElementById('sides-group').style.display = (shape === 'polygon' || shape === 'star') ? '' : 'none';
+
+            const svg = document.getElementById('live-svg');
+            let shapeEl = '';
+            const transformAttr = `transform="rotate(${rotation} 100 100) scale(${scale})"`;
+            const styleAttrs = `fill="${fill}" stroke="${stroke}" stroke-width="${strokew}" opacity="${opacity}"`;
+
+            switch(shape) {
+                case 'circle':
+                    shapeEl = `<circle cx="100" cy="100" r="${radius}" ${styleAttrs} ${transformAttr}/>`;
+                    break;
+                case 'rect':
+                    const hw = 60, hh = 45;
+                    shapeEl = `<rect x="${100-hw}" y="${100-hh}" width="${hw*2}" height="${hh*2}" rx="5" ${styleAttrs} ${transformAttr}/>`;
+                    break;
+                case 'polygon':
+                    const pts = polygonPoints(100, 100, parseInt(radius), parseInt(sides));
+                    shapeEl = `<polygon points="${pts}" ${styleAttrs} ${transformAttr}/>`;
+                    break;
+                case 'star':
+                    const spts = starPoints(100, 100, parseInt(radius), parseInt(radius)*0.45, parseInt(sides));
+                    shapeEl = `<polygon points="${spts}" ${styleAttrs} ${transformAttr}/>`;
+                    break;
+            }
+            svg.innerHTML = shapeEl;
+        }
+
+        updateLiveShape();
     </script>
 </body>
 

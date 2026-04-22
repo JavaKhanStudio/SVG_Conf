@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <style>
+    :root {
+      --bg-color: #87744a;
+      --fur-color: #000000;
+      --fur-shadow: #8a7456;          /* @ws mix=fur-color:-0.45 */
+      --ear-inner: #e8a5a5;
+      --eye-color: #ff0000;
+      --nose-color: #c47b7b;
+      --stroke: #b3a18f;
+    }
+    .outline { stroke: var(--stroke); stroke-width: 1.5; stroke-linejoin: round; stroke-linecap: round; }
+    .fur     { fill: var(--fur-color); }
+    .shadow  { fill: var(--fur-shadow); }
+    .ear-in  { fill: var(--ear-inner); }
+    .eye     { fill: var(--eye-color); }
+    .nose    { fill: var(--nose-color); }
+  </style>
+
+  <rect width="200" height="200" fill="#8f6200" rx="12"/>
+
+  <g id="rabbit">
+    <!-- Ears: outer fur + inner pink. Symmetric around x=100. -->
+    <g id="ear-left">
+      <ellipse class="fur outline" cx="82" cy="52" rx="11" ry="32"/>
+      <ellipse class="ear-in" cx="82" cy="56" rx="5" ry="22"/>
+    </g>
+    <g id="ear-right">
+      <ellipse class="fur outline" cx="118" cy="52" rx="11" ry="32"/>
+      <ellipse class="ear-in" cx="118" cy="56" rx="5" ry="22"/>
+    </g>
+
+    <!-- Body: round haunches, sitting pose. -->
+    <ellipse id="body" class="fur outline" cx="100" cy="142" rx="48" ry="38"/>
+    <!-- Belly highlight / shadow under head -->
+    <ellipse id="chest-shadow" class="shadow" cx="100" cy="118" rx="28" ry="10" opacity="0.35"/>
+
+    <!-- Front paws -->
+    <ellipse id="paw-left" class="fur outline" cx="80" cy="172" rx="12" ry="8"/>
+    <ellipse id="paw-right" class="fur outline" cx="120" cy="172" rx="12" ry="8"/>
+
+    <!-- Head -->
+    <circle id="head" class="fur outline" cx="100" cy="100" r="34"/>
+
+    <!-- Muzzle -->
+    <ellipse id="muzzle" class="fur outline" cx="100" cy="113" rx="14" ry="9"/>
+
+    <!-- Eyes -->
+    <circle id="eye-left" class="eye" cx="87" cy="94" r="3.5"/>
+    <circle id="eye-right" class="eye" cx="113" cy="94" r="3.5"/>
+
+    <!-- Nose: small rounded triangle -->
+    <path id="nose" class="nose outline" d="M100 105 Q104 108 102 112 Q100 113 98 112 Q96 108 100 105 Z"/>
+
+    <!-- Mouth -->
+    <path id="mouth" class="outline" fill="none" d="M100 114 Q100 118 96 119 M100 114 Q100 118 104 119"/>
+  </g>
+
+  <!-- TODO v2: whiskers, tail peeking behind body, subtle cheek blush. v1 stays sparse to validate proportions first. -->
+</svg>

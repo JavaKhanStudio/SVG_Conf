@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <title>Mouton</title>
+
+  <!-- Prairie -->
+  <rect x="0" y="230" width="400" height="70" fill="#8dc26f"/>
+
+  <!-- Pattes -->
+  <rect x="145" y="195" width="14" height="55" rx="4" fill="#3b3a39"/>
+  <rect x="180" y="195" width="14" height="55" rx="4" fill="#3b3a39"/>
+  <rect x="225" y="195" width="14" height="55" rx="4" fill="#3b3a39"/>
+  <rect x="260" y="195" width="14" height="55" rx="4" fill="#3b3a39"/>
+
+  <!-- Corps : une grappe de cercles façon nuage de laine -->
+  <g fill="#f7f3ec" stroke="#d9d2c5" stroke-width="2">
+    <circle cx="170" cy="170" r="42"/>
+    <circle cx="215" cy="160" r="50"/>
+    <circle cx="260" cy="170" r="42"/>
+    <circle cx="190" cy="140" r="35"/>
+    <circle cx="240" cy="135" r="38"/>
+    <circle cx="215" cy="185" r="40"/>
+  </g>
+
+  <!-- Tête -->
+  <g>
+    <!-- Oreille gauche -->
+    <ellipse cx="108" cy="148" rx="10" ry="16" fill="#3b3a39" transform="rotate(-25 108 148)"/>
+    <!-- Visage -->
+    <ellipse cx="125" cy="165" rx="28" ry="34" fill="#3b3a39"/>
+    <!-- Toupet de laine sur le front -->
+    <circle cx="118" cy="140" r="10" fill="#f7f3ec" stroke="#d9d2c5" stroke-width="2"/>
+    <!-- Oeil -->
+    <circle cx="115" cy="158" r="4" fill="#f7f3ec"/>
+    <circle cx="116" cy="159" r="2" fill="#1a1a1a"/>
+    <!-- Museau -->
+    <ellipse cx="108" cy="178" rx="9" ry="6" fill="#f7f3ec"/>
+    <circle cx="104" cy="176" r="1.5" fill="#1a1a1a"/>
+    <!-- Sourire -->
+    <path d="M103 182 Q108 186 113 182" stroke="#1a1a1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- Queue -->
+  <circle cx="305" cy="160" r="14" fill="#f7f3ec" stroke="#d9d2c5" stroke-width="2"/>
+
+  <!-- Petit nuage, parce que c'est plus joli -->
+  <g fill="#ffffff" opacity="0.85">
+    <circle cx="60" cy="60" r="14"/>
+    <circle cx="78" cy="55" r="18"/>
+    <circle cx="98" cy="62" r="14"/>
+  </g>
+</svg>

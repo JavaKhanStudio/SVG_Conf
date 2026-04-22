@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Room - Formation SVG</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="workshop-viewer/viewer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" href="images/LogoHeaderSBP.png" type="image/png">
+    <style>
+        .skill-pipeline {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1rem;
+            margin: 1.25rem 0 0.5rem;
+        }
+        .skill-step {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 0.9rem 1rem 1rem;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        .skill-step-num {
+            position: absolute;
+            top: -12px; left: 0.9rem;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #9b59b6, var(--primary-blue));
+            color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; font-weight: 700;
+            box-shadow: var(--shadow);
+        }
+        .skill-step h5 {
+            color: #9b59b6;
+            font-size: 0.98rem;
+            margin: 0.4rem 0 0.5rem 2rem;
+        }
+        .skill-step p {
+            font-size: 0.88rem;
+            color: var(--text-color);
+            margin: 0;
+            line-height: 1.5;
+        }
+        .skill-step code {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 0.05rem 0.3rem;
+            border-radius: 3px;
+            font-size: 0.82rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+        <div class="page-hero">
+            <h2 data-i18n="workshop_title">Black Room</h2>
+            <p data-i18n="workshop_subtitle">Choisissez une illustration et modifiez ses variables CSS en direct</p>
+        </div>
+
+        <div class="content-block">
+            <h3 data-i18n="workshop_how_title">Comment ca marche</h3>
+            <p data-i18n-html="workshop_how_desc">Chaque SVG de la galerie declare ses parametres dans une regle <code>:root</code>, et accole un commentaire <code>/* @ws ... */</code> qui dit a la Black Room comment construire le bon controle. C'est tout. Le fichier reste un SVG valide ouvrable dans n'importe quel navigateur.</p>
+            <div class="code-block" style="font-size: 0.8rem; margin: 0.75rem 0 1rem;">
+                <span class="code-label">CSS dans le SVG</span>
+                <code>:root {
+  <span class="attr">--bg-color</span>: <span class="val">#1a1a2e</span>;          <span class="comment">/* @ws color */</span>
+  <span class="attr">--shape-size</span>: <span class="val">50</span>;             <span class="comment">/* @ws number min=10 max=100 */</span>
+  <span class="attr">--accent</span>: <span class="val">#f09040</span>;
+  <span class="attr">--accent-shadow</span>: <span class="val">#7a4820</span>;     <span class="comment">/* @ws mix=accent:-0.55 */</span>
+}</code>
+            </div>
+            <p data-i18n-html="workshop_how_extra"><strong>Compare</strong> place le SVG et la photo source cote a cote, <strong>Telecharger</strong> recupere ton SVG avec tes modifications, et <strong>Voir le code source</strong> sous l'illustration ouvre le fichier brut dans un nouvel onglet.</p>
+
+            <div class="workshop-viewer">
+                <aside id="files-pane">
+                    <ul id="file-list"></ul>
+                </aside>
+                <main id="preview-pane">
+                    <div id="preview-host"></div>
+                    <a id="source-link" href="#" target="_blank" rel="noopener" hidden data-i18n="workshop_view_source">Voir le code source &rarr;</a>
+                </main>
+                <aside id="right-pane">
+                    <section id="controls-section">
+                        <div id="controls-header">
+                            <h2 data-i18n="workshop_controls">Controles</h2>
+                            <div class="header-buttons">
+                                <div class="view-toggle" role="group">
+                                    <button class="view-btn active" data-view="svg" data-i18n="workshop_view_svg">SVG</button>
+                                    <button class="view-btn" data-view="compare" data-i18n="workshop_view_compare">Comparer</button>
+                                    <button class="view-btn" data-view="ref" data-i18n="workshop_view_photo">Photo</button>
+                                </div>
+                                <button id="download-btn" data-i18n="workshop_download" title="Telecharger le SVG avec mes modifications">Telecharger</button>
+                                <button id="reset-btn" data-i18n="workshop_reset">Reinitialiser</button>
+                            </div>
+                        </div>
+                        <div id="controls"></div>
+                        <div id="empty-hint" data-i18n="workshop_empty" hidden>Ce SVG n'expose aucune variable.</div>
+                    </section>
+                </aside>
+            </div>
+        </div>
+
+        <!-- svg-from-photo skill pipeline -->
+        <div class="content-block" style="border-left: 4px solid #9b59b6; background: linear-gradient(135deg, rgba(155, 89, 182, 0.04), rgba(7, 82, 207, 0.04));">
+            <h3 data-i18n="br_skill_title"><i class="fa-solid fa-robot" style="color:#9b59b6; margin-right:0.5rem;"></i>Quand une IA utilise la Black Room</h3>
+            <p data-i18n-html="br_skill_intro">La Black Room expose un vrai pipeline pour qu'un agent IA transforme une photo de telephone en SVG parametrique. Tout est decrit dans <code>.claude/skills/svg-from-photo/SKILL.md</code> (~200 lignes) : l'agent recoit des outils via le CLI <code>svgw</code> (backend Python port 5174), boucle sur les mesures, et corrige region par region.</p>
+
+            <div class="skill-pipeline">
+                <div class="skill-step">
+                    <div class="skill-step-num">1</div>
+                    <h5 data-i18n="br_skill_s1_title">Preprocess</h5>
+                    <p data-i18n-html="br_skill_s1_desc"><code>svgw preprocess</code> ecrit 7 variantes (original, gray, otsu, adaptive, canny, bilateral, depth) dans <code>.workshop/&lt;svg&gt;.refs/</code>. Canny = outline, otsu = silhouette.</p>
+                </div>
+                <div class="skill-step">
+                    <div class="skill-step-num">2</div>
+                    <h5 data-i18n="br_skill_s2_title">Trace</h5>
+                    <p data-i18n-html="br_skill_s2_desc"><code>svgw trace</code> injecte un <code>&lt;g id="trace-ref"&gt;</code> cache dans le SVG cible. Le bouton "Trace" l'affiche en surcouche magenta.</p>
+                </div>
+                <div class="skill-step">
+                    <div class="skill-step-num">3</div>
+                    <h5 data-i18n="br_skill_s3_title">Decider : trace ou hand-draft</h5>
+                    <p data-i18n-html="br_skill_s3_desc"><strong>Line art / logos</strong> : <code>vtracer</code> direct en mode color, paths re-buckets par classe CSS. <strong>Photos avec profondeur</strong> : hand-draft parametrique par-dessus le trace en reference.</p>
+                </div>
+                <div class="skill-step">
+                    <div class="skill-step-num">4</div>
+                    <h5 data-i18n="br_skill_s4_title">Posterise (stylisation)</h5>
+                    <p data-i18n-html="br_skill_s4_desc">Photo vers illustration parametrique : boost saturation HSV x2.5 + k-means k=8 + vtracer. Puppy : 17900 &rarr; 279 paths, 20.7 Mo &rarr; 1.4 Mo, 8 regions nommees.</p>
+                </div>
+                <div class="skill-step">
+                    <div class="skill-step-num">5</div>
+                    <h5 data-i18n="br_skill_s5_title">Measure</h5>
+                    <p data-i18n-html="br_skill_s5_desc"><code>svgw measure</code> renvoie 3 scores : <strong>outline_iou</strong>, <strong>pixel_iou</strong>, <strong>edge_ssim</strong>. Passes optionnelles : <code>subject_bbox</code>, <code>per_region_density</code>, <code>symmetry</code>.</p>
+                </div>
+                <div class="skill-step">
+                    <div class="skill-step-num">6</div>
+                    <h5 data-i18n="br_skill_s6_title">Revise + echantillonner couleurs</h5>
+                    <p data-i18n-html="br_skill_s6_desc">Boucle sur la pire region, jusqu'a outline_iou &ge; 0.85 ou 5 passes. Puis <code>svgw colors</code> echantillonne une couleur par region nommee avec score de confiance.</p>
+                </div>
+                <div class="skill-step">
+                    <div class="skill-step-num">7</div>
+                    <h5 data-i18n="br_skill_s7_title">SVGO workshop-safe</h5>
+                    <p data-i18n-html="br_skill_s7_desc">Optimisation finale via <code>tools/svgo.config.mjs</code>. Reduction moyenne ~85% (stone 16 Mo &rarr; 2 Mo) avec drift metriques sous 0.01 IoU.</p>
+                </div>
+                <div class="skill-step">
+                    <div class="skill-step-num">8</div>
+                    <h5 data-i18n="br_skill_s8_title">Text overlay</h5>
+                    <p data-i18n-html="br_skill_s8_desc">Pour posters / logos : bucket les fills texte, auto-derive position/taille via bbox + cluster Y, puis injecte de vrais <code>&lt;text&gt;</code>. Le traced text se cache via <code>--traced-text: none</code>.</p>
+                </div>
+            </div>
+
+            <p data-i18n-html="br_skill_outro" style="margin-top:1rem;">Le pattern : <strong>le backend Python fournit les mesures ; l'agent est la boucle</strong>. L'interface ci-dessus est pour que l'humain regarde en direct et intervienne. Source complet : <a class="inline-link" href="https://github.com/JavaKhanStudio/SVG_Conf/blob/main/.claude/skills/svg-from-photo/SKILL.md" target="_blank" rel="noopener"><code>.claude/skills/svg-from-photo/SKILL.md</code></a>.</p>
+        </div>
+
+        <div class="content-block workshop-editor-cta">
+            <h3 data-i18n="workshop_editor_title">Envie de pousser plus loin ?</h3>
+            <p data-i18n="workshop_editor_desc">Cette page est une vitrine statique. Pour la Black Room complete &mdash; surveillance des fichiers, snapshots, import d'une photo de reference, metriques de ressemblance &mdash; clonez le depot et demarrez le serveur local :</p>
+            <div class="code-block" style="font-size: 0.85rem; margin: 0.75rem 0 1rem;">
+                <span class="code-label">Terminal</span>
+                <code>node server.js ./gallery</code>
+            </div>
+            <p><a class="inline-link" href="/blackroom/" data-i18n="workshop_editor_link">Ouvrir l'editeur interactif (Blackroom) &rarr;</a></p>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="js/main.js"></script>
+    <script type="module" src="workshop-viewer/viewer.js"></script>
+</body>
+</html>

@@ -394,6 +394,64 @@ main {
 .gallery-card .card-tag.bone { background: #e3f2fd; color: #1565c0; }
 .gallery-card .card-tag.ai { background: #f3e5f5; color: #7b1fa2; }
 .gallery-card .card-tag.cheatsheet { background: #e8f5e9; color: #2e7d32; }
+.gallery-card .card-tag.project { background: #fef3c7; color: #78350f; }
+.gallery-card .card-tag.element { background: #fff7e6; color: #9a3412; }
+
+/* ===== Act end-of-section buttons ===== */
+.act-btn {
+    display: inline-block;
+    padding: 0.65rem 1.4rem;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 600;
+    margin: 0.25rem;
+    border: none;
+    cursor: pointer;
+}
+.act-btn.forward {
+    background: linear-gradient(135deg, var(--primary-red), var(--primary-blue));
+    color: white;
+}
+.act-btn.back {
+    background: linear-gradient(135deg, var(--primary-blue), var(--primary-red));
+    color: white;
+}
+.act-btn.neutral {
+    background: var(--card-bg);
+    color: var(--primary-blue);
+    border: 1px solid var(--primary-blue);
+}
+
+/* ===== Lightbox (story images) ===== */
+.zoomable { cursor: zoom-in; transition: transform 0.15s ease; }
+.zoomable:hover { transform: scale(1.02); }
+.lightbox-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000; cursor: zoom-out;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+.lightbox-overlay.open { opacity: 1; pointer-events: auto; }
+.lightbox-overlay img {
+    max-width: 92vw; max-height: 92vh;
+    border-radius: 8px;
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
+    background: white;
+}
+.lightbox-close {
+    position: absolute; top: 18px; right: 24px;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: none;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    font-size: 1.5rem; line-height: 1;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+}
+.lightbox-close:hover { background: rgba(255, 255, 255, 0.3); }
 
 /* ===== Step-by-Step Progression ===== */
 .step-progression {

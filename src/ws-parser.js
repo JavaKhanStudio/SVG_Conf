@@ -84,7 +84,7 @@ export function inferType(val) {
   if (/^#([0-9a-f]{3,8})$/i.test(v)) return 'color';
   if (/^rgba?\(/i.test(v) || /^hsla?\(/i.test(v)) return 'color';
   if (NAMED_COLORS.has(v.toLowerCase())) return 'color';
-  if (/^-?\d+(\.\d+)?(px|deg|%|em|rem)?$/.test(v)) return 'number';
+  if (/^-?\d+(\.\d+)?(px|deg|%|em|rem|s|ms)?$/.test(v)) return 'number';
   if (v === 'true' || v === 'false') return 'boolean';
   return 'text';
 }
@@ -92,7 +92,7 @@ export function inferType(val) {
 // Split "42px" into {number: 42, unit: 'px'} so number controls can
 // preserve the unit when the user drags the slider.
 export function splitNumber(val) {
-  const m = /^(-?\d+(?:\.\d+)?)(px|deg|%|em|rem)?$/.exec(String(val).trim());
+  const m = /^(-?\d+(?:\.\d+)?)(px|deg|%|em|rem|ms|s)?$/.exec(String(val).trim());
   if (!m) return { number: Number(val) || 0, unit: '' };
   return { number: Number(m[1]), unit: m[2] || '' };
 }

@@ -92,7 +92,7 @@
         .card-anat-toggle {
             display: flex; align-items: center; gap: 0.5rem;
             margin-bottom: 0.6rem; font-size: 0.88rem;
-            color: var(--text-light);
+            color: #ffffff;
             justify-content: center;
         }
         .card-anat-toggle input { cursor: pointer; }
@@ -116,6 +116,8 @@
             text-decoration: none;
         }
         .anat-marker:hover { background: var(--primary-blue); }
+        .anat-marker-half { width: 32px; height: 26px; font-size: 11px; }
+        .card-num-half { font-size: 0.75rem; width: 38px !important; }
         .card-anat-cards {
             display: flex; flex-direction: column; gap: 1.25rem;
         }
@@ -162,6 +164,13 @@
         .card-zoom .demo.grid-2 {
             display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;
         }
+        .card-zoom .demo.grid-3 {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;
+            align-items: center; justify-items: center;
+        }
+        .card-zoom .demo.grid-3 svg {
+            width: 110px; max-height: 110px;
+        }
         .card-zoom .zoom-controls {
             display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem;
             align-items: center; margin-top: 0.75rem;
@@ -178,21 +187,49 @@
         /* Animated money shot: the stage stays put, only the card inside
            levitates so the dark backdrop frame doesn't move with it. */
         .card-animated-stage {
-            display: flex; justify-content: center;
+            display: flex; flex-direction: column; align-items: center;
             padding: 2rem 1rem;
-            background: radial-gradient(circle at center, #10102a 0%, #050510 100%);
+            background:
+                radial-gradient(circle at center, rgba(100, 155, 255, 0.22) 0%, rgba(100, 155, 255, 0.08) 30%, transparent 60%),
+                radial-gradient(circle at center, #10102a 0%, #050510 100%);
             border-radius: var(--radius);
             margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        /* Tamer glow pulsing behind the card (softer than the eye aura). */
+        .card-animated-stage::before {
+            content: "";
+            position: absolute; inset: 0;
+            background: radial-gradient(circle at center, rgba(100, 155, 255, 0.15), transparent 55%);
+            animation: stageGlow calc(7s / var(--anim-speed, 1)) ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes stageGlow {
+            0%, 100% { opacity: 0.55; transform: scale(1); }
+            50%      { opacity: 1.0;  transform: scale(1.1); }
         }
         .card-animated-stage object {
             display: block; width: 320px; height: auto;
             border-radius: 10px;
             filter: drop-shadow(0 20px 40px rgba(100,155,255,0.3));
-            animation: cardLevitate 6s ease-in-out infinite;
+            animation: cardLevitate calc(6s / var(--anim-speed, 1)) ease-in-out infinite;
+            position: relative; z-index: 1;
         }
         @keyframes cardLevitate {
             0%, 100% { transform: translateY(0); }
             50%      { transform: translateY(-12px); }
+        }
+        .card-anim-controls {
+            display: flex; align-items: center; gap: 0.75rem;
+            margin-top: 1rem; font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.85);
+            z-index: 2; position: relative;
+        }
+        .card-anim-controls input[type="range"] { width: 180px; }
+        .card-anim-controls .speed-val {
+            font-family: ui-monospace, monospace;
+            min-width: 3em; text-align: right;
         }
         .license-note {
             text-align: center; font-size: 0.82rem;
@@ -658,14 +695,13 @@
 
         <g fill="var(--eye-color)">
             <!-- Eye with gradient sclera -->
-            <ellipse cx="0" cy="0" rx="35" ry="24" fill="url(#sclera-gradient)" stroke="var(--edge)" stroke-width="2"
-                     filter="url(#glow-pulse)"/>
+            <ellipse cx="0" cy="0" rx="35" ry="24" fill="url(#sclera-gradient)" stroke="var(--edge)" stroke-width="2"/>
 
             <!-- Iris with gradient -->
-            <circle cx="0" cy="0" r="16" fill="url(#iris-gradient)" filter="url(#glow-pulse)"/>
+            <circle cx="0" cy="0" r="16" fill="url(#iris-gradient)"/>
             <circle cx="0" cy="0" r="16" fill="none" stroke="var(--edge)" stroke-width="1.5"/>
 
-            <g stroke="var(--eye-color)" fill="none" opacity="1" filter="url(#darken) url(#glow-pulse)">
+            <g stroke="var(--eye-color)" fill="none" opacity="1" filter="url(#darken)">
                 <circle cx="0" cy="0" r="10" stroke-width="2.5" stroke-dasharray="2,1"/>
                 <circle cx="0" cy="0" r="13" stroke-width="2.5" stroke-dasharray="1.5,1.5"/>
             </g>
@@ -712,7 +748,7 @@
         <!-- Anatomy -->
         <div class="content-block">
             <h3 data-i18n="story3_anat_title">Anatomie de la carte</h3>
-            <p data-i18n="story3_anat_desc">Six techniques SVG qui composent la carte. Chacune s'utilise independamment et se combine avec les autres, c'est ce qui fait la richesse du format.</p>
+            <p data-i18n="story3_anat_desc">Sept techniques SVG qui composent la carte (theme Matiere). Chacune controle une variable CSS distincte (sauf 5 et 5·b qui partagent <code>--pyramid-color</code>) : modifie la couleur dans une carte, seul l'element concerne change.</p>
 
             <div class="card-anat-layout">
                 <div class="card-anat-sticky">
@@ -721,21 +757,23 @@
                         <span data-i18n="story3_anat_toggle">Afficher les reperes</span>
                     </label>
                     <div class="card-anat-inner">
-                        <object id="card-anat-object" type="image/svg+xml" data="sources/card_back_Showcase.svg" aria-label="Card back reference"></object>
+                        <object id="card-anat-object" type="image/svg+xml" data="sources/card_back_Showcase_Matiere.svg" aria-label="Card back reference (Matiere theme)"></object>
                         <div class="anat-markers" id="anat-markers">
-                            <!-- Each marker anchors on the visual feature its technique controls. -->
-                            <!-- 1 CSS vars: upper inner border (demonstrates --pyramid-color + --bg-color at once) -->
-                            <a class="anat-marker" href="#zoom-1" style="left:50%; top:6%;" title="Variables CSS">1</a>
-                            <!-- 2 defs/use: the 18x rotated ray pattern around the pyramid -->
-                            <a class="anat-marker" href="#zoom-2" style="left:78%; top:55%;" title="defs / use">2</a>
-                            <!-- 3 Gradients: the iris + sclera radial stack -->
-                            <a class="anat-marker" href="#zoom-3" style="left:50%; top:52%;" title="Gradients">3</a>
-                            <!-- 4 Animated filters: the outer border glow-pulse -->
-                            <a class="anat-marker" href="#zoom-4" style="left:94%; top:30%;" title="Filtres animes">4</a>
-                            <!-- 5 Clip paths: top of the pyramid where bricks clip to the triangle -->
-                            <a class="anat-marker" href="#zoom-5" style="left:50%; top:40%;" title="Clip paths">5</a>
-                            <!-- 6 Symmetry: a mirrored corner ornament -->
-                            <a class="anat-marker" href="#zoom-6" style="left:14%; top:10%;" title="Symetrie">6</a>
+                            <!-- Each marker anchors on the visual feature its technique controls. Each concept owns a distinct CSS variable. -->
+                            <!-- 1 CSS vars: the iris, driven by --eye-color -->
+                            <a class="anat-marker" href="#zoom-1" style="left:44%; top:45%;" title="Variables CSS">1</a>
+                            <!-- 2 defs/use: corner ornament triangles, all placed via <use> -->
+                            <a class="anat-marker" href="#zoom-2" style="left:14%; top:10%;" title="defs / use">2</a>
+                            <!-- 3 Gradients: eye sclera/iris radial stack -->
+                            <a class="anat-marker" href="#zoom-3" style="left:62%; top:48%;" title="Gradients">3</a>
+                            <!-- 4 Animated filters: outer border glow-pulse (--frame-color) -->
+                            <a class="anat-marker" href="#zoom-4" style="left:92%; top:8%;" title="Filtres animes">4</a>
+                            <!-- 5 Clip paths: swapped with 6, now sits where rays are (right of pyramid) -->
+                            <a class="anat-marker" href="#zoom-5" style="left:78%; top:54%;" title="Clip paths">5</a>
+                            <!-- 5b 3D brick depth: bottom-left corner of the pyramid/triangle -->
+                            <a class="anat-marker anat-marker-half" href="#zoom-5b" style="left:22%; top:62%;" title="Effet 3D brique">5b</a>
+                            <!-- 6 Rays around pyramid (--ray-color): swapped with 5, now on pyramid -->
+                            <a class="anat-marker" href="#zoom-6" style="left:50%; top:68%;" title="Rayons">6</a>
                         </div>
                     </div>
                 </div>
@@ -761,26 +799,46 @@
                     </div>
 
                     <!-- 2. defs + use -->
-                    <div class="card-zoom" id="zoom-2" data-anat-var="--pyramid-color">
+                    <div class="card-zoom" id="zoom-2" data-anat-var="--decoration-color">
                         <div class="card-num">2</div>
                         <h5 data-i18n="story3_card2_title">&lt;defs&gt; et &lt;use&gt;</h5>
-                        <p data-i18n-html="story3_card2_desc">Une forme est definie une fois dans <code>&lt;defs&gt;</code> puis instanciee avec <code>&lt;use href="#id"&gt;</code> avec un transform different. La meme brique, rayon ou triangle est reutilise des dizaines de fois sans gonfler le fichier.</p>
+                        <p data-i18n-html="story3_card2_desc">Dans la carte, deux triangles sont definis dans <code>&lt;defs&gt;</code> (<code>#triangle</code> et <code>#triangle-down</code>) puis instancies avec <code>&lt;use&gt;</code> et un <code>transform="translate(...)"</code> different a chaque fois. Voici un extrait du meme pattern que celui dans les coins de la carte.</p>
                         <div class="demo">
-                            <svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
-                                <g class="demo-root" style="--demo-c: #649bff">
+                            <svg viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg">
+                                <g class="demo-root" style="--demo-c: #c68654">
                                     <defs>
-                                        <polygon id="demo-tri" points="0,-10 -8,6 8,6" fill="var(--demo-c)" stroke="#000" stroke-width="0.5"/>
+                                        <polygon id="demo-tri-up" points="0,-6 -6,6 6,6" fill="var(--demo-c)"/>
+                                        <polygon id="demo-tri-down" points="0,6 -6,-6 6,-6" fill="var(--demo-c)" opacity="0.8"/>
                                     </defs>
-                                    <use href="#demo-tri" transform="translate(30,40)"/>
-                                    <use href="#demo-tri" transform="translate(60,40) scale(1.3)"/>
-                                    <use href="#demo-tri" transform="translate(100,40) scale(0.8) rotate(45)"/>
-                                    <use href="#demo-tri" transform="translate(140,40) rotate(180)"/>
-                                    <use href="#demo-tri" transform="translate(175,40) scale(1.2)"/>
+                                    <!-- Row 1 -->
+                                    <use href="#demo-tri-up" transform="translate(20,20)"/>
+                                    <use href="#demo-tri-down" transform="translate(34,20)"/>
+                                    <use href="#demo-tri-up" transform="translate(48,20)"/>
+                                    <use href="#demo-tri-down" transform="translate(62,20)"/>
+                                    <use href="#demo-tri-up" transform="translate(76,20)"/>
+                                    <use href="#demo-tri-down" transform="translate(90,20)"/>
+                                    <use href="#demo-tri-up" transform="translate(104,20)"/>
+                                    <use href="#demo-tri-down" transform="translate(118,20)"/>
+                                    <use href="#demo-tri-up" transform="translate(132,20)"/>
+                                    <!-- Small spire -->
+                                    <use href="#demo-tri-up" transform="translate(40,42)"/>
+                                    <use href="#demo-tri-down" transform="translate(50,42)"/>
+                                    <use href="#demo-tri-up" transform="translate(60,42)"/>
+                                    <use href="#demo-tri-up" transform="translate(45,60)"/>
+                                    <use href="#demo-tri-down" transform="translate(55,60)"/>
+                                    <use href="#demo-tri-up" transform="translate(50,80)"/>
+                                    <!-- Right spire -->
+                                    <use href="#demo-tri-up" transform="translate(100,42)"/>
+                                    <use href="#demo-tri-down" transform="translate(110,42)"/>
+                                    <use href="#demo-tri-up" transform="translate(120,42)"/>
+                                    <use href="#demo-tri-up" transform="translate(105,60)"/>
+                                    <use href="#demo-tri-down" transform="translate(115,60)"/>
+                                    <use href="#demo-tri-up" transform="translate(110,80)"/>
                                 </g>
                             </svg>
                         </div>
                         <div class="zoom-controls">
-                            <label><span data-i18n="story3_zoom_color">Couleur :</span> <input type="color" class="zoom-color" value="#649bff"></label>
+                            <label><span data-i18n="story3_zoom_color">Couleur :</span> <input type="color" class="zoom-color" value="#c68654"></label>
                         </div>
                     </div>
 
@@ -788,29 +846,59 @@
                     <div class="card-zoom" id="zoom-3" data-anat-var="--eye-color">
                         <div class="card-num">3</div>
                         <h5 data-i18n="story3_card3_title">Gradients</h5>
-                        <p data-i18n-html="story3_card3_desc">Quatre gradients superposes (radiaux pour l'iris et la sclere, lineaires pour les ornements) construisent la profondeur. L'iris seul combine 3 stops avec opacites variables.</p>
-                        <div class="demo grid-2">
+                        <p data-i18n-html="story3_card3_desc">Trois usages du meme <code>var(--demo-c)</code> : a gauche une <strong>sphere</strong> avec un radial centre-decale (blanc &rarr; couleur &rarr; noir), au centre l'<strong>oeil</strong> de la carte (trois gradients empiles : sclera, iris, ombre), a droite un <strong>triangle</strong> avec un linear vertical qui s'estompe. Trois formes, trois gradients, une seule variable.</p>
+                        <div class="demo grid-3">
+                            <!-- Sphere: simple radial gradient -->
                             <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                                 <g class="demo-root" style="--demo-c: #64ff9b">
                                     <defs>
-                                        <radialGradient id="demo-radial" cx="35%" cy="35%">
-                                            <stop offset="0%" stop-color="#fff"/>
+                                        <radialGradient id="demo-sphere" cx="35%" cy="35%">
+                                            <stop offset="0%" stop-color="#ffffff"/>
                                             <stop offset="60%" stop-color="var(--demo-c)"/>
-                                            <stop offset="100%" stop-color="#000" stop-opacity="0.5"/>
+                                            <stop offset="100%" stop-color="#000000" stop-opacity="0.7"/>
                                         </radialGradient>
                                     </defs>
-                                    <circle cx="50" cy="50" r="40" fill="url(#demo-radial)"/>
+                                    <circle cx="50" cy="50" r="40" fill="url(#demo-sphere)"/>
                                 </g>
                             </svg>
+                            <!-- Eye: stacked gradients matching the card exactly -->
+                            <svg viewBox="-50 -40 100 80" xmlns="http://www.w3.org/2000/svg">
+                                <g class="demo-root" style="--demo-c: #64ff9b">
+                                    <defs>
+                                        <radialGradient id="demo-sclera" cx="30%" cy="30%">
+                                            <stop offset="0%" stop-color="#ffffff"/>
+                                            <stop offset="60%" stop-color="#ffffff"/>
+                                            <stop offset="100%" stop-color="#d0d0d0"/>
+                                        </radialGradient>
+                                        <radialGradient id="demo-iris">
+                                            <stop offset="0%" stop-color="var(--demo-c)" stop-opacity="0.8"/>
+                                            <stop offset="82%" stop-color="var(--demo-c)" stop-opacity="1"/>
+                                            <stop offset="100%" stop-color="#000000" stop-opacity="0.5"/>
+                                        </radialGradient>
+                                        <radialGradient id="demo-shadow">
+                                            <stop offset="85%" stop-color="#000000" stop-opacity="0"/>
+                                            <stop offset="100%" stop-color="#000000" stop-opacity="0.5"/>
+                                        </radialGradient>
+                                    </defs>
+                                    <ellipse cx="0" cy="0" rx="38" ry="28" fill="url(#demo-shadow)"/>
+                                    <ellipse cx="0" cy="0" rx="35" ry="24" fill="url(#demo-sclera)" stroke="#000" stroke-width="2"/>
+                                    <circle cx="0" cy="0" r="16" fill="url(#demo-iris)"/>
+                                    <circle cx="0" cy="0" r="16" fill="none" stroke="#000" stroke-width="1.5"/>
+                                    <circle cx="0" cy="0" r="6" fill="#000000"/>
+                                    <circle cx="-2" cy="-2" r="2" fill="#1a1a2e"/>
+                                </g>
+                            </svg>
+                            <!-- Triangle: linear gradient fading to transparent -->
                             <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                                 <g class="demo-root" style="--demo-c: #64ff9b">
                                     <defs>
-                                        <linearGradient id="demo-linear" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <linearGradient id="demo-triangle" x1="0%" y1="0%" x2="0%" y2="100%">
                                             <stop offset="0%" stop-color="var(--demo-c)" stop-opacity="1"/>
+                                            <stop offset="50%" stop-color="var(--demo-c)" stop-opacity="0.8"/>
                                             <stop offset="100%" stop-color="var(--demo-c)" stop-opacity="0.3"/>
                                         </linearGradient>
                                     </defs>
-                                    <polygon points="50,10 90,85 10,85" fill="url(#demo-linear)"/>
+                                    <polygon points="50,10 90,85 10,85" fill="url(#demo-triangle)"/>
                                 </g>
                             </svg>
                         </div>
@@ -820,13 +908,13 @@
                     </div>
 
                     <!-- 4. Filters + SMIL animation -->
-                    <div class="card-zoom" id="zoom-4" data-anat-var="--pyramid-color">
+                    <div class="card-zoom" id="zoom-4" data-anat-var="--frame-color">
                         <div class="card-num">4</div>
                         <h5 data-i18n="story3_card4_title">Filtres animes</h5>
-                        <p data-i18n-html="story3_card4_desc">Les chaines <code>feGaussianBlur</code> + <code>feMerge</code> donnent le halo. L'element <code>&lt;animate&gt;</code> de SMIL fait pulser la valeur <code>stdDeviation</code> entre 2 et 7 sur 3 secondes, en boucle.</p>
+                        <p data-i18n-html="story3_card4_desc">Les chaines <code>feGaussianBlur</code> + <code>feMerge</code> donnent le halo du cadre. L'element <code>&lt;animate&gt;</code> de SMIL fait pulser la valeur <code>stdDeviation</code> entre 2 et 7 sur 3 secondes, en boucle.</p>
                         <div class="demo">
                             <svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
-                                <g class="demo-root" style="--demo-c: #649bff">
+                                <g class="demo-root" style="--demo-c: #d4a574">
                                     <defs>
                                         <filter id="demo-glow">
                                             <feGaussianBlur stdDeviation="3" result="blur"/>
@@ -842,12 +930,12 @@
                             </svg>
                         </div>
                         <div class="zoom-controls">
-                            <label><span data-i18n="story3_zoom_color">Couleur :</span> <input type="color" class="zoom-color" value="#649bff"></label>
+                            <label><span data-i18n="story3_zoom_color">Couleur :</span> <input type="color" class="zoom-color" value="#d4a574"></label>
                         </div>
                     </div>
 
                     <!-- 5. Clip paths -->
-                    <div class="card-zoom" id="zoom-5" data-anat-var="--pyramid-color">
+                    <div class="card-zoom" id="zoom-5" data-anat-var="--pyramid-color" data-share-demo-with="zoom-5b">
                         <div class="card-num">5</div>
                         <h5 data-i18n="story3_card5_title">Clip paths</h5>
                         <p data-i18n-html="story3_card5_desc">La pyramide est un triangle, rempli de briques rectangulaires. Un <code>&lt;clipPath&gt;</code> au contour triangulaire decoupe les briques qui depassent : on dessine un rectangle bete, le clip fait le reste.</p>
@@ -885,32 +973,90 @@
                         </div>
                     </div>
 
-                    <!-- 6. Symmetry via transform -->
-                    <div class="card-zoom" id="zoom-6" data-anat-var="--eye-color">
-                        <div class="card-num">6</div>
-                        <h5 data-i18n="story3_card6_title">Symetrie via transform</h5>
-                        <p data-i18n-html="story3_card6_desc">L'ornement d'un coin est dessine une fois, puis duplique aux trois autres avec <code>scale(-1,1)</code>, <code>scale(1,-1)</code>, <code>scale(-1,-1)</code>. Change un coin, tous les autres suivent.</p>
+                    <!-- 5b. Brick 3D depth (shares picker + --pyramid-color with zoom-5) -->
+                    <div class="card-zoom" id="zoom-5b">
+                        <div class="card-num card-num-half">5·b</div>
+                        <h5 data-i18n="story3_card5b_title">Effet 3D sur une brique</h5>
+                        <p data-i18n-html="story3_card5b_desc">Une brique plate devient une brique 3D avec seulement deux <code>&lt;path&gt;</code> superposes : un triangle clair (blanc, opacite 0.2) en haut-gauche pour la lumiere, un triangle sombre (noir, opacite 0.2) en bas-droite pour l'ombre. La couleur de base vient toujours de <code>--pyramid-color</code> (meme bouton que #5).</p>
                         <div class="demo">
-                            <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
-                                <g class="demo-root" style="--demo-c: #64ff9b">
+                            <svg viewBox="0 0 220 120" xmlns="http://www.w3.org/2000/svg">
+                                <g class="demo-root" style="--demo-c: #649bff">
+                                    <!-- Flat (no depth) -->
+                                    <g transform="translate(20,30)">
+                                        <rect width="60" height="60" fill="var(--demo-c)" stroke="#111" stroke-width="0.5"/>
+                                        <text x="30" y="78" text-anchor="middle" fill="#888" font-size="9" font-family="ui-monospace, monospace">plate</text>
+                                    </g>
+                                    <!-- 3D-faked brick (2 triangle overlays) -->
+                                    <g transform="translate(120,30)">
+                                        <rect width="60" height="60" fill="var(--demo-c)" stroke="#111" stroke-width="0.5"/>
+                                        <path d="M 0,0 L 9,9 L 9,51 L 0,60 Z" fill="#ffffff" opacity="0.3"/>
+                                        <path d="M 60,0 L 51,9 L 51,51 L 60,60 Z" fill="#000000" opacity="0.3"/>
+                                        <text x="30" y="78" text-anchor="middle" fill="#888" font-size="9" font-family="ui-monospace, monospace">+ 2 paths</text>
+                                    </g>
+                                    <!-- Arrow between them -->
+                                    <g stroke="#888" stroke-width="1" fill="none">
+                                        <line x1="86" y1="60" x2="114" y2="60"/>
+                                        <polygon points="114,60 108,57 108,63" fill="#888" stroke="none"/>
+                                    </g>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- 6. Rays around the pyramid (decoupled from --eye-color via --ray-color) -->
+                    <div class="card-zoom" id="zoom-6" data-anat-var="--ray-color">
+                        <div class="card-num">6</div>
+                        <h5 data-i18n="story3_card6_title">Rayons autour du triangle</h5>
+                        <p data-i18n-html="story3_card6_desc">Un motif de 5 rayons (un long, un court, un point, un long, un court) est defini une fois, puis la couronne entiere est obtenue en l'instanciant 18 fois avec <code>rotate(20deg)</code> a chaque pas. Controle par <code>--ray-color</code> (independant de la couleur de l'oeil).</p>
+                        <div class="demo">
+                            <svg viewBox="-80 -80 160 160" xmlns="http://www.w3.org/2000/svg">
+                                <g class="demo-root" style="--demo-c: #ffc878">
                                     <defs>
-                                        <g id="demo-corner" stroke="var(--demo-c)" stroke-width="2" fill="none" stroke-linecap="round">
-                                            <path d="M 10,10 L 40,10 M 10,10 L 10,40"/>
-                                            <circle cx="10" cy="10" r="3" fill="var(--demo-c)" stroke="none"/>
+                                        <line id="demo-ray-large" x1="0" y1="-20" x2="0" y2="-75" stroke="var(--demo-c)" stroke-width="1.2"/>
+                                        <line id="demo-ray-small" x1="0" y1="-20" x2="0" y2="-60" stroke="var(--demo-c)" stroke-width="1.2"/>
+                                        <circle id="demo-ray-dot" cx="0" cy="-65" r="1.4" fill="var(--demo-c)"/>
+                                        <g id="demo-ray-group">
+                                            <use href="#demo-ray-large" transform="rotate(0)"/>
+                                            <use href="#demo-ray-small" transform="rotate(5)"/>
+                                            <use href="#demo-ray-dot" transform="rotate(5)"/>
+                                            <use href="#demo-ray-large" transform="rotate(10)"/>
+                                            <use href="#demo-ray-small" transform="rotate(15)"/>
                                         </g>
                                     </defs>
-                                    <use href="#demo-corner"/>
-                                    <use href="#demo-corner" transform="translate(200,0) scale(-1,1)"/>
-                                    <use href="#demo-corner" transform="translate(0,120) scale(1,-1)"/>
-                                    <use href="#demo-corner" transform="translate(200,120) scale(-1,-1)"/>
-                                    <text x="100" y="66" text-anchor="middle" fill="var(--demo-c)" font-family="ui-monospace, monospace" font-size="10">1 path, 4 copies</text>
+                                    <!-- Highlighted single group (bold) so the pattern unit is readable -->
+                                    <g stroke-width="2">
+                                        <use href="#demo-ray-group" transform="rotate(-10) scale(1)"/>
+                                    </g>
+                                    <!-- Full crown -->
+                                    <g opacity="0.55">
+                                        <use href="#demo-ray-group" transform="rotate(20)"/>
+                                        <use href="#demo-ray-group" transform="rotate(40)"/>
+                                        <use href="#demo-ray-group" transform="rotate(60)"/>
+                                        <use href="#demo-ray-group" transform="rotate(80)"/>
+                                        <use href="#demo-ray-group" transform="rotate(100)"/>
+                                        <use href="#demo-ray-group" transform="rotate(120)"/>
+                                        <use href="#demo-ray-group" transform="rotate(140)"/>
+                                        <use href="#demo-ray-group" transform="rotate(160)"/>
+                                        <use href="#demo-ray-group" transform="rotate(180)"/>
+                                        <use href="#demo-ray-group" transform="rotate(200)"/>
+                                        <use href="#demo-ray-group" transform="rotate(220)"/>
+                                        <use href="#demo-ray-group" transform="rotate(240)"/>
+                                        <use href="#demo-ray-group" transform="rotate(260)"/>
+                                        <use href="#demo-ray-group" transform="rotate(280)"/>
+                                        <use href="#demo-ray-group" transform="rotate(300)"/>
+                                        <use href="#demo-ray-group" transform="rotate(320)"/>
+                                        <use href="#demo-ray-group" transform="rotate(340)"/>
+                                    </g>
+                                    <!-- Central triangle reference -->
+                                    <polygon points="0,-12 -10,6 10,6" fill="#111" stroke="#444" stroke-width="0.5"/>
                                 </g>
                             </svg>
                         </div>
                         <div class="zoom-controls">
-                            <label><span data-i18n="story3_zoom_color">Couleur :</span> <input type="color" class="zoom-color" value="#64ff9b"></label>
+                            <label><span data-i18n="story3_zoom_color">Couleur :</span> <input type="color" class="zoom-color" value="#ffc878"></label>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -921,17 +1067,36 @@
             <p data-i18n="story3_animated_desc">Meme carte, mais avec quelques animations CSS : une rotation lente sur le motif de rayons, une derive de teinte sur la palette, une levitation discrete. Le SVG, c'est du texte qui peut tout faire.</p>
 
             <div class="card-animated-stage">
-                <object type="image/svg+xml" data="sources/card_back_animated.svg" aria-label="Animated card back"></object>
+                <object id="card-anim-object" type="image/svg+xml" data="sources/card_back_animated.svg" aria-label="Animated card back"></object>
+                <div class="card-anim-controls">
+                    <label for="card-anim-speed" data-i18n="story3_anim_speed">Vitesse d'animation</label>
+                    <input id="card-anim-speed" type="range" min="0.25" max="4" step="0.05" value="1">
+                    <span class="speed-val" id="card-anim-speed-val">1.0x</span>
+                </div>
             </div>
             <p class="license-note" data-i18n="story3_license">&copy; Simon Bedard. SVG partage a des fins educatives. Usage commercial interdit.</p>
+        </div>
+
+        <!-- Devoxx talk QR -->
+        <div class="content-block devoxx-share" style="display:flex; flex-wrap:wrap; gap:1.5rem; align-items:center; justify-content:center; text-align:center;">
+            <a href="https://m.devoxx.com/events/devoxxfr2026/talks/85092/svg-et-ia-gnrative-comment-repenser-limage-interactive-sur-son-site-web" target="_blank" rel="noopener" title="Ouvrir le talk Devoxx FR 2026">
+                <img src="images/qr_devoxx_talk.svg" alt="QR vers le talk Devoxx FR 2026"
+                     style="width:444px; height:444px; background:white; padding:6px; border-radius:8px; border:1px solid var(--border-color);">
+            </a>
+            <div style="display:flex; flex-direction:column; gap:0.4rem; align-items:flex-start; text-align:left; max-width:340px;">
+                <p data-i18n="story3_devoxx_label" style="margin:0; font-size:0.9rem; color:var(--text-light);">Le talk Devoxx FR 2026</p>
+                <p data-i18n="story3_devoxx_title" style="margin:0; font-weight:600;">SVG et IA generative : repenser l'image interactive sur son site web</p>
+                <a class="inline-link" href="https://m.devoxx.com/events/devoxxfr2026/talks/85092/svg-et-ia-gnrative-comment-repenser-limage-interactive-sur-son-site-web" target="_blank" rel="noopener" style="font-size:0.85rem;"><i class="fa-solid fa-up-right-from-square" style="margin-right:0.3rem;"></i><span data-i18n="story3_devoxx_link">Ouvrir la fiche du talk</span></a>
+            </div>
         </div>
 
         <!-- End CTA -->
         <div class="content-block" style="text-align: center;">
             <p class="act-label" data-i18n="story3_end_label">Fin de l'acte 3</p>
             <p data-i18n="story3_end_p" style="font-size: 1.05rem; margin: 1rem 0;">Voila. Trois actes, un fil rouge : l'IA aide a construire, mais les decisions de design restent humaines.</p>
-            <a href="stories.html" data-i18n="story1_end_back" style="display: inline-block; padding: 0.65rem 1.4rem; background: var(--card-bg); color: var(--primary-blue); border: 1px solid var(--primary-blue); border-radius: var(--radius); text-decoration: none; font-weight: 600; margin-right: 0.5rem;">Retour aux histoires</a>
-            <a href="workshop.html" data-i18n="story3_end_continue" style="display: inline-block; padding: 0.65rem 1.4rem; background: var(--accent-gradient); color: white; border-radius: var(--radius); text-decoration: none; font-weight: 600;">Aller a l'atelier &rarr;</a>
+            <a href="story-part2.html" class="act-btn back" data-i18n="story3_end_prev">&larr; Retour a l'Acte 2</a>
+            <a href="stories.html" class="act-btn neutral" data-i18n="story1_end_back">Retour aux histoires</a>
+            <a href="studio.html" class="act-btn forward" data-i18n="story3_end_continue">Aller vers le Studio &rarr;</a>
         </div>
     </main>
 
@@ -951,7 +1116,7 @@
             // visible right next to them.
             let stickyCard = null;
             const anatObj = document.getElementById('card-anat-object');
-            const VARS = ['--bg-color', '--pyramid-color', '--eye-color', '--edge', '--sclera'];
+            const VARS = ['--bg-color', '--pyramid-color', '--eye-color', '--edge', '--sclera', '--frame-color', '--decoration-color', '--ray-color'];
             function applyVar(prop, val) {
                 cardSvg.style.setProperty(prop, val);
                 if (stickyCard) stickyCard.style.setProperty(prop, val);
@@ -1016,9 +1181,20 @@
                 const anatVar = zoom.dataset.anatVar;
                 const picker = zoom.querySelector('.zoom-color');
                 if (!picker) continue;
+                const shareTargets = (zoom.dataset.shareDemoWith || '')
+                    .split(',').map(s => s.trim()).filter(Boolean);
                 picker.addEventListener('input', () => {
                     for (const root of zoom.querySelectorAll('.demo-root')) {
                         root.style.setProperty('--demo-c', picker.value);
+                    }
+                    // Fan the colour out to any zoom cards that share this picker
+                    // (e.g. 5b inherits 5's --pyramid-color).
+                    for (const targetId of shareTargets) {
+                        const target = document.getElementById(targetId);
+                        if (!target) continue;
+                        for (const root of target.querySelectorAll('.demo-root')) {
+                            root.style.setProperty('--demo-c', picker.value);
+                        }
                     }
                     applyVar(anatVar, picker.value);
                     const mainPicker = document.querySelector(`.card-controls input[data-var="${anatVar}"]`);
@@ -1033,6 +1209,33 @@
                 markerToggle.addEventListener('change', () => {
                     markerLayer.toggleAttribute('hidden', !markerToggle.checked);
                 });
+            }
+
+            // Animated card speed slider. --anim-speed is a free-standing
+            // CSS variable both inside the SVG (scales keyframe durations
+            // via calc) and on the .card-animated-stage (scales the
+            // behind-card stageGlow + cardLevitate). Setting it on both
+            // the object's document root and the parent stage keeps them
+            // in sync.
+            const animObj = document.getElementById('card-anim-object');
+            const speedSlider = document.getElementById('card-anim-speed');
+            const speedVal = document.getElementById('card-anim-speed-val');
+            const stage = document.querySelector('.card-animated-stage');
+            function applyAnimSpeed(v) {
+                const n = Number(v);
+                if (speedVal) speedVal.textContent = n.toFixed(2).replace(/\.?0+$/, '') + 'x';
+                if (stage) stage.style.setProperty('--anim-speed', n);
+                if (animObj && animObj.contentDocument) {
+                    animObj.contentDocument.documentElement.style.setProperty('--anim-speed', n);
+                }
+            }
+            if (speedSlider) {
+                speedSlider.addEventListener('input', e => applyAnimSpeed(e.target.value));
+                // Re-apply when the object loads so the SVG picks up the current slider value.
+                if (animObj) {
+                    animObj.addEventListener('load', () => applyAnimSpeed(speedSlider.value));
+                }
+                applyAnimSpeed(speedSlider.value);
             }
         })();
     </script>

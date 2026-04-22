@@ -30,7 +30,15 @@ checkServer().then(ok => {
         ? `Connecte. Dossier : ./${STUDIO_FOLDER}/`
         : 'Serveur local injoignable. Download fonctionne, pas Save.';
     if (ok) refreshFolder();
+    autoLoadFromQuery();
 });
+
+function autoLoadFromQuery() {
+    const q = new URLSearchParams(window.location.search).get('path');
+    if (!q) return;
+    $('#path-input').value = q;
+    loadFromPath(q);
+}
 
 // ---- server probing ----------------------------------------------------
 
@@ -148,6 +156,21 @@ function loadSvgText(text, name) {
 function wireSave() {
     $('#save-btn').addEventListener('click', saveVersioned);
     $('#download-btn').addEventListener('click', downloadCurrent);
+    wirePlayPause();
+}
+
+function wirePlayPause() {
+    const btn = $('#play-btn');
+    let paused = false;
+    btn.addEventListener('click', () => {
+        const svg = getSvg() && document.querySelector('#preview-host svg');
+        if (!svg) return;
+        paused = !paused;
+        if (paused) svg.dataset.studioPaused = 'true';
+        else delete svg.dataset.studioPaused;
+        btn.innerHTML = paused ? '&#x25B6;' : '&#x23F8;';
+        btn.title = paused ? 'Play' : 'Pause';
+    });
 }
 
 async function saveVersioned() {

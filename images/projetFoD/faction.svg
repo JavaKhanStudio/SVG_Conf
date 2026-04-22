@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <rect width="400" height="400" rx="12" fill="#1c1917"/>
+  <rect x="1" y="1" width="398" height="398" rx="11" stroke="#9f1239" stroke-opacity="0.3" stroke-width="2"/>
+  <!-- Banner/flag shape -->
+  <rect x="160" y="60" width="8" height="280" rx="2" fill="#292524"/>
+  <path d="M168 80 L300 110 L300 200 L168 170 Z" fill="#292524" stroke="#e11d48" stroke-opacity="0.3" stroke-width="2"/>
+  <!-- Shield emblem -->
+  <path d="M220 120 L260 135 L260 165 L240 180 L220 165 Z" fill="#1c1917" stroke="#e11d48" stroke-opacity="0.2" stroke-width="1.5"/>
+  <!-- Star in shield -->
+  <circle cx="240" cy="148" r="8" fill="#e11d48" opacity="0.15"/>
+  <!-- Label -->
+  <text x="200" y="380" text-anchor="middle" fill="#a8a29e" font-family="sans-serif" font-size="14" opacity="0.5">FACTION</text>
+</svg>

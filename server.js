@@ -11,7 +11,7 @@ import { WebSocketServer } from 'ws';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PORT = 5173;
+const PORT = Number(process.env.SVGW_PORT) || 5100;
 const BACKEND_URL = process.env.SVGW_BACKEND || 'http://127.0.0.1:5174';
 const folderArg = process.argv[2] || './';
 const WATCH_DIR = path.resolve(process.cwd(), folderArg);

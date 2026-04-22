@@ -36,90 +36,17 @@
         </div>
 
         <div class="content-block" style="text-align:center; background:rgba(7,82,207,0.04); border:1px dashed var(--border-color);">
-            <p data-i18n-html="gal_techniques">Les exemples ci-dessous combinent des techniques vues ailleurs dans le parcours : <a class="inline-link" href="svg-anatomy.html">anatomie</a> et formes de base, <a class="inline-link" href="bezier.html">courbes de Bezier</a> pour les paths, <a class="inline-link" href="animations.html">animations</a> pour le mouvement, et <a class="inline-link" href="live-demo.html">defs/use + variables CSS</a> pour les composants reutilisables comme l'os ci-dessous.</p>
+            <p data-i18n-html="gal_techniques">Les exemples ci-dessous combinent des techniques vues ailleurs dans le parcours : <a class="inline-link" href="svg-anatomy.html">anatomie</a> et formes de base, <a class="inline-link" href="bezier.html">courbes de Bezier</a> pour les paths, <a class="inline-link" href="animations.html">animations</a> pour le mouvement, et <a class="inline-link" href="svg-anatomy.html">variables CSS</a> pour les composants reutilisables.</p>
         </div>
 
         <!-- Filter tabs -->
         <div class="filter-tabs">
             <button class="filter-btn active" data-filter="all" data-i18n="gal_tab_all">Tout</button>
             <button class="filter-btn" data-filter="flower" data-i18n="gal_tab_flowers">Fleurs</button>
-            <button class="filter-btn" data-filter="bone" data-i18n="gal_tab_bones">Os (etape par etape)</button>
+            <button class="filter-btn" data-filter="element" data-i18n="gal_tab_elements">Elements</button>
             <button class="filter-btn" data-filter="ai" data-i18n="gal_tab_ai">Genere par IA</button>
             <button class="filter-btn" data-filter="cheatsheet" data-i18n="gal_tab_cheatsheets">Aide-memoires</button>
-        </div>
-
-        <!-- Bone Step-by-step (shown only in bone or all filter) -->
-        <div class="content-block gallery-section" data-category="bone" id="bone-section">
-            <h3 data-i18n="gal_tab_bones">Os - Construction etape par etape</h3>
-            <p data-i18n-html="gal_bone_techniques" style="font-size:0.9rem; color:var(--text-light); margin-bottom:0.5rem;">Chaque etape ajoute une technique : <a class="inline-link" href="svg-anatomy.html">viewBox</a>, transforms, gradients, filters. Le passage d'icone plate a os 3D illustre comment quelques attributs SVG bien choisis suffisent a creer de la profondeur.</p>
-            <p class="arrow-hint">&larr; scroll &rarr;</p>
-            <div class="step-scroll">
-                <div class="step-item">
-                    <div class="step-num">1</div>
-                    <img src="images/bones/bone.svg" alt="Bone V1">
-                    <p data-i18n="gallery_bone_v1">Base icon (16x16)</p>
-                </div>
-                <div class="step-item">
-                    <div class="step-num">2</div>
-                    <img src="images/bones/boneV2.svg" alt="Bone V2">
-                    <p data-i18n="gallery_bone_v2">+ rotation (transform)</p>
-                </div>
-                <div class="step-item">
-                    <div class="step-num">3</div>
-                    <img src="images/bones/boneV3.svg" alt="Bone V3">
-                    <p data-i18n="gallery_bone_v3">+ matrix transform + text</p>
-                </div>
-                <div class="step-item">
-                    <div class="step-num">4</div>
-                    <img src="images/bones/boneV4.svg" alt="Bone V4">
-                    <p data-i18n="gallery_bone_v4">+ viewBox + layout</p>
-                </div>
-                <div class="step-item">
-                    <div class="step-num">5</div>
-                    <img src="images/bones/boneV5.svg" alt="Bone V5">
-                    <p data-i18n="gallery_bone_v5">+ gradients + filters</p>
-                </div>
-                <div class="step-item">
-                    <div class="step-num">6</div>
-                    <img src="images/bones/boneV6.svg" alt="Bone V6">
-                    <p data-i18n="gallery_bone_v6">+ highlight gradient</p>
-                </div>
-                <div class="step-item">
-                    <div class="step-num">7</div>
-                    <img src="images/bones/boneV7.svg" alt="Bone V7">
-                    <p data-i18n="gallery_bone_v7">+ refinements</p>
-                </div>
-                <div class="step-item">
-                    <div class="step-num">8</div>
-                    <img src="images/bones/boneV8.svg" alt="Bone V8">
-                    <p data-i18n="gallery_bone_v8">+ shadow & depth</p>
-                </div>
-                <div class="step-item">
-                    <div class="step-num">9</div>
-                    <img src="images/bones/boneV9.svg" alt="Bone V9">
-                    <p data-i18n="gallery_bone_v9">+ texture pattern</p>
-                </div>
-                <div class="step-item">
-                    <div class="step-num">10</div>
-                    <img src="images/bones/boneV10.svg" alt="Bone V10">
-                    <p data-i18n="gallery_bone_v10">+ edge effects</p>
-                </div>
-                <div class="step-item">
-                    <div class="step-num">11</div>
-                    <img src="images/bones/boneV11.svg" alt="Bone V11">
-                    <p data-i18n="gallery_bone_v11">+ text emboss filter</p>
-                </div>
-                <div class="step-item">
-                    <div class="step-num">12</div>
-                    <img src="images/bones/boneV12.svg" alt="Bone V12">
-                    <p data-i18n="gallery_bone_v12">+ polished styling</p>
-                </div>
-                <div class="step-item">
-                    <div class="step-num">13</div>
-                    <img src="images/bones/boneV13.svg" alt="Bone V13">
-                    <p data-i18n="gallery_bone_v13">Final: full metallic bone</p>
-                </div>
-            </div>
+            <button class="filter-btn" data-filter="project" data-i18n="gal_tab_project">Projet FoD</button>
         </div>
 
         <!-- Gallery Grid -->
@@ -305,22 +232,6 @@
                 </div>
             </div>
 
-            <!-- Bone - GPT generated -->
-            <div class="gallery-card" data-category="ai">
-                <div class="card-image">
-                    <img src="images/bones/boneV_GPT.svg" alt="Bone GPT">
-                </div>
-                <div class="card-body">
-                    <h4>Bone Tag - GPT</h4>
-                    <p data-i18n="gallery_ai_gpt_bone">AI: ChatGPT - bone tag variant</p>
-                    <div class="prompt-box">
-                        <strong data-i18n="gal_prompt">Prompt :</strong>
-                        <span data-i18n="gal_prompt_placeholder">Le prompt sera ajoute prochainement</span>
-                    </div>
-                    <span class="card-tag ai">AI Generated</span>
-                </div>
-            </div>
-
             <!-- Cheat Sheets -->
             <div class="gallery-card" data-category="cheatsheet">
                 <div class="card-image">
@@ -367,14 +278,125 @@
             </div>
 
             <!-- Extra elements -->
-            <div class="gallery-card" data-category="flower">
+            <div class="gallery-card" data-category="element">
                 <div class="card-image">
                     <img src="images/elements/patte.svg" alt="Patte">
                 </div>
                 <div class="card-body">
                     <h4>Patte</h4>
-                    <p data-i18n="gallery_tool_patte">Simple reusable decorative element</p>
-                    <span class="card-tag flower">Element</span>
+                    <p data-i18n="gallery_tool_patte">Element decoratif simple et reutilisable</p>
+                    <span class="card-tag element">Element</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="element">
+                <div class="card-image">
+                    <img src="images/elements/mouton.svg" alt="Mouton">
+                </div>
+                <div class="card-body">
+                    <h4>Mouton</h4>
+                    <p data-i18n="gallery_element_mouton">Grappe de cercles pour la laine, tete sombre, palette creme</p>
+                    <span class="card-tag element">Element</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="element">
+                <div class="card-image">
+                    <img src="images/elements/lapin_paque.svg" alt="Lapin de Paques">
+                </div>
+                <div class="card-body">
+                    <h4>Lapin de Paques</h4>
+                    <p data-i18n="gallery_element_lapin">Oreilles roses, noeud papillon, panier d'oeufs colores</p>
+                    <span class="card-tag element">Element</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="element">
+                <div class="card-image">
+                    <img src="images/elements/ninja.svg" alt="Ninja">
+                </div>
+                <div class="card-body">
+                    <h4>Ninja</h4>
+                    <p data-i18n="gallery_element_ninja">Gi indigo, hachimaki rouge, shuriken et ciel de nuit</p>
+                    <span class="card-tag element">Element</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="element">
+                <div class="card-image">
+                    <img src="images/elements/anthropic.svg" alt="Anthropic mark">
+                </div>
+                <div class="card-body">
+                    <h4>Anthropic mark</h4>
+                    <p data-i18n="gallery_element_anthropic">Burst geometrique a trois branches, approximation dessinee de memoire</p>
+                    <span class="card-tag element">Element</span>
+                </div>
+            </div>
+
+            <!-- Projet FoD - placeholder iconography -->
+            <div class="gallery-card" data-category="project">
+                <div class="card-image">
+                    <img src="images/projetFoD/character.svg" alt="Character placeholder">
+                </div>
+                <div class="card-body">
+                    <h4>Character</h4>
+                    <p data-i18n="gallery_fod_character">Silhouette + accent d'epee, palette ambre</p>
+                    <span class="card-tag project">Projet FoD</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="project">
+                <div class="card-image">
+                    <img src="images/projetFoD/event.svg" alt="Event placeholder">
+                </div>
+                <div class="card-body">
+                    <h4>Event</h4>
+                    <p data-i18n="gallery_fod_event">Eclair central + lignes radiales cyan</p>
+                    <span class="card-tag project">Projet FoD</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="project">
+                <div class="card-image">
+                    <img src="images/projetFoD/faction.svg" alt="Faction placeholder">
+                </div>
+                <div class="card-body">
+                    <h4>Faction</h4>
+                    <p data-i18n="gallery_fod_faction">Banniere + embleme-bouclier, palette carmin</p>
+                    <span class="card-tag project">Projet FoD</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="project">
+                <div class="card-image">
+                    <img src="images/projetFoD/group.svg" alt="Group placeholder">
+                </div>
+                <div class="card-body">
+                    <h4>Group</h4>
+                    <p data-i18n="gallery_fod_group">Trois silhouettes liees, palette sarcelle</p>
+                    <span class="card-tag project">Projet FoD</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="project">
+                <div class="card-image">
+                    <img src="images/projetFoD/item.svg" alt="Item placeholder">
+                </div>
+                <div class="card-body">
+                    <h4>Item</h4>
+                    <p data-i18n="gallery_fod_item">Gemme a facettes + halo, palette violet</p>
+                    <span class="card-tag project">Projet FoD</span>
+                </div>
+            </div>
+
+            <div class="gallery-card" data-category="project">
+                <div class="card-image">
+                    <img src="images/projetFoD/location.svg" alt="Location placeholder">
+                </div>
+                <div class="card-body">
+                    <h4>Location</h4>
+                    <p data-i18n="gallery_fod_location">Montagnes superposees + lune, palette foret</p>
+                    <span class="card-tag project">Projet FoD</span>
                 </div>
             </div>
         </div>
@@ -391,7 +413,6 @@
         // Filter gallery
         const filterBtns = document.querySelectorAll('.filter-btn');
         const cards = document.querySelectorAll('.gallery-card[data-category]');
-        const boneSection = document.getElementById('bone-section');
 
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -399,14 +420,6 @@
                 btn.classList.add('active');
                 const filter = btn.dataset.filter;
 
-                // Toggle bone step-by-step section
-                if (filter === 'all' || filter === 'bone') {
-                    boneSection.style.display = '';
-                } else {
-                    boneSection.style.display = 'none';
-                }
-
-                // Toggle gallery cards
                 cards.forEach(card => {
                     if (filter === 'all' || card.dataset.category === filter) {
                         card.classList.remove('hidden');

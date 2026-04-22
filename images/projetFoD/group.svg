@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <rect width="400" height="400" rx="12" fill="#1c1917"/>
+  <rect x="1" y="1" width="398" height="398" rx="11" stroke="#115e59" stroke-opacity="0.3" stroke-width="2"/>
+  <!-- Three silhouette figures -->
+  <ellipse cx="200" cy="340" rx="130" ry="50" fill="#292524"/>
+  <!-- Center figure (tallest) -->
+  <circle cx="200" cy="160" r="40" fill="#292524"/>
+  <ellipse cx="200" cy="260" rx="35" ry="55" fill="#292524"/>
+  <!-- Left figure -->
+  <circle cx="120" cy="185" r="32" fill="#1f2937"/>
+  <ellipse cx="120" cy="275" rx="28" ry="45" fill="#1f2937"/>
+  <!-- Right figure -->
+  <circle cx="280" cy="185" r="32" fill="#1f2937"/>
+  <ellipse cx="280" cy="275" rx="28" ry="45" fill="#1f2937"/>
+  <!-- Connection lines -->
+  <line x1="145" y1="200" x2="170" y2="185" stroke="#14b8a6" stroke-opacity="0.2" stroke-width="1.5"/>
+  <line x1="255" y1="200" x2="230" y2="185" stroke="#14b8a6" stroke-opacity="0.2" stroke-width="1.5"/>
+  <!-- Label -->
+  <text x="200" y="380" text-anchor="middle" fill="#a8a29e" font-family="sans-serif" font-size="14" opacity="0.5">GROUP</text>
+</svg>

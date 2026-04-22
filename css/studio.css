@@ -7,16 +7,30 @@
     margin: 1rem auto;
     max-width: 1600px;
     padding: 0 0.75rem;
-    height: calc(100vh - 220px);
-    min-height: 560px;
+    /* No fixed height: the right column (inspector + :root vars) drives the
+       page scroll, while the left and stage stick to the viewport as the
+       user scrolls. Same pattern as workshop-viewer (blackroom). */
+    align-items: start;
 }
 
 .studio-col {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    overflow-y: auto;
     padding-right: 2px;
+}
+
+.studio-left {
+    position: sticky;
+    top: 80px;
+    align-self: start;
+    /* No max-height: the left pane (source + folder + tree) grows naturally
+       with its content. If it exceeds viewport, the page scrolls. Sticky keeps
+       it pinned under the header once the page is scrolled past it. */
+}
+
+.studio-right {
+    /* flows with the page: this is the one that usually drives the scroll */
 }
 
 .studio-stage {
@@ -26,6 +40,18 @@
     border-radius: var(--radius, 8px);
     overflow: hidden;
     min-width: 0;
+    position: sticky;
+    top: 80px;
+    align-self: start;
+    min-height: 560px;
+    /* No max-height: for large SVGs or tall stages, content makes the page
+       taller rather than being clipped or internally scrolled. */
+}
+
+.element-tree li.hidden > .tag,
+.element-tree li.hidden > .name {
+    opacity: 0.45;
+    text-decoration: line-through;
 }
 
 .studio-panel {
@@ -151,14 +177,26 @@
 
 .preview-host {
     position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .preview-host svg {
     display: block;
+    width: 100%;
+    height: 100%;
     max-width: min(90vw, 1100px);
     max-height: 100%;
     background: white;
     box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+
+.preview-host svg[data-studio-paused="true"],
+.preview-host svg[data-studio-paused="true"] * {
+    animation-play-state: paused !important;
 }
 
 /* Studio overlay graphics live inside the SVG itself as a <g id="__studio_overlay__">
@@ -211,8 +249,6 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    max-height: 50vh;
-    overflow-y: auto;
     font-size: 0.82rem;
 }
 
@@ -262,8 +298,6 @@
     padding: 0;
     margin: 0;
     font-size: 0.82rem;
-    max-height: 200px;
-    overflow-y: auto;
 }
 
 .folder-list li {

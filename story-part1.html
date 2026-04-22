@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,53 +10,82 @@
     <link rel="icon" href="images/LogoHeaderSBP.png" type="image/png">
     <style>
         .story-portrait {
-            float: right; width: 180px; height: 180px;
-            border-radius: 50%; object-fit: cover;
+            float: right;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
             margin: 0 0 1rem 1.5rem;
             border: 4px solid var(--primary-blue);
             box-shadow: var(--shadow);
         }
+
         @media (max-width: 600px) {
-            .story-portrait { float: none; display: block; margin: 0 auto 1rem; width: 140px; height: 140px; }
+            .story-portrait {
+                float: none;
+                display: block;
+                margin: 0 auto 1rem;
+                width: 140px;
+                height: 140px;
+            }
         }
+
         .needs-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 1rem;
             margin: 1.5rem 0;
         }
+
         .need-card {
-            display: flex; align-items: center; gap: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
             padding: 0.85rem 1rem;
             background: linear-gradient(135deg, rgba(186, 1, 1, 0.05), rgba(7, 82, 207, 0.05));
             border-left: 4px solid var(--primary-blue);
             border-radius: 0 8px 8px 0;
             font-size: 0.95rem;
         }
+
         .need-card .need-icon {
             color: var(--primary-blue);
             flex-shrink: 0;
-            display: flex; align-items: center;
+            display: flex;
+            align-items: center;
         }
+
         .need-card .need-num {
-            display: inline-block; min-width: 1.2em;
-            color: var(--primary-red); font-weight: 700;
+            display: inline-block;
+            min-width: 1.2em;
+            color: var(--primary-red);
+            font-weight: 700;
         }
+
         a.need-link {
-            color: inherit; text-decoration: none;
+            color: inherit;
+            text-decoration: none;
             transition: transform var(--transition), box-shadow var(--transition);
         }
+
         a.need-link:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow);
         }
+
         .tag-row {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
             margin: 1.5rem 0;
         }
-        @media (max-width: 700px) { .tag-row { grid-template-columns: 1fr; } }
+
+        @media (max-width: 700px) {
+            .tag-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .tag-card {
             background: #faf6ee;
             border-radius: var(--radius);
@@ -63,17 +93,29 @@
             padding: 1rem;
             text-align: center;
         }
-        .tag-card svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
-        .tag-card .tag-caption {
-            margin-top: 0.5rem; font-size: 0.85rem;
-            color: var(--text-light); font-style: italic;
+
+        .tag-card svg {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
         }
+
+        .tag-card .tag-caption {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
         .litter-photo {
-            display: block; max-width: 100%;
+            display: block;
+            max-width: 100%;
             margin: 1rem auto;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
         }
+
         /* Money shot */
         .money-shot {
             float: right;
@@ -82,9 +124,16 @@
             border-radius: var(--radius);
             box-shadow: var(--shadow);
         }
+
         @media (max-width: 700px) {
-            .money-shot { float: none; display: block; margin: 0 auto 1rem; width: 200px; }
+            .money-shot {
+                float: none;
+                display: block;
+                margin: 0 auto 1rem;
+                width: 200px;
+            }
         }
+
         /* Mini-workshop */
         .tagshop {
             display: grid;
@@ -92,57 +141,102 @@
             gap: 1.5rem;
             margin-top: 1rem;
         }
-        @media (max-width: 800px) { .tagshop { grid-template-columns: 1fr; } }
+
+        @media (max-width: 800px) {
+            .tagshop {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .tagshop-stage {
             background: linear-gradient(135deg, #fff8e1, #ffe0b2);
             border-radius: var(--radius);
             padding: 1.5rem;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .tagshop-controls .control-group { margin-bottom: 0.9rem; }
+
+        .tagshop-controls .control-group {
+            margin-bottom: 0.9rem;
+        }
+
         .tagshop-controls .photo-picker {
-            display: flex; gap: 0.5rem; flex-wrap: wrap;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
         }
+
         .tagshop-controls .photo-picker button {
-            background: white; border: 2px solid var(--border-color);
-            border-radius: 8px; padding: 0.25rem; cursor: pointer;
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.25rem;
+            cursor: pointer;
             transition: all var(--transition);
         }
+
         .tagshop-controls .photo-picker button.active {
             border-color: var(--primary-blue);
             box-shadow: 0 0 0 2px rgba(7, 82, 207, 0.2);
         }
+
         .tagshop-controls .photo-picker button img {
-            display: block; width: 84px; height: 84px;
-            object-fit: cover; border-radius: 50%;
+            display: block;
+            width: 84px;
+            height: 84px;
+            object-fit: cover;
+            border-radius: 50%;
         }
-        .tagshop-controls label { font-size: 1rem; font-weight: 600; }
+
+        .tagshop-controls label {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
         .tagshop-controls input[type="text"] {
-            width: 100%; padding: 0.55rem 0.75rem;
+            width: 100%;
+            padding: 0.55rem 0.75rem;
             border: 1px solid var(--border-color);
-            border-radius: 6px; font-size: 1.15rem;
+            border-radius: 6px;
+            font-size: 1.15rem;
         }
+
         .tagshop-controls input[type="color"] {
-            width: 64px; height: 40px; padding: 0;
+            width: 64px;
+            height: 40px;
+            padding: 0;
             border: 1px solid var(--border-color);
-            border-radius: 4px; cursor: pointer; vertical-align: middle;
+            border-radius: 4px;
+            cursor: pointer;
+            vertical-align: middle;
         }
-        .tagshop-controls input[type="range"] { height: 28px; }
+
+        .tagshop-controls input[type="range"] {
+            height: 28px;
+        }
+
         /* Luminance / flip indicator */
         #ts-flip-panel .lum-bar {
-            position: relative; height: 18px;
+            position: relative;
+            height: 18px;
             margin: 0.25rem 0 0.4rem;
             border-radius: 3px;
             overflow: visible;
         }
+
         #ts-flip-panel .lum-bar-track {
-            position: absolute; inset: 0;
+            position: absolute;
+            inset: 0;
             background: linear-gradient(to right, #000 0%, #fff 100%);
             border: 1px solid var(--border-color);
             border-radius: 3px;
         }
+
         #ts-flip-panel .lum-bar-marker {
-            position: absolute; top: -3px; bottom: -3px;
+            position: absolute;
+            top: -3px;
+            bottom: -3px;
             width: 4px;
             background: var(--primary-red);
             border-radius: 2px;
@@ -150,32 +244,50 @@
             box-shadow: 0 0 0 1px white;
             transition: left 0.15s ease;
         }
+
         #ts-flip-panel .lum-bar-threshold {
-            position: absolute; top: -6px; bottom: -6px;
+            position: absolute;
+            top: -6px;
+            bottom: -6px;
             width: 2px;
             background: var(--primary-blue);
             border-radius: 1px;
             transform: translateX(-50%);
             box-shadow: 0 0 0 1px white;
         }
+
         #ts-flip-panel .lum-readout {
-            font-size: 0.85rem; color: var(--text-light);
-            display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            flex-wrap: wrap;
         }
+
         #ts-flip-panel .lum-readout code {
-            background: #f0f0f4; padding: 1px 5px; border-radius: 3px;
-            color: var(--text-color); font-size: 0.85rem;
+            background: #f0f0f4;
+            padding: 1px 5px;
+            border-radius: 3px;
+            color: var(--text-color);
+            font-size: 0.85rem;
         }
-        #ts-flip-panel .lum-spacer { color: var(--border-color); }
+
+        #ts-flip-panel .lum-spacer {
+            color: var(--border-color);
+        }
+
         #ts-flip-panel .lum-swatch {
             display: inline-block;
-            width: 14px; height: 14px;
+            width: 14px;
+            height: 14px;
             border: 1px solid #aaa;
             border-radius: 2px;
             vertical-align: middle;
         }
     </style>
 </head>
+
 <body>
     <div id="header-placeholder"></div>
 
@@ -188,56 +300,105 @@
 
     <main>
         <div class="page-hero">
-            <p style="text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.25rem;" data-i18n="story_act_label">Acte 1</p>
+            <p style="text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.25rem;"
+                data-i18n="story_act_label">Acte 1</p>
             <h2 data-i18n="story1_title">Comment je me suis retrouve a coder un atelier de SVG</h2>
             <p data-i18n="story1_subtitle">Une histoire de chien, de site web et de variables CSS</p>
         </div>
 
         <!-- Intro -->
-        <div class="content-block">
+        <div class="content-block" style="overflow: hidden;">
             <h3 data-i18n="story1_hello_title">Qui suis-je</h3>
-            <img src="images/story/portrait.jpg" alt="Simon" class="story-portrait">
-            <p data-i18n="story1_hello_p1">Simon Bedard, professeur d'informatique depuis 3 ans, Canadien en France depuis 10 ans, et grand curieux ayant fait aussi bien du jeu video que du design web dans mes temps libres. J'ai actuellement un interet tout particulier pour les outils augmentes par l'IA.</p>
-            <p data-i18n="story1_hello_p2">Aujourd'hui au menu : l'histoire de comment un projet personnel m'a force a reapprendre comment fonctionne le SVG.</p>
+            <img src="images/story/portrait.jpg" alt="Simon" class="story-portrait zoomable">
+            <p data-i18n="story1_hello_p1">Simon Bedard, professeur d'informatique depuis 3 ans, Canadien en France
+                depuis 10 ans, et grand curieux ayant fait aussi bien du jeu video que du design web dans mes temps
+                libres. J'ai actuellement un interet tout particulier pour les outils augmentes par l'IA.</p>
+            <p data-i18n="story1_hello_p2">Aujourd'hui au menu : l'histoire de comment un projet personnel m'a force a
+                reapprendre comment fonctionne le SVG.</p>
+        </div>
+
+        <!-- Site QR + repo link -->
+        <div class="content-block site-share"
+            style="display:flex; flex-wrap:wrap; gap:1.5rem; align-items:center; justify-content:center; text-align:center;">
+            <a href="https://javakhanstudio.github.io/SVG_Conf/story-part1.html" target="_blank" rel="noopener"
+                title="Scanne ou clique pour ouvrir la page" style="display:inline-block;">
+                <img src="images/qr_site_story1.svg" alt="QR vers la page GitHub Pages"
+                    style="width:444px; height:444px; background:white; padding:6px; border-radius:8px; border:1px solid var(--border-color);">
+            </a>
+            <div style="display:flex; flex-direction:column; gap:0.4rem; align-items:flex-start; text-align:left;">
+                <p style="margin:0; font-size:0.9rem; color:var(--text-light);"></p>
+                <a class="inline-link" href="https://github.com/JavaKhanStudio/SVG_Conf" target="_blank"
+                    rel="noopener"><i class="fa-brands fa-github" style="margin-right:0.4rem;"></i><span
+                        data-i18n="story1_share_repo">Voir le code source (GitHub)</span></a>
+            </div>
         </div>
 
         <!-- The dog -->
         <div class="content-block">
-            <h3 data-i18n-html="story1_dog_title">Une famille de cabots <span style="color: var(--text-light); font-weight: 400; font-size: 0.85em;">&rarr; 5 chiots plus tard</span></h3>
-            <p data-i18n-html="story1_dog_p1">Mon chien Syn (Syntaxe pour les intimes) etait sur le point d'etre papa. Naturellement, j'ai voulu <a class="inline-link" href="https://javakhanstudio.github.io/SynAndKaya/" target="_blank" rel="noopener">faire un petit site pour presenter la petite famille</a> et celebrer l'occasion.</p>
-            <img src="images/story/puppies.jpg" alt="Les chiots" class="litter-photo" style="max-width: 500px;">
-            <p data-i18n-html="story1_dog_p2"><s style="color: var(--text-light);">J'ai donc facture une journee de travail a Syn.</s> C'etait le moment parfait pour faire un peu de veille techno, tester quelques outils et garder un souvenir de cet episode.</p>
+            <h3 data-i18n-html="story1_dog_title">Une famille de cabots <span
+                    style="color: var(--text-light); font-weight: 400; font-size: 0.85em;">&rarr; 5 chiots plus
+                    tard</span></h3>
+            <p data-i18n-html="story1_dog_p1">Mon chien Syn (Syntaxe pour les intimes) etait sur le point d'etre papa.
+                Naturellement, j'ai voulu <a class="inline-link" href="https://javakhanstudio.github.io/SynAndKaya/"
+                    target="_blank" rel="noopener">faire un petit site pour presenter la petite famille</a> et celebrer
+                l'occasion.</p>
+            <img src="images/story/puppies.jpg" alt="Les chiots" class="litter-photo zoomable" style="max-width: 500px;">
+            <p data-i18n-html="story1_dog_p2"><s style="color: var(--text-light);">J'ai donc facture une journee de
+                    travail a Syn.</s> C'etait le moment parfait pour faire un peu de veille techno, tester quelques
+                outils et garder un souvenir de cet episode.</p>
         </div>
 
         <!-- The challenge -->
         <div class="content-block">
             <h3 data-i18n="story1_challenge_title">Defi : un dogtag par chien</h3>
-            <p data-i18n="story1_challenge_p1">Un de mes objectifs : afficher chaque chien avec sa propre medaille personnalisee. Onze chiens, onze medailles, toutes coherentes mais toutes uniques.</p>
+            <p data-i18n="story1_challenge_p1">Un de mes objectifs : afficher chaque chien avec sa propre medaille
+                personnalisee. Onze chiens, onze medailles, toutes coherentes mais toutes uniques.</p>
             <p data-i18n="story1_challenge_p2">Premier reflexe : demander a une IA de generer les images. Probleme :</p>
             <div class="needs-grid">
                 <a class="need-card need-link" href="svg-anatomy.html">
                     <span class="need-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h12M4 18h8"/></svg>
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor"
+                            stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 6h16M4 12h12M4 18h8" />
+                        </svg>
                     </span>
-                    <span><span class="need-num">1.</span> <span data-i18n-html="story1_need_text">Besoin d'une image <strong>avec du texte</strong>.</span></span>
+                    <span><span class="need-num">1.</span> <span data-i18n-html="story1_need_text">Besoin d'une image
+                            <strong>avec du texte</strong>.</span></span>
                 </a>
-                <a class="need-card need-link" href="workshop.html">
+                <a class="need-card need-link" href="blackroom.html">
                     <span class="need-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="11.5" r="2.5"/><circle cx="11.5" cy="17.5" r="2.5"/><circle cx="18.5" cy="14.5" r="2.5"/></svg>
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor"
+                            stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="13.5" cy="6.5" r="2.5" />
+                            <circle cx="6.5" cy="11.5" r="2.5" />
+                            <circle cx="11.5" cy="17.5" r="2.5" />
+                            <circle cx="18.5" cy="14.5" r="2.5" />
+                        </svg>
                     </span>
-                    <span><span class="need-num">2.</span> <span data-i18n-html="story1_need_color">Besoin d'une image <strong>facilement recoloriable</strong>.</span></span>
+                    <span><span class="need-num">2.</span> <span data-i18n-html="story1_need_color">Besoin d'une image
+                            <strong>facilement recoloriable</strong>.</span></span>
                 </a>
                 <a class="need-card need-link" href="what-is-svg.html">
                     <span class="need-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3 14 10M3 21l7-7M21 3v7M21 3h-7M3 21v-7M3 21h7"/></svg>
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor"
+                            stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 3 14 10M3 21l7-7M21 3v7M21 3h-7M3 21v-7M3 21h7" />
+                        </svg>
                     </span>
-                    <span><span class="need-num">3.</span> <span data-i18n-html="story1_need_size">Besoin d'une <strong>taille flexible</strong>.</span></span>
+                    <span><span class="need-num">3.</span> <span data-i18n-html="story1_need_size">Besoin d'une
+                            <strong>taille flexible</strong>.</span></span>
                 </a>
-                <a class="need-card need-link" href="make-svg.html">
+                <a class="need-card need-link" href="svg-anatomy.html">
                     <span class="need-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l3-3 9-9 3 3-9 9-3 0v-3"/><path d="M14 6l4 4"/><path d="M10 21h11"/></svg>
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor"
+                            stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 21l3-3 9-9 3 3-9 9-3 0v-3" />
+                            <path d="M14 6l4 4" />
+                            <path d="M10 21h11" />
+                        </svg>
                     </span>
-                    <span><span class="need-num">4.</span> <span data-i18n-html="story1_need_draw">Et surtout : <strong>je suis nul en dessin.</strong></span></span>
+                    <span><span class="need-num">4.</span> <span data-i18n-html="story1_need_draw">Et surtout :
+                            <strong>je suis nul en dessin.</strong></span></span>
                 </a>
             </div>
         </div>
@@ -245,76 +406,107 @@
         <!-- The 3 examples (boneV13-based) -->
         <div class="content-block">
             <h3 data-i18n="story1_examples_title">La solution : un SVG</h3>
-            <p data-i18n="story1_examples_desc">Apres plusieurs iterations, que nous verrons par la suite, la solution est rapidement devenue claire : utiliser un SVG. Meme template, trois chiens differents (le premier, c'est Syn, enfin, Syntaxe).</p>
+            <p data-i18n="story1_examples_desc">Apres plusieurs iterations, que nous verrons par la suite, la solution
+                est rapidement devenue claire : utiliser un SVG. Meme template, trois chiens differents (le premier,
+                c'est Syn, enfin, Syntaxe).</p>
 
             <div class="tag-row">
                 <!-- Syn(taxe), warm gold/orange -->
                 <div class="tag-card">
-                    <svg viewBox="0 0 200 235" xmlns="http://www.w3.org/2000/svg" style="--metal-s1:#56380e; --metal-s3:#7a5418; --metal-s4:#9a6e23; --metal-s5:#b78b34; --metal-s6:#d6ab51; --metal-s7:#f0cd7c; --bone-border:#5a3c0e">
+                    <svg viewBox="0 0 200 235" xmlns="http://www.w3.org/2000/svg"
+                        style="--metal-s1:#56380e; --metal-s3:#7a5418; --metal-s4:#9a6e23; --metal-s5:#b78b34; --metal-s6:#d6ab51; --metal-s7:#f0cd7c; --bone-border:#5a3c0e">
                         <defs>
-                            <clipPath id="circ-syn"><circle cx="100" cy="80" r="65"/></clipPath>
+                            <clipPath id="circ-syn">
+                                <circle cx="100" cy="80" r="65" />
+                            </clipPath>
                         </defs>
-                        <image href="images/story/syn.jpg" x="35" y="15" width="130" height="130" preserveAspectRatio="xMidYMid slice" clip-path="url(#circ-syn)"/>
-                        <circle cx="100" cy="80" r="65" fill="none" stroke="#5a3c0e" stroke-width="5"/>
+                        <image href="images/story/syn.jpg" x="35" y="15" width="130" height="130"
+                            preserveAspectRatio="xMidYMid slice" clip-path="url(#circ-syn)" />
+                        <circle cx="100" cy="80" r="65" fill="none" stroke="#5a3c0e" stroke-width="5" />
                         <g class="bone-slot" data-x="20" data-y="120" data-w="160" data-h="100"></g>
-                        <text x="100" y="180" text-anchor="middle" font-family="Cabin Sketch, Arial" font-weight="bold" font-size="22" fill="#fff" stroke="#000" stroke-width="3" stroke-linejoin="round" paint-order="stroke" style="paint-order: stroke fill" transform="scale(1)">Syntaxe</text>
+                        <text x="100" y="180" text-anchor="middle" font-family="Cabin Sketch, Arial" font-weight="bold"
+                            font-size="22" fill="#fff" stroke="#000" stroke-width="3" stroke-linejoin="round"
+                            paint-order="stroke" style="paint-order: stroke fill" transform="scale(1)">Syntaxe</text>
                     </svg>
                     <p class="tag-caption" data-i18n="story1_tag_caption_syn">Syn(taxe), le papa</p>
                 </div>
                 <!-- Albert, blue -->
                 <div class="tag-card">
-                    <svg viewBox="0 0 200 235" xmlns="http://www.w3.org/2000/svg" style="--metal-s1:#0a1428; --metal-s3:#152340; --metal-s4:#1d3056; --metal-s5:#264070; --metal-s6:#33548c; --metal-s7:#4a72b3; --bone-border:rgba(255,255,255,0.7)">
+                    <svg viewBox="0 0 200 235" xmlns="http://www.w3.org/2000/svg"
+                        style="--metal-s1:#0a1428; --metal-s3:#152340; --metal-s4:#1d3056; --metal-s5:#264070; --metal-s6:#33548c; --metal-s7:#4a72b3; --bone-border:rgba(255,255,255,0.7)">
                         <defs>
-                            <clipPath id="circ-alb"><circle cx="100" cy="80" r="65"/></clipPath>
+                            <clipPath id="circ-alb">
+                                <circle cx="100" cy="80" r="65" />
+                            </clipPath>
                         </defs>
-                        <image href="images/story/albert.jpg" x="35" y="15" width="130" height="130" preserveAspectRatio="xMidYMid slice" clip-path="url(#circ-alb)"/>
-                        <circle cx="100" cy="80" r="65" fill="none" stroke="#0a1428" stroke-width="5"/>
+                        <image href="images/story/albert.jpg" x="35" y="15" width="130" height="130"
+                            preserveAspectRatio="xMidYMid slice" clip-path="url(#circ-alb)" />
+                        <circle cx="100" cy="80" r="65" fill="none" stroke="#0a1428" stroke-width="5" />
                         <g class="bone-slot" data-x="20" data-y="120" data-w="160" data-h="100"></g>
-                        <text x="100" y="180" text-anchor="middle" font-family="Cabin Sketch, Arial" font-weight="bold" font-size="22" fill="#fff" stroke="#000" stroke-width="3" stroke-linejoin="round" paint-order="stroke" style="paint-order: stroke fill">Albert</text>
+                        <text x="100" y="180" text-anchor="middle" font-family="Cabin Sketch, Arial" font-weight="bold"
+                            font-size="22" fill="#fff" stroke="#000" stroke-width="3" stroke-linejoin="round"
+                            paint-order="stroke" style="paint-order: stroke fill">Albert</text>
                     </svg>
                     <p class="tag-caption">Albert</p>
                 </div>
                 <!-- Daisy, pink -->
                 <div class="tag-card">
-                    <svg viewBox="0 0 200 235" xmlns="http://www.w3.org/2000/svg" style="--metal-s1:#4a1a3c; --metal-s3:#7a2c5e; --metal-s4:#a04280; --metal-s5:#c057a0; --metal-s6:#d97cba; --metal-s7:#f0a8d6; --bone-border:#4a1a3c">
+                    <svg viewBox="0 0 200 235" xmlns="http://www.w3.org/2000/svg"
+                        style="--metal-s1:#4a1a3c; --metal-s3:#7a2c5e; --metal-s4:#a04280; --metal-s5:#c057a0; --metal-s6:#d97cba; --metal-s7:#f0a8d6; --bone-border:#4a1a3c">
                         <defs>
-                            <clipPath id="circ-dai"><circle cx="100" cy="80" r="65"/></clipPath>
+                            <clipPath id="circ-dai">
+                                <circle cx="100" cy="80" r="65" />
+                            </clipPath>
                         </defs>
-                        <image href="images/story/daisy.jpg" x="35" y="15" width="130" height="130" preserveAspectRatio="xMidYMid slice" clip-path="url(#circ-dai)"/>
-                        <circle cx="100" cy="80" r="65" fill="none" stroke="#4a1a3c" stroke-width="5"/>
+                        <image href="images/story/daisy.jpg" x="35" y="15" width="130" height="130"
+                            preserveAspectRatio="xMidYMid slice" clip-path="url(#circ-dai)" />
+                        <circle cx="100" cy="80" r="65" fill="none" stroke="#4a1a3c" stroke-width="5" />
                         <g class="bone-slot" data-x="20" data-y="120" data-w="160" data-h="100"></g>
-                        <text x="100" y="180" text-anchor="middle" font-family="Cabin Sketch, Arial" font-weight="bold" font-size="22" fill="#fff" stroke="#000" stroke-width="3" stroke-linejoin="round" paint-order="stroke" style="paint-order: stroke fill">Daisy</text>
+                        <text x="100" y="180" text-anchor="middle" font-family="Cabin Sketch, Arial" font-weight="bold"
+                            font-size="22" fill="#fff" stroke="#000" stroke-width="3" stroke-linejoin="round"
+                            paint-order="stroke" style="paint-order: stroke fill">Daisy</text>
                     </svg>
                     <p class="tag-caption">Daisy</p>
                 </div>
             </div>
-            <p data-i18n="story1_examples_note">Le format est SVG : du texte XML, recolorable a la volee, redimensionnable a l'infini, et le nom du chien est juste... un attribut texte.</p>
+            <p data-i18n="story1_examples_note">Le format est SVG : du texte XML, recolorable a la volee,
+                redimensionnable a l'infini, et le nom du chien est juste... un attribut texte.</p>
         </div>
 
         <!-- Mini-workshop -->
         <div class="content-block">
             <h3 data-i18n="story1_play_title">A toi de jouer</h3>
-            <p data-i18n="story1_play_desc">Choisis un chien, change le nom, change la couleur de la medaille. Tout est genere en temps reel, c'est exactement le pattern qu'utilise le site SynAndKaya pour onze chiens differents.</p>
+            <p data-i18n="story1_play_desc">Choisis un chien, change le nom, change la couleur de la medaille. Tout est
+                genere en temps reel, c'est exactement le pattern qu'utilise le site SynAndKaya pour onze chiens
+                differents.</p>
 
             <div class="tagshop">
                 <div class="tagshop-stage">
                     <svg id="ts-svg" viewBox="0 0 200 235" width="340" height="400" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                            <clipPath id="ts-clip"><circle cx="100" cy="80" r="65"/></clipPath>
+                            <clipPath id="ts-clip">
+                                <circle cx="100" cy="80" r="65" />
+                            </clipPath>
                         </defs>
-                        <image id="ts-image" href="images/story/syn.jpg" x="35" y="15" width="130" height="130" preserveAspectRatio="xMidYMid slice" clip-path="url(#ts-clip)"/>
-                        <circle id="ts-ring" cx="100" cy="80" r="65" fill="none" stroke="#5a3c0e" stroke-width="5"/>
+                        <image id="ts-image" href="images/story/syn.jpg" x="35" y="15" width="130" height="130"
+                            preserveAspectRatio="xMidYMid slice" clip-path="url(#ts-clip)" />
+                        <circle id="ts-ring" cx="100" cy="80" r="65" fill="none" stroke="#5a3c0e" stroke-width="5" />
                         <g class="bone-slot" data-x="20" data-y="120" data-w="160" data-h="100"></g>
-                        <text id="ts-text" x="100" y="180" text-anchor="middle" font-family="Cabin Sketch, Arial" font-weight="bold" font-size="22" fill="#fff" stroke="#000" stroke-width="3" stroke-linejoin="round" paint-order="stroke" style="paint-order: stroke fill">Syntaxe</text>
+                        <text id="ts-text" x="100" y="180" text-anchor="middle" font-family="Cabin Sketch, Arial"
+                            font-weight="bold" font-size="22" fill="#fff" stroke="#000" stroke-width="3"
+                            stroke-linejoin="round" paint-order="stroke" style="paint-order: stroke fill">Syntaxe</text>
                     </svg>
                 </div>
                 <div class="tagshop-controls">
                     <div class="control-group">
                         <label data-i18n="story1_play_pick">Choisis un chien :</label>
                         <div class="photo-picker">
-                            <button class="active" data-img="images/story/syn.jpg" data-name="Syntaxe" data-base="#9a6e23"><img src="images/story/syn.jpg" alt="Syn"></button>
-                            <button data-img="images/story/albert.jpg" data-name="Albert" data-base="#1d3056"><img src="images/story/albert.jpg" alt="Albert"></button>
-                            <button data-img="images/story/daisy.jpg" data-name="Daisy" data-base="#a04280"><img src="images/story/daisy.jpg" alt="Daisy"></button>
+                            <button class="active" data-img="images/story/syn.jpg" data-name="Syntaxe"
+                                data-base="#9a6e23"><img src="images/story/syn.jpg" alt="Syn"></button>
+                            <button data-img="images/story/albert.jpg" data-name="Albert" data-base="#1d3056"><img
+                                    src="images/story/albert.jpg" alt="Albert"></button>
+                            <button data-img="images/story/daisy.jpg" data-name="Daisy" data-base="#a04280"><img
+                                    src="images/story/daisy.jpg" alt="Daisy"></button>
                         </div>
                     </div>
                     <div class="control-group">
@@ -325,7 +517,8 @@
                         <label for="ts-base" data-i18n="story1_play_color">Couleur de la medaille :</label>
                         <div style="display: flex; gap: 0.75rem; align-items: center; margin-top: 0.25rem;">
                             <input type="color" id="ts-base" value="#9a6e23">
-                            <span id="ts-base-hex" style="font-family: ui-monospace, monospace; font-size: 0.85rem; color: var(--text-light);">#9a6e23</span>
+                            <span id="ts-base-hex"
+                                style="font-family: ui-monospace, monospace; font-size: 0.85rem; color: var(--text-light);">#9a6e23</span>
                         </div>
                     </div>
 
@@ -345,7 +538,8 @@
                             <code id="ts-border-mode">mid</code>
                             <span id="ts-border-swatch" class="lum-swatch"></span>
                         </div>
-                        <div style="display:flex; gap:0.5rem; align-items:center; margin-top:0.5rem; font-size:0.85rem;">
+                        <div
+                            style="display:flex; gap:0.5rem; align-items:center; margin-top:0.5rem; font-size:0.85rem;">
                             <label for="ts-thresh" data-i18n="story1_flip_thresh">Seuil :</label>
                             <input type="range" id="ts-thresh" min="0" max="1" step="0.01" value="0.30" style="flex:1;">
                             <code id="ts-thresh-val" style="min-width: 3em; text-align: right;">0.30</code>
@@ -354,27 +548,45 @@
                 </div>
             </div>
 
-            <p data-i18n-html="story1_flip_explain" style="margin-top:1rem; padding:0.75rem 1rem; background:rgba(155, 89, 182, 0.06); border-left:3px solid #9b59b6; border-radius:0 6px 6px 0; font-size:0.92rem;">
+            <p data-i18n-html="story1_flip_explain"
+                style="margin-top:1rem; padding:0.75rem 1rem; background:rgba(155, 89, 182, 0.06); border-left:3px solid #9b59b6; border-radius:0 6px 6px 0; font-size:0.92rem;">
                 <i class="fa-solid fa-code" style="color:#9b59b6; margin-right:0.4rem;"></i>
-                <strong>Et la bordure ?</strong> Elle n'est pas dans la palette : c'est du <strong>JavaScript</strong> qui la calcule a partir de la luminance perceptive de la couleur principale. Si <code>0.299&middot;R + 0.587&middot;G + 0.114&middot;B</code> (la luminance) passe sous le seuil, la bordure passe en <strong>blanc</strong> (sinon elle reste sombre). Glisse le seuil ou choisis Albert pour voir le flip se declencher.
+                <strong>Et la bordure ?</strong> Elle n'est pas dans la palette : c'est du <strong>JavaScript</strong>
+                qui la calcule a partir de la luminance perceptive de la couleur principale. Si
+                <code>0.299&middot;R + 0.587&middot;G + 0.114&middot;B</code> (la luminance) passe sous le seuil, la
+                bordure passe en <strong>blanc</strong> (sinon elle reste sombre). Glisse le seuil ou choisis Albert
+                pour voir le flip se declencher.
             </p>
         </div>
 
         <!-- AI bridge with money shot -->
-        <div class="content-block" style="border-left: 4px solid #9b59b6; background: linear-gradient(135deg, rgba(155, 89, 182, 0.04), rgba(186, 1, 1, 0.04));">
-            <h3 data-i18n="story1_ai_title"><i class="fa-solid fa-robot" style="color:#9b59b6; margin-right:0.5rem;"></i>Tout ca, possible grace a l'IA</h3>
-            <img src="images/story/money-shot.jpg" alt="Syntaxe en dogtag, la solution finale" class="money-shot">
-            <p data-i18n="story1_ai_p1">Le travail ne fut pas simple, mais en une journee, accompagne par Claude, les tags etaient prets a l'emploi et uniques pour chaque chien.</p>
-            <p data-i18n-html="story1_ai_p2">Je suis nul en dessin, mais je sais ecrire un prompt et lire du code, les deux seuls skills necessaires pour creer une image vectorielle en 2026. C'est la-dessus qu'on va creuser dans la suite : <a class="inline-link" href="what-is-svg.html">pourquoi le SVG plait a l'IA</a>, comment <a class="inline-link" href="svg-anatomy.html">l'anatomie d'un fichier</a> se prete au format texte, et comment construire ses propres SVGs <a class="inline-link" href="make-svg.html">parametriques</a> avec un atelier interactif.</p>
+        <div class="content-block"
+            style="border-left: 4px solid #9b59b6; background: linear-gradient(135deg, rgba(155, 89, 182, 0.04), rgba(186, 1, 1, 0.04));">
+            <h3 data-i18n="story1_ai_title"><i class="fa-solid fa-robot"
+                    style="color:#9b59b6; margin-right:0.5rem;"></i>Tout ca, possible grace a l'IA</h3>
+            <img src="images/story/money-shot.jpg" alt="Syntaxe en dogtag, la solution finale" class="money-shot zoomable">
+            <p data-i18n="story1_ai_p1">Le travail ne fut pas simple, mais en une journee, accompagne par Claude, les
+                tags etaient prets a l'emploi et uniques pour chaque chien.</p>
+            <p data-i18n-html="story1_ai_p2">Je suis nul en dessin, mais je sais ecrire un prompt et lire du code, les
+                deux seuls skills necessaires pour creer une image vectorielle en 2026. C'est la-dessus qu'on va creuser
+                dans la suite : <a class="inline-link" href="what-is-svg.html">pourquoi le SVG plait a l'IA</a>, comment
+                <a class="inline-link" href="svg-anatomy.html">l'anatomie d'un fichier</a> se prete au format texte, et
+                comment construire ses propres SVGs <a class="inline-link" href="svg-anatomy.html">parametriques</a>
+                avec un atelier interactif.
+            </p>
             <div style="clear: both;"></div>
         </div>
 
         <!-- End-of-act CTA -->
         <div class="content-block" style="text-align: center;">
-            <p data-i18n="story1_end_label" style="text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-light); font-size: 0.85rem;">Fin de l'acte 1</p>
-            <p data-i18n="story1_end_p" style="font-size: 1.05rem; margin: 1rem 0;">L'acte 2 raconte comment l'IA m'a aide a tout construire, les outils, les pieges, les surprises.</p>
-            <a href="stories.html" data-i18n="story1_end_back" style="display: inline-block; padding: 0.65rem 1.4rem; background: var(--card-bg); color: var(--primary-blue); border: 1px solid var(--primary-blue); border-radius: var(--radius); text-decoration: none; font-weight: 600; margin-right: 0.5rem;">Retour aux histoires</a>
-            <a href="story-part2.html" data-i18n="story1_end_continue" style="display: inline-block; padding: 0.65rem 1.4rem; background: var(--accent-gradient); color: white; border-radius: var(--radius); text-decoration: none; font-weight: 600;">Continuer vers l'Acte 2 &rarr;</a>
+            <p data-i18n="story1_end_label"
+                style="text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-light); font-size: 0.85rem;">
+                Fin de l'acte 1</p>
+            <p data-i18n="story1_end_p" style="font-size: 1.05rem; margin: 1rem 0;">L'acte 2 raconte comment l'IA m'a
+                aide a tout construire, les outils, les pieges, les surprises.</p>
+            <a href="index.html" class="act-btn back" data-i18n="story1_end_prev">&larr; Accueil</a>
+            <a href="stories.html" class="act-btn neutral" data-i18n="story1_end_back">Retour aux histoires</a>
+            <a href="story-part2.html" class="act-btn forward" data-i18n="story1_end_continue">Continuer vers l'Acte 2 &rarr;</a>
         </div>
     </main>
 
@@ -394,7 +606,7 @@
             // palette baked in (no CSS-var indirection, that path is unreliable
             // through cross-SVG references).  Returns an SVGSVGElement that
             // should be inserted as a child of the target SVG.
-            function makeBone({x, y, w, h, palette}) {
+            function makeBone({ x, y, w, h, palette }) {
                 const id = 'bv13-' + (++boneCounter);
                 const wrapper = document.createElementNS(SVG_NS, 'svg');
                 wrapper.setAttribute('x', x);
@@ -445,12 +657,12 @@
                 const cs = getComputedStyle(svg);
                 const get = (name, fb) => (cs.getPropertyValue(name).trim() || fb);
                 return {
-                    s1:     get('--metal-s1', '#444'),
-                    s3:     get('--metal-s3', '#666'),
-                    s4:     get('--metal-s4', '#777'),
-                    s5:     get('--metal-s5', '#888'),
-                    s6:     get('--metal-s6', '#999'),
-                    s7:     get('--metal-s7', '#aaa'),
+                    s1: get('--metal-s1', '#444'),
+                    s3: get('--metal-s3', '#666'),
+                    s4: get('--metal-s4', '#777'),
+                    s5: get('--metal-s5', '#888'),
+                    s6: get('--metal-s6', '#999'),
+                    s7: get('--metal-s7', '#aaa'),
                     border: get('--bone-border', '#333'),
                 };
             }
@@ -522,9 +734,9 @@
             // semi-transparent white (so a dark tag stays readable).
             function computeBorder(r, g, b, flipThreshold) {
                 const lum = luminance(r, g, b);
-                if (lum < flipThreshold)  return { color: 'rgba(255,255,255,0.7)', mode: 'white (flip)' };
-                if (lum > 0.7)            return { color: rgbStr(clamp(r-120), clamp(g-120), clamp(b-120)), mode: 'super dark' };
-                                          return { color: rgbStr(...metallicShade(r, g, b, -60, 0.5, 0.45)), mode: 'mid metallic' };
+                if (lum < flipThreshold) return { color: 'rgba(255,255,255,0.7)', mode: 'white (flip)' };
+                if (lum > 0.7) return { color: rgbStr(clamp(r - 120), clamp(g - 120), clamp(b - 120)), mode: 'super dark' };
+                return { color: rgbStr(...metallicShade(r, g, b, -60, 0.5, 0.45)), mode: 'mid metallic' };
             }
             function generatePalette(hex, flipThreshold = 0.30) {
                 const [r, g, b] = hexToRgb(hex);
@@ -533,9 +745,9 @@
                     metallicShade(r, g, b, -70, 0.62, 0.58), // S2
                     metallicShade(r, g, b, -50, 0.65, 0.56), // S3
                     metallicShade(r, g, b, -25, 0.7, 0.54),  // S4
-                    metallicShade(r, g, b, 0,   0.75, 0.52), // S5
-                    metallicShade(r, g, b, 25,  0.8, 0.5),   // S6
-                    metallicShade(r, g, b, 50,  0.85, 0.48), // S7
+                    metallicShade(r, g, b, 0, 0.75, 0.52), // S5
+                    metallicShade(r, g, b, 25, 0.8, 0.5),   // S6
+                    metallicShade(r, g, b, 50, 0.85, 0.48), // S7
                 ];
                 const borderInfo = computeBorder(r, g, b, flipThreshold);
                 return {
@@ -550,18 +762,18 @@
             }
 
             const stage = {
-                svg:        $('#ts-svg'),
-                img:        $('#ts-image'),
-                ring:       $('#ts-ring'),
-                text:       $('#ts-text'),
-                name:       $('#ts-name'),
-                base:       $('#ts-base'),
-                hex:        $('#ts-base-hex'),
-                thresh:     $('#ts-thresh'),
-                threshVal:  $('#ts-thresh-val'),
-                lumMarker:  $('#ts-lum-marker'),
+                svg: $('#ts-svg'),
+                img: $('#ts-image'),
+                ring: $('#ts-ring'),
+                text: $('#ts-text'),
+                name: $('#ts-name'),
+                base: $('#ts-base'),
+                hex: $('#ts-base-hex'),
+                thresh: $('#ts-thresh'),
+                threshVal: $('#ts-thresh-val'),
+                lumMarker: $('#ts-lum-marker'),
                 threshMark: $('#ts-thresh-marker'),
-                lumVal:     $('#ts-lum-val'),
+                lumVal: $('#ts-lum-val'),
                 borderMode: $('#ts-border-mode'),
                 borderSwatch: $('#ts-border-swatch'),
             };
@@ -602,4 +814,5 @@
         })();
     </script>
 </body>
+
 </html>

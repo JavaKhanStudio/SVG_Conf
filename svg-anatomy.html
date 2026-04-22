@@ -7,6 +7,31 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="icon" href="images/LogoHeaderSBP.png" type="image/png">
+    <style>
+        .recipe-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 1rem; }
+        @media (min-width: 900px) { .recipe-grid { grid-template-columns: 1fr 1fr; } }
+        .recipe-grid .svg-display { background: #f8f9fa; padding: 1rem; border-radius: var(--radius); }
+        .hint-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.92rem; }
+        .hint-table th, .hint-table td { text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--border-color); vertical-align: top; }
+        .hint-table th { background: #f8f9fa; color: var(--primary-blue); font-weight: 600; }
+        .hint-table code { background: #eef; padding: 1px 5px; border-radius: 3px; font-size: 0.88rem; }
+        .pitfall-list { list-style: none; padding: 0; }
+        .pitfall-list li { padding: 0.6rem 0.9rem; margin: 0.4rem 0; background: rgba(231, 76, 60, 0.06); border-left: 3px solid #e74c3c; border-radius: 0 6px 6px 0; }
+        .pitfall-list li strong { color: #c0392b; }
+        .live-editor .live-code { display: flex; flex-direction: column; min-height: 280px; }
+        .live-editor .live-source {
+            flex: 1;
+            background: var(--code-bg); color: var(--code-text);
+            border: none; outline: none;
+            font-family: ui-monospace, "Cascadia Code", monospace;
+            font-size: 0.82rem; line-height: 1.45;
+            padding: 0.8rem 1rem; border-radius: 6px;
+            resize: vertical; tab-size: 2;
+            min-height: 240px; white-space: pre;
+        }
+        .live-editor .live-render { display: flex; align-items: stretch; justify-content: stretch; min-height: 280px; padding: 0; }
+        .live-editor .live-render iframe { flex: 1; border: none; background: white; border-radius: var(--radius); min-height: 280px; width: 100%; }
+    </style>
 </head>
 <body>
     <div id="header-placeholder"></div>
@@ -234,7 +259,7 @@
         <!-- Styling -->
         <div class="content-block">
             <h3 data-i18n="anat_styling_title">Stylisation</h3>
-            <p data-i18n-html="anat_styling_desc">Les elements SVG peuvent etre styles avec des attributs, du CSS inline, ou des feuilles de style externes. Combine avec des <strong>variables CSS</strong>, le meme SVG devient parametrable a la volee, c'est exactement ce que fait <a class="inline-link" href="workshop.html">l'atelier</a>.</p>
+            <p data-i18n-html="anat_styling_desc">Les elements SVG peuvent etre styles avec des attributs, du CSS inline, ou des feuilles de style externes. Combine avec des <strong>variables CSS</strong>, le meme SVG devient parametrable a la volee, c'est exactement ce que fait <a class="inline-link" href="blackroom.html">la Black Room</a>.</p>
             <div class="split-layout">
                 <div class="code-block">
                     <span class="code-label">Attributes</span>
@@ -272,9 +297,127 @@
         <!-- Cheatsheet link -->
         <div class="content-block" style="text-align:center;">
             <h3 data-i18n="anat_cheatsheet">Aide-memoire complet</h3>
-            <div class="svg-display" style="max-height: 600px; overflow-y: auto;">
+            <div class="svg-display">
                 <img src="images/cheatSheets/cs_general.svg" alt="SVG Cheat Sheet" style="width:100%; max-width:800px;">
             </div>
+        </div>
+
+        <!-- =========================================================
+             Recette : ton propre SVG parametrique (merged from make-svg.html)
+             ========================================================= -->
+        <div class="page-hero" style="margin-top:2.5rem;">
+            <h2 data-i18n="recipe_title">Recette : ton propre SVG parametrique</h2>
+            <p data-i18n="recipe_subtitle">Le format que la Black Room comprend, en quelques lignes</p>
+        </div>
+
+        <div class="content-block">
+            <h3 data-i18n="recipe_principle_title">Le principe</h3>
+            <p data-i18n-html="recipe_principle_desc">Tu declares tes parametres en variables CSS dans une regle <code>:root</code>, placee dans une balise <code>&lt;style&gt;</code> en tout debut du SVG. Tu reutilises ces variables via <code>var(--ma-variable)</code> dans les attributs. C'est tout : le SVG reste 100% valide, ouvrable dans Inkscape, dans une page web, ou dans <a class="inline-link" href="blackroom.html">la Black Room</a> qui detecte les variables et fabrique les controles automatiquement.</p>
+
+            <div class="recipe-grid live-editor" data-editor="template">
+                <div class="code-block live-code">
+                    <span class="code-label" data-i18n="recipe_live_label">Template minimal &mdash; modifie a gauche, regarde a droite</span>
+                    <textarea class="live-source" spellcheck="false">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"&gt;
+  &lt;style&gt;
+    :root {
+      --bg-color:    #1a1a2e;
+      --shape-color: #4a90e2;
+      --shape-size:  50;
+    }
+  &lt;/style&gt;
+  &lt;rect width="100%" height="100%"
+        fill="var(--bg-color)" /&gt;
+  &lt;circle cx="100" cy="100"
+           r="var(--shape-size)"
+           fill="var(--shape-color)" /&gt;
+&lt;/svg&gt;</textarea>
+                </div>
+                <div class="svg-display live-render"></div>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h3 data-i18n="recipe_inference_title">Inference automatique</h3>
+            <p data-i18n="recipe_inference_desc">Pas besoin d'annoter chaque variable. La Black Room devine le type a partir de la valeur :</p>
+            <table class="hint-table">
+                <thead>
+                    <tr><th data-i18n="recipe_th_value">Valeur ressemble a</th><th data-i18n="recipe_th_control">Controle</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>#1a1a2e</code>, <code>rgb(...)</code>, <code>red</code></td><td data-i18n="recipe_ctrl_color">Selecteur de couleur</td></tr>
+                    <tr><td><code>20</code>, <code>1.5</code>, <code>45deg</code>, <code>100%</code></td><td data-i18n="recipe_ctrl_number">Curseur numerique</td></tr>
+                    <tr><td><code>true</code> / <code>false</code></td><td data-i18n="recipe_ctrl_bool">Case a cocher</td></tr>
+                    <tr><td data-i18n="recipe_ctrl_other_val">N'importe quoi d'autre</td><td data-i18n="recipe_ctrl_text">Champ texte</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-block">
+            <h3 data-i18n="recipe_hints_title">Indices @ws (quand tu veux plus de controle)</h3>
+            <p data-i18n-html="recipe_hints_desc">Ajoute un commentaire <code>/* @ws ... */</code> apres la valeur, sur la meme ligne, pour upgrader le controle. Les commentaires sont ignores par le navigateur, donc le SVG reste valide.</p>
+
+            <div class="code-block" style="margin: 1rem 0;">
+                <code>:root {
+  <span class="attr">--pupil-size</span>:    <span class="val">20</span>;     <span class="comment">/* @ws number min=5 max=50 step=1 */</span>
+  <span class="attr">--style-mode</span>:    <span class="val">soft</span>;   <span class="comment">/* @ws select options=soft,sharp,neon */</span>
+  <span class="attr">--seed</span>:          <span class="val">12345</span>;  <span class="comment">/* @ws seed */</span>
+  <span class="attr">--orange</span>:        <span class="val">#f09040</span>;
+  <span class="attr">--orange-shadow</span>: <span class="val">#7a4820</span>; <span class="comment">/* @ws mix=orange:-0.55 */</span>
+  <span class="attr">--internal</span>:     <span class="val">0.7</span>;    <span class="comment">/* @ws ignore */</span>
+}</code>
+            </div>
+
+            <table class="hint-table">
+                <thead>
+                    <tr><th data-i18n="recipe_th_hint">Indice</th><th data-i18n="recipe_th_what">Effet</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>@ws number min=N max=N step=N</code></td><td data-i18n="recipe_hint_number">Curseur avec plage et pas explicites.</td></tr>
+                    <tr><td><code>@ws select options=a,b,c</code></td><td data-i18n="recipe_hint_select">Menu deroulant avec les options listees.</td></tr>
+                    <tr><td><code>@ws color</code> / <code>@ws text</code></td><td data-i18n="recipe_hint_force">Force le type de controle si l'inference se trompe.</td></tr>
+                    <tr><td><code>@ws mix=base-var:amount</code></td><td data-i18n-html="recipe_hint_mix">Marque la variable comme <strong>derivee</strong> d'une autre couleur. <code>amount</code> dans <code>[-1, 1]</code> : negatif assombrit, positif eclaircit. La variable suit automatiquement sa base.</td></tr>
+                    <tr><td><code>@ws seed</code></td><td data-i18n="recipe_hint_seed">Champ numerique avec un bouton random.</td></tr>
+                    <tr><td><code>@ws ignore</code></td><td data-i18n="recipe_hint_ignore">Ne genere aucun controle (utile pour les helpers internes).</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-block">
+            <h3 data-i18n="recipe_example_title">Exemple : deux couleurs liees</h3>
+            <p data-i18n-html="recipe_example_desc">Le cas classique : une couleur principale et son ombre. Avec <code>@ws mix=...</code>, tu modifies une seule couleur et l'autre suit en temps reel.</p>
+
+            <div class="recipe-grid live-editor" data-editor="linked">
+                <div class="code-block live-code">
+                    <span class="code-label" data-i18n="recipe_live_label2">Edite le code, regarde le resultat</span>
+                    <textarea class="live-source" spellcheck="false">&lt;svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 200 100"&gt;
+  &lt;style&gt;
+    .sun    { fill: #f09040; }
+    .shadow { fill: #7a4820; }
+  &lt;/style&gt;
+  &lt;circle class="sun"    cx="60"  cy="50" r="40"/&gt;
+  &lt;circle class="shadow" cx="140" cy="50" r="40"/&gt;
+&lt;/svg&gt;</textarea>
+                </div>
+                <div class="svg-display live-render"></div>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h3 data-i18n="recipe_pitfalls_title">Pieges a eviter</h3>
+            <ul class="pitfall-list">
+                <li data-i18n-html="recipe_pitfall_root"><strong>N'oublie pas <code>:root</code>.</strong> Les declarations doivent vivre dans une regle <code>:root { ... }</code>. Une variable declaree au top-level du stylesheet sans selecteur ne sera pas detectee.</li>
+                <li data-i18n-html="recipe_pitfall_style_position"><strong>Place la balise <code>&lt;style&gt;</code> en premier enfant du <code>&lt;svg&gt;</code>.</strong> Pas dans un <code>&lt;g&gt;</code>, pas dans un <code>&lt;defs&gt;</code>. Premier enfant, c'est plus lisible et c'est ce que la Black Room cherche.</li>
+                <li data-i18n-html="recipe_pitfall_kebab"><strong>Kebab-case pour les noms.</strong> <code>--light-x</code>, pas <code>--lightX</code>. Convention CSS, plus lisible.</li>
+                <li data-i18n-html="recipe_pitfall_hint_line"><strong>L'indice <code>/* @ws ... */</code> doit etre sur la meme ligne</strong> que la declaration qu'il annote, apres le point-virgule. Sur une ligne separee, il ne sera pas associe.</li>
+                <li data-i18n-html="recipe_pitfall_no_amend"><strong>Ne reecris pas le SVG quand tu changes une valeur dans la Black Room.</strong> Les modifications sont appliquees en surcouche via des styles inline ; le fichier source garde ses defauts.</li>
+            </ul>
+        </div>
+
+        <div class="content-block" style="text-align:center;">
+            <h3 data-i18n="recipe_cta_title">A toi de jouer</h3>
+            <p data-i18n-html="recipe_cta_desc">Ouvre n'importe quel SVG de la <a class="inline-link" href="blackroom.html">galerie de la Black Room</a> et clique sur <em>Voir le code source</em> pour voir le format en vrai. Puis copie-colle le template ci-dessus dans un fichier <code>.svg</code>, ajoute tes propres variables, et teste-le en glissant le fichier dans un navigateur.</p>
+            <a href="blackroom.html" data-i18n="recipe_cta_btn" style="display:inline-block; padding:0.7rem 1.6rem; margin-top:0.5rem; background:var(--accent-gradient); color:white; text-decoration:none; border-radius:var(--radius); font-weight:600;">Tester dans la Black Room</a>
         </div>
     </main>
 
@@ -294,6 +437,33 @@
             document.getElementById('viewbox-demo').setAttribute('viewBox', `0 0 ${w} ${h}`);
             document.getElementById('viewbox-code').textContent = `viewBox="0 0 ${w} ${h}"`;
         }
+
+        // Recipe live editors: render the textarea SVG inside an iframe (srcdoc)
+        // so its <style> :root rule doesn't bleed into the host page.
+        (() => {
+            for (const editor of document.querySelectorAll('.live-editor')) {
+                const src = editor.querySelector('.live-source');
+                const out = editor.querySelector('.live-render');
+                if (!src || !out) continue;
+
+                const frame = document.createElement('iframe');
+                frame.setAttribute('sandbox', 'allow-same-origin');
+                frame.setAttribute('aria-label', 'SVG preview');
+                out.appendChild(frame);
+
+                const wrap = (svgText) =>
+                    `<!DOCTYPE html><html><head><style>
+                       html,body{margin:0;height:100%;}
+                       body{display:flex;align-items:center;justify-content:center;padding:8px;box-sizing:border-box;}
+                       svg{width:auto;height:auto;max-width:100%;max-height:100%;display:block;}
+                       svg:not([width]):not([height]){width:90%;height:90%;}
+                     </style></head><body>${svgText}</body></html>`;
+
+                const update = () => { frame.srcdoc = wrap(src.value); };
+                src.addEventListener('input', update);
+                update();
+            }
+        })();
     </script>
 </body>
 </html>

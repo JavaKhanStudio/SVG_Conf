@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <style>
+    :root {
+      --bg-color: #1a0808;
+      --bg-glow: #4a0f0f;
+      --fur-color: #0a0a0a;
+      --fur-shadow: #2a1212;          /* @ws mix=fur-color:0.15 */
+      --ear-inner: #6b0f1a;
+      --horn-color: #2a1408;
+      --eye-color: #ff1a1a;
+      --eye-pupil: #0a0000;
+      --eye-glow: #ff4444;
+      --fang-color: #e8dfc8;
+      --nose-color: #1a0505;
+      --stroke: #8a7a66;
+
+      --eye-pulse-duration: 1.6s;  /* @ws number min=0.2 max=5 step=0.1 */
+      --eye-pulse-min: 0.35;       /* @ws number min=0 max=1 step=0.05 */
+      --eye-pulse-ease: ease-in-out; /* @ws select options=linear,ease,ease-in,ease-out,ease-in-out */
+      --breathe-duration: 3.2s;    /* @ws number min=0.5 max=8 step=0.1 */
+      --breathe-amount: 0.025;     /* @ws number min=0 max=0.15 step=0.005 */
+      --horn-flicker-duration: 4.5s; /* @ws number min=0.5 max=10 step=0.1 */
+    }
+    .outline  { stroke: var(--stroke); stroke-width: 1.2; stroke-linejoin: round; stroke-linecap: round; }
+    .fur      { fill: var(--fur-color); }
+    .shadow   { fill: var(--fur-shadow); }
+    .ear-in   { fill: var(--ear-inner); }
+    .horn     { fill: var(--horn-color); stroke: var(--stroke); stroke-width: 1; }
+    .eye      { fill: var(--eye-color); filter: url(#eye-glow); }
+    .pupil    { fill: var(--eye-pupil); }
+    .fang     { fill: var(--fang-color); stroke: #3a1010; stroke-width: 0.4; }
+    .nose     { fill: var(--nose-color); }
+
+    @keyframes eye-pulse {
+      0%, 100% { opacity: 1; }
+      50%      { opacity: var(--eye-pulse-min); }
+    }
+    #eye-left, #eye-right {
+      animation: eye-pulse var(--eye-pulse-duration) var(--eye-pulse-ease) infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); }
+      50%      { transform: scale(calc(1 + var(--breathe-amount))); }
+    }
+    #body {
+      transform-box: fill-box;
+      transform-origin: 50% 100%;
+      animation: breathe var(--breathe-duration) ease-in-out infinite;
+    }
+
+    @keyframes horn-flicker {
+      0%, 92%, 100% { opacity: 1; }
+      94%, 98%      { opacity: 0.3; }
+      96%           { opacity: 1; }
+    }
+    #horn-left, #horn-right {
+      animation: horn-flicker var(--horn-flicker-duration) steps(1, end) infinite;
+    }
+  </style>
+
+  <defs>
+    <radialGradient id="bg-grad" cx="50%" cy="55%" r="70%">
+      <stop offset="0%"  stop-color="var(--bg-glow)" stop-opacity="0.9"/>
+      <stop offset="60%" stop-color="var(--bg-color)"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+    <filter id="eye-glow" x="-200%" y="-200%" width="500%" height="500%">
+      <feGaussianBlur stdDeviation="1.6" result="blur"/>
+      <feFlood flood-color="#ff2a2a" flood-opacity="0.9"/>
+      <feComposite in2="blur" operator="in" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="200" height="200" fill="url(#bg-grad)" rx="12"/>
+
+  <g id="rabbit">
+    <!-- Horns: small curved nubs between the ears -->
+    <path id="horn-left"  class="horn" d="M90 48 Q87 38 92 30 Q95 38 93 48 Z"/>
+    <path id="horn-right" class="horn" d="M110 48 Q113 38 108 30 Q105 38 107 48 Z"/>
+
+    <!-- Ears -->
+    <g id="ear-left">
+      <ellipse class="fur outline" cx="82" cy="52" rx="11" ry="32"/>
+      <ellipse class="ear-in" cx="82" cy="56" rx="5" ry="22"/>
+    </g>
+    <g id="ear-right">
+      <ellipse class="fur outline" cx="118" cy="52" rx="11" ry="32"/>
+      <ellipse class="ear-in" cx="118" cy="56" rx="5" ry="22"/>
+    </g>
+
+    <!-- Body -->
+    <ellipse id="body" class="fur outline" cx="100" cy="142" rx="48" ry="38"/>
+    <ellipse id="chest-shadow" class="shadow" cx="100" cy="118" rx="28" ry="10" opacity="0.6"/>
+
+    <!-- Front paws with claws -->
+    <ellipse id="paw-left"  class="fur outline" cx="80"  cy="172" rx="12" ry="8"/>
+    <ellipse id="paw-right" class="fur outline" cx="120" cy="172" rx="12" ry="8"/>
+    <g id="claws-left" stroke="var(--stroke)" stroke-width="0.8" fill="var(--stroke)">
+      <path d="M72 176 L70 180"/>
+      <path d="M78 178 L77 182"/>
+      <path d="M84 178 L83 182"/>
+    </g>
+    <g id="claws-right" stroke="var(--stroke)" stroke-width="0.8" fill="var(--stroke)">
+      <path d="M116 178 L115 182"/>
+      <path d="M122 178 L121 182"/>
+      <path d="M128 176 L130 180"/>
+    </g>
+
+    <!-- Head -->
+    <circle id="head" class="fur outline" cx="100" cy="100" r="34"/>
+
+    <!-- Muzzle -->
+    <ellipse id="muzzle" class="fur outline" cx="100" cy="113" rx="14" ry="9"/>
+
+    <!-- Eyes with slit pupils -->
+    <g id="eye-left">
+      <circle class="eye" cx="87" cy="94" r="4.5"/>
+      <ellipse class="pupil" cx="87" cy="94" rx="0.9" ry="3.2"/>
+    </g>
+    <g id="eye-right">
+      <circle class="eye" cx="113" cy="94" r="4.5"/>
+      <ellipse class="pupil" cx="113" cy="94" rx="0.9" ry="3.2"/>
+    </g>
+
+    <!-- Nose -->
+    <path id="nose" class="nose outline" d="M100 105 Q104 108 102 112 Q100 113 98 112 Q96 108 100 105 Z"/>
+
+    <!-- Wicked grin -->
+    <path id="mouth" class="outline" fill="none"
+          d="M92 117 Q100 123 108 117"/>
+
+    <!-- Fangs: two tiny triangles poking down from the grin -->
+    <path id="fang-left"  class="fang" d="M96 118 L95 122 L97 118 Z"/>
+    <path id="fang-right" class="fang" d="M104 118 L105 122 L103 118 Z"/>
+  </g>
+</svg>

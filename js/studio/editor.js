@@ -4,6 +4,8 @@
 // module via setSvg(svgText) / getSvg() / onChange(cb).
 
 import { parsePath, serializePath, getHandles } from './paths.js';
+import { parseRootVars, isDerived, resolveDerived } from '/src/ws-parser.js';
+import { buildControl } from '/src/ws-controls.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const OVERLAY_ID = '__studio_overlay__';
@@ -213,6 +215,24 @@ function walk(el, depth, ul) {
     nameSpan.textContent = el.id ? '#' + el.id : '(untagged)';
     li.appendChild(nameSpan);
 
+    const NON_VISUAL = new Set(['defs','lineargradient','radialgradient','filter','stop','fegaussianblur','feflood','femerge','femergenode','feoffset','fecomposite','fecolormatrix','fedropshadow','feblend','feturbulence','fedisplacementmap']);
+    if (el !== state.svg && !NON_VISUAL.has(el.tagName.toLowerCase())) {
+        const hidden = el.style.display === 'none';
+        if (hidden) li.classList.add('hidden');
+        const eye = document.createElement('button');
+        eye.className = 'tree-btn';
+        eye.textContent = hidden ? '—' : '\u{1F441}';
+        eye.title = hidden ? 'Afficher' : 'Masquer';
+        eye.addEventListener('click', e => {
+            e.stopPropagation();
+            snapshot();
+            if (el.style.display === 'none') el.style.removeProperty('display');
+            else el.style.display = 'none';
+            refresh(); fire();
+        });
+        li.appendChild(eye);
+    }
+
     if (el.id) {
         const btn = document.createElement('button');
         btn.className = 'tree-btn';
@@ -416,8 +436,8 @@ function renderInspector() {
     // Common style fields for everything except root/gradient/filter
     if (!['lineargradient','radialgradient','stop','filter','fegaussianblur','fedropshadow','fecolormatrix','style','defs'].includes(tag)) {
         addSection(host, 'Style');
-        addColorField(host, 'fill', el.getAttribute('fill') || '', v => setOrRemove(el, 'fill', v));
-        addColorField(host, 'stroke', el.getAttribute('stroke') || '', v => setOrRemove(el, 'stroke', v));
+        addPaintField(host, el, 'fill');
+        addPaintField(host, el, 'stroke');
         addNumberField(host, 'stroke-width', el.getAttribute('stroke-width') || '', 0, 50, 0.5, v => setOrRemove(el, 'stroke-width', v));
         addNumberField(host, 'opacity', el.getAttribute('opacity') ?? '', 0, 1, 0.05, v => setOrRemove(el, 'opacity', v));
     }
@@ -435,6 +455,28 @@ function renderSvgRootFields(host) {
     addTextField(host, 'viewBox', el.getAttribute('viewBox') || '', v => setOrRemove(el, 'viewBox', v));
     addTextField(host, 'width', el.getAttribute('width') || '', v => setOrRemove(el, 'width', v));
     addTextField(host, 'height', el.getAttribute('height') || '', v => setOrRemove(el, 'height', v));
+}
+
+function readTranslate(el) {
+    const t = el.getAttribute('transform') || '';
+    const m = /translate\(\s*(-?[\d.]+)(?:\s*[,\s]\s*(-?[\d.]+))?\s*\)/.exec(t);
+    return m ? { tx: parseFloat(m[1]), ty: m[2] != null ? parseFloat(m[2]) : 0 } : { tx: 0, ty: 0 };
+}
+
+function writeTranslate(el, tx, ty) {
+    const t = el.getAttribute('transform') || '';
+    const zero = Number(tx) === 0 && Number(ty) === 0;
+    const frag = zero ? '' : `translate(${tx} ${ty})`;
+    let out;
+    if (/translate\(/.test(t)) {
+        out = t.replace(/translate\([^)]*\)\s*/, frag ? frag + ' ' : '').trim();
+    } else {
+        out = (frag + ' ' + t).trim();
+    }
+    if (out === '') el.removeAttribute('transform');
+    else el.setAttribute('transform', out);
+    fire();
+    if (state.selected === el) redrawOverlay();
 }
 
 const EDITORS = {
@@ -495,6 +537,9 @@ const EDITORS = {
     g: (host, el) => {
         addSection(host, 'Groupe');
         addTextField(host, 'class', el.getAttribute('class') || '', v => setOrRemove(el, 'class', v));
+        const { tx, ty } = readTranslate(el);
+        addNumberField(host, 'translate x', tx, -1000, 1000, 1, v => writeTranslate(el, parseFloat(v) || 0, readTranslate(el).ty));
+        addNumberField(host, 'translate y', ty, -1000, 1000, 1, v => writeTranslate(el, readTranslate(el).tx, parseFloat(v) || 0));
     },
     text: (host, el) => {
         addSection(host, 'Texte');
@@ -688,6 +733,155 @@ function addColorFieldNode(host, label, value, onchange) {
     host.appendChild(row);
 }
 
+function listRootVars() {
+    const style = state.svg?.querySelector('style');
+    if (!style) return [];
+    const m = (style.textContent || '').match(/:root\s*\{([\s\S]*?)\}/);
+    if (!m) return [];
+    const out = [];
+    const re = /(--[\w-]+)\s*:\s*([^;]+?)\s*;/g;
+    let x;
+    while ((x = re.exec(m[1])) !== null) out.push({ name: x[1], value: x[2].trim() });
+    return out;
+}
+
+function resolvePaintSource(el, prop) {
+    const resolved = (() => {
+        try { return getComputedStyle(el).getPropertyValue(prop).trim(); }
+        catch (_) { return ''; }
+    })();
+    const inline = el.style?.getPropertyValue(prop);
+    if (inline) {
+        const m = /var\(\s*(--[\w-]+)/.exec(inline);
+        if (m) return { source: 'inline-var', varName: m[1], resolved };
+        return { source: 'inline-literal', literal: inline, resolved };
+    }
+    const attr = el.getAttribute(prop);
+    if (attr) {
+        const m = /var\(\s*(--[\w-]+)/.exec(attr);
+        if (m) return { source: 'attr-var', varName: m[1], resolved };
+        return { source: 'attr-literal', literal: attr, resolved };
+    }
+    const styleEl = state.svg?.querySelector(':scope > style');
+    if (styleEl && el.classList && el.classList.length) {
+        const css = styleEl.textContent || '';
+        for (const cls of el.classList) {
+            const re = new RegExp('\\.' + cls + '\\b[^{]*\\{([^}]*)\\}', 'g');
+            let rm;
+            while ((rm = re.exec(css)) !== null) {
+                const body = rm[1];
+                const propRe = new RegExp('\\b' + prop + '\\s*:\\s*([^;]+?)\\s*(?:;|$)');
+                const pm = propRe.exec(body);
+                if (pm) {
+                    const val = pm[1].trim();
+                    const vm = /var\(\s*(--[\w-]+)/.exec(val);
+                    if (vm) return { source: 'class-var', varName: vm[1], fromClass: cls, resolved };
+                    return { source: 'class-literal', literal: val, fromClass: cls, resolved };
+                }
+            }
+        }
+    }
+    return { source: 'none', resolved };
+}
+
+function addPaintField(host, el, prop) {
+    const info = resolvePaintSource(el, prop);
+    const row = mkRow(prop);
+    const wrap = document.createElement('div');
+    wrap.className = 'field-row';
+    wrap.style.flexWrap = 'wrap';
+    wrap.style.gap = '0.3rem';
+
+    const swatch = document.createElement('span');
+    swatch.style.cssText = 'display:inline-block;width:20px;height:20px;border:1px solid #d1d5db;border-radius:3px;background:' + (info.resolved || '#fff') + ';';
+    swatch.title = info.resolved || '';
+    wrap.appendChild(swatch);
+
+    const linked = info.source === 'attr-var' || info.source === 'class-var' || info.source === 'inline-var';
+    if (linked) {
+        const badge = document.createElement('span');
+        badge.style.cssText = 'font-family:ui-monospace,monospace;font-size:0.78rem;color:#0752CF;';
+        badge.textContent = '\u{1F517} ' + info.varName;
+        if (info.fromClass) badge.title = 'via .' + info.fromClass;
+        wrap.appendChild(badge);
+
+        const disc = document.createElement('button');
+        disc.className = 'tree-btn';
+        disc.textContent = 'Déconnecter';
+        disc.title = 'Écrire la couleur résolue en attribut direct';
+        disc.addEventListener('click', () => {
+            snapshot();
+            const v = toHex(info.resolved) || info.resolved || '#000000';
+            // Inline style beats class rules in specificity; attribute doesn't.
+            el.removeAttribute(prop);
+            el.style.setProperty(prop, v);
+            fire(); renderInspector();
+        });
+        wrap.appendChild(disc);
+    } else {
+        const hex = toHex(info.resolved) || toHex(info.literal) || '#000000';
+        const color = document.createElement('input');
+        color.type = 'color';
+        color.value = hex;
+        let pending = false;
+        color.addEventListener('input', () => {
+            if (!pending) { snapshot(); pending = true; }
+            el.removeAttribute(prop);
+            el.style.setProperty(prop, color.value);
+            fire(); if (state.selected === el) redrawOverlay();
+            swatch.style.background = color.value;
+        });
+        color.addEventListener('change', () => { pending = false; });
+        wrap.appendChild(color);
+
+        if (el.hasAttribute(prop) || el.style.getPropertyValue(prop)) {
+            const clr = document.createElement('button');
+            clr.className = 'tree-btn';
+            clr.textContent = '×';
+            clr.title = 'Retirer la valeur directe';
+            clr.addEventListener('click', () => {
+                snapshot();
+                el.removeAttribute(prop);
+                el.style.removeProperty(prop);
+                fire(); renderInspector();
+            });
+            wrap.appendChild(clr);
+        }
+    }
+
+    const vars = listRootVars().filter(v => toHex(v.value));
+    if (vars.length) {
+        const sel = document.createElement('select');
+        sel.style.cssText = 'font-size:0.78rem;max-width:140px;';
+        const opt0 = document.createElement('option');
+        opt0.value = '';
+        opt0.textContent = linked ? 'Changer…' : 'Lier à…';
+        sel.appendChild(opt0);
+        for (const v of vars) {
+            const o = document.createElement('option');
+            o.value = v.name;
+            o.textContent = v.name;
+            sel.appendChild(o);
+        }
+        if (linked && info.varName) sel.value = info.varName;
+        sel.addEventListener('change', () => {
+            if (!sel.value) return;
+            snapshot();
+            // var() only resolves in CSS context (style attr / stylesheet),
+            // NOT as a presentation attribute. Use inline style, strip any attr.
+            el.removeAttribute(prop);
+            el.style.setProperty(prop, 'var(' + sel.value + ')');
+            fire();
+            if (state.selected === el) redrawOverlay();
+            renderInspector();
+        });
+        wrap.appendChild(sel);
+    }
+
+    row.appendChild(wrap);
+    host.appendChild(row);
+}
+
 function mkRow(label) {
     const row = document.createElement('div');
     row.className = 'field';
@@ -774,54 +968,33 @@ function renderCssVars() {
     const style = state.svg.querySelector('style');
     if (!style) { host.innerHTML = '<p class="muted" style="margin:0;">Aucun bloc style.</p>'; return; }
     const css = style.textContent || '';
-    const rootMatch = css.match(/:root\s*\{([\s\S]*?)\}/);
-    if (!rootMatch) { host.innerHTML = '<p class="muted" style="margin:0;">Pas de <code>:root</code>.</p>'; return; }
-    const body = rootMatch[1];
-    const varRe = /(--[\w-]+)\s*:\s*([^;]+?)\s*;/g;
-    let m;
-    const found = [];
-    while ((m = varRe.exec(body)) !== null) {
-        found.push({ name: m[1], value: m[2].trim() });
-    }
-    if (found.length === 0) {
+    const vars = parseRootVars(css).filter(v => v.hint?.type !== 'ignore');
+    if (!vars.length) {
         host.innerHTML = '<p class="muted" style="margin:0;">Aucune variable dans :root.</p>';
         return;
     }
-    for (const v of found) {
-        const row = document.createElement('div');
-        row.className = 'var-row';
-        const label = document.createElement('span');
-        label.className = 'var-name';
-        label.textContent = v.name;
-        row.appendChild(label);
-
-        const isColor = !!toHex(v.value);
-        const isNum = !isColor && /^-?\d+(\.\d+)?$/.test(v.value);
-        let input;
-        if (isColor) {
-            input = document.createElement('input');
-            input.type = 'color';
-            input.value = toHex(v.value);
-        } else if (isNum) {
-            input = document.createElement('input');
-            input.type = 'number';
-            input.step = 'any';
-            input.value = v.value;
-            input.style.width = '80px';
-        } else {
-            input = document.createElement('input');
-            input.type = 'text';
-            input.value = v.value;
-            input.style.width = '120px';
-        }
-        let pending = false;
-        input.addEventListener('input', () => {
-            if (!pending) { snapshot(); pending = true; }
-            updateRootVar(v.name, input.value);
+    const overrides = {};
+    let pending = false;
+    const current = name => overrides[name] ?? vars.find(x => x.name === name)?.rawValue ?? '';
+    const commit = (name, value) => {
+        if (!pending) { snapshot(); pending = true; }
+        overrides[name] = value;
+        updateRootVar(name, value);
+        fire();
+        pending = false;
+    };
+    for (const v of vars) {
+        const ctrl = buildControl(v, {
+            getCurrentValue: current,
+            setValue: commit,
+            isDerived: (vv) => isDerived(vv),
+            getDerivedColor: (name) => {
+                const resolved = resolveDerived(vars, overrides);
+                return resolved[name] || null;
+            },
+            derivedLabel: (vv) => vv.hint?.raw || '',
         });
-        input.addEventListener('change', () => { if (pending) { fire(); pending = false; } });
-        row.appendChild(input);
-        host.appendChild(row);
+        host.appendChild(ctrl);
     }
 }
 

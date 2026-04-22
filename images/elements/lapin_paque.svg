@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <title>Lapin de Pâques</title>
+
+  <!-- Prairie -->
+  <rect x="0" y="245" width="400" height="55" fill="#a8d88a"/>
+
+  <!-- Petites fleurs dans l'herbe -->
+  <g>
+    <circle cx="40" cy="265" r="3" fill="#ffd1e8"/>
+    <circle cx="40" cy="262" r="2.5" fill="#ffd1e8"/>
+    <circle cx="43" cy="265" r="2.5" fill="#ffd1e8"/>
+    <circle cx="37" cy="265" r="2.5" fill="#ffd1e8"/>
+    <circle cx="40" cy="268" r="2.5" fill="#ffd1e8"/>
+    <circle cx="40" cy="265" r="1.5" fill="#fff3a8"/>
+
+    <circle cx="350" cy="275" r="3" fill="#fff3a8"/>
+    <circle cx="350" cy="272" r="2.5" fill="#fff3a8"/>
+    <circle cx="353" cy="275" r="2.5" fill="#fff3a8"/>
+    <circle cx="347" cy="275" r="2.5" fill="#fff3a8"/>
+    <circle cx="350" cy="278" r="2.5" fill="#fff3a8"/>
+    <circle cx="350" cy="275" r="1.5" fill="#ffb84d"/>
+  </g>
+
+  <!-- Nuage -->
+  <g fill="#ffffff" opacity="0.9">
+    <circle cx="310" cy="55" r="14"/>
+    <circle cx="328" cy="50" r="18"/>
+    <circle cx="348" cy="57" r="14"/>
+  </g>
+
+  <!-- Soleil -->
+  <circle cx="60" cy="55" r="22" fill="#ffd97a"/>
+  <circle cx="60" cy="55" r="16" fill="#ffe8a8"/>
+
+  <!-- === LAPIN === -->
+
+  <!-- Oreilles -->
+  <g>
+    <!-- Oreille gauche -->
+    <ellipse cx="175" cy="75" rx="16" ry="48" fill="#f5f0e8" stroke="#d9d2c5" stroke-width="2" transform="rotate(-8 175 75)"/>
+    <ellipse cx="175" cy="80" rx="8" ry="36" fill="#ffc9d9" transform="rotate(-8 175 80)"/>
+    <!-- Oreille droite -->
+    <ellipse cx="220" cy="75" rx="16" ry="48" fill="#f5f0e8" stroke="#d9d2c5" stroke-width="2" transform="rotate(8 220 75)"/>
+    <ellipse cx="220" cy="80" rx="8" ry="36" fill="#ffc9d9" transform="rotate(8 220 80)"/>
+  </g>
+
+  <!-- Corps -->
+  <ellipse cx="200" cy="220" rx="55" ry="45" fill="#f5f0e8" stroke="#d9d2c5" stroke-width="2"/>
+
+  <!-- Pattes arrière -->
+  <ellipse cx="155" cy="250" rx="22" ry="14" fill="#f5f0e8" stroke="#d9d2c5" stroke-width="2"/>
+  <ellipse cx="245" cy="250" rx="22" ry="14" fill="#f5f0e8" stroke="#d9d2c5" stroke-width="2"/>
+  <!-- Coussinets des pattes -->
+  <ellipse cx="148" cy="250" rx="6" ry="4" fill="#ffc9d9"/>
+  <ellipse cx="252" cy="250" rx="6" ry="4" fill="#ffc9d9"/>
+
+  <!-- Pattes avant -->
+  <ellipse cx="182" cy="245" rx="10" ry="18" fill="#f5f0e8" stroke="#d9d2c5" stroke-width="2"/>
+  <ellipse cx="218" cy="245" rx="10" ry="18" fill="#f5f0e8" stroke="#d9d2c5" stroke-width="2"/>
+
+  <!-- Tête -->
+  <circle cx="197" cy="150" r="52" fill="#f5f0e8" stroke="#d9d2c5" stroke-width="2"/>
+
+  <!-- Joues -->
+  <circle cx="160" cy="165" r="10" fill="#ffc9d9" opacity="0.6"/>
+  <circle cx="234" cy="165" r="10" fill="#ffc9d9" opacity="0.6"/>
+
+  <!-- Yeux -->
+  <circle cx="178" cy="143" r="6" fill="#1a1a1a"/>
+  <circle cx="216" cy="143" r="6" fill="#1a1a1a"/>
+  <circle cx="180" cy="141" r="2" fill="#ffffff"/>
+  <circle cx="218" cy="141" r="2" fill="#ffffff"/>
+
+  <!-- Museau -->
+  <ellipse cx="197" cy="167" rx="4" ry="3" fill="#ff8faa"/>
+
+  <!-- Bouche + dents -->
+  <path d="M197 170 Q197 178 189 180" stroke="#1a1a1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M197 170 Q197 178 205 180" stroke="#1a1a1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <rect x="194" y="178" width="3" height="5" fill="#ffffff" stroke="#d9d2c5" stroke-width="0.5"/>
+  <rect x="197" y="178" width="3" height="5" fill="#ffffff" stroke="#d9d2c5" stroke-width="0.5"/>
+
+  <!-- Moustaches -->
+  <g stroke="#8a837a" stroke-width="1" stroke-linecap="round" fill="none">
+    <line x1="170" y1="170" x2="150" y2="168"/>
+    <line x1="170" y1="174" x2="150" y2="176"/>
+    <line x1="224" y1="170" x2="244" y2="168"/>
+    <line x1="224" y1="174" x2="244" y2="176"/>
+  </g>
+
+  <!-- Noeud papillon -->
+  <g>
+    <path d="M197 195 L180 188 L180 208 L197 200 Z" fill="#ff9ebb"/>
+    <path d="M197 195 L214 188 L214 208 L197 200 Z" fill="#ff9ebb"/>
+    <circle cx="197" cy="198" r="4" fill="#e87a9a"/>
+  </g>
+
+  <!-- === PANIER D'OEUFS === -->
+  <g>
+    <!-- Panier -->
+    <path d="M280 240 L330 240 L325 275 L285 275 Z" fill="#c68a52" stroke="#8a5a32" stroke-width="1.5"/>
+    <!-- Tressage -->
+    <line x1="285" y1="250" x2="325" y2="250" stroke="#8a5a32" stroke-width="1"/>
+    <line x1="286" y1="260" x2="324" y2="260" stroke="#8a5a32" stroke-width="1"/>
+    <line x1="294" y1="240" x2="294" y2="275" stroke="#8a5a32" stroke-width="1"/>
+    <line x1="305" y1="240" x2="305" y2="275" stroke="#8a5a32" stroke-width="1"/>
+    <line x1="316" y1="240" x2="316" y2="275" stroke="#8a5a32" stroke-width="1"/>
+    <!-- Anse -->
+    <path d="M285 240 Q305 210 325 240" stroke="#8a5a32" stroke-width="3" fill="none"/>
+
+    <!-- Oeufs -->
+    <ellipse cx="292" cy="232" rx="8" ry="11" fill="#a8d8f0"/>
+    <ellipse cx="290" cy="229" rx="2" ry="1.5" fill="#ffffff" opacity="0.7"/>
+    <path d="M284 232 Q288 234 292 232 Q296 230 300 232" stroke="#ffffff" stroke-width="1" fill="none"/>
+
+    <ellipse cx="308" cy="228" rx="8" ry="11" fill="#ffc9d9"/>
+    <ellipse cx="306" cy="225" rx="2" ry="1.5" fill="#ffffff" opacity="0.7"/>
+    <circle cx="305" cy="230" r="1.2" fill="#e87a9a"/>
+    <circle cx="310" cy="226" r="1.2" fill="#e87a9a"/>
+    <circle cx="311" cy="232" r="1.2" fill="#e87a9a"/>
+
+    <ellipse cx="323" cy="232" rx="8" ry="11" fill="#c8e89a"/>
+    <ellipse cx="321" cy="229" rx="2" ry="1.5" fill="#ffffff" opacity="0.7"/>
+    <path d="M316 230 L330 230 M316 234 L330 234" stroke="#ffffff" stroke-width="1"/>
+  </g>
+
+  <!-- Oeuf isolé dans l'herbe -->
+  <g>
+    <ellipse cx="105" cy="265" rx="9" ry="12" fill="#ffd97a"/>
+    <ellipse cx="102" cy="261" rx="2" ry="1.5" fill="#ffffff" opacity="0.7"/>
+    <path d="M97 263 Q101 266 105 263 Q109 260 113 263" stroke="#e87a9a" stroke-width="1.2" fill="none"/>
+    <path d="M97 269 Q101 272 105 269 Q109 266 113 269" stroke="#6ab0e0" stroke-width="1.2" fill="none"/>
+  </g>
+</svg>

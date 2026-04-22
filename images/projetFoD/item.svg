@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <rect width="400" height="400" rx="12" fill="#1c1917"/>
+  <rect x="1" y="1" width="398" height="398" rx="11" stroke="#6b21a8" stroke-opacity="0.3" stroke-width="2"/>
+  <!-- Gem shape -->
+  <polygon points="200,80 280,180 240,300 160,300 120,180" fill="#292524" stroke="#7c3aed" stroke-opacity="0.3" stroke-width="2"/>
+  <!-- Inner facets -->
+  <line x1="200" y1="80" x2="200" y2="300" stroke="#7c3aed" stroke-opacity="0.15" stroke-width="1"/>
+  <line x1="120" y1="180" x2="280" y2="180" stroke="#7c3aed" stroke-opacity="0.15" stroke-width="1"/>
+  <line x1="200" y1="80" x2="120" y2="180" stroke="#7c3aed" stroke-opacity="0.1" stroke-width="1"/>
+  <line x1="200" y1="80" x2="280" y2="180" stroke="#7c3aed" stroke-opacity="0.1" stroke-width="1"/>
+  <!-- Glow -->
+  <circle cx="200" cy="190" r="20" fill="#7c3aed" opacity="0.08"/>
+  <!-- Label -->
+  <text x="200" y="380" text-anchor="middle" fill="#a8a29e" font-family="sans-serif" font-size="14" opacity="0.5">ITEM</text>
+</svg>
