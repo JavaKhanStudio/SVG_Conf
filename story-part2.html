@@ -264,13 +264,20 @@
                 bottom: 12px;
                 right: 12px;
                 left: auto;
-                width: 130px;
+                width: 170px;
                 z-index: 90;
                 background: var(--card-bg);
                 border: 1px solid var(--border-color);
                 border-radius: 8px;
                 padding: 4px;
                 box-shadow: 0 4px 18px rgba(0,0,0,0.3);
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.2s ease;
+            }
+            body.anat-section-active .anat-sticky {
+                opacity: 1;
+                pointer-events: auto;
             }
             .anat-sticky .anat-stage {
                 padding: 4px;
@@ -1139,6 +1146,20 @@
                 }
                 render();
             }
+        })();
+
+        // Mobile thumbnail gate: only show the floating dogtag while the
+        // anatomy layout is actually in view. Above 900px the sticky
+        // column takes over — the body class is harmless there.
+        (function mountAnatSectionObserver() {
+            const target = document.querySelector('.anat-layout');
+            if (!target || !('IntersectionObserver' in window)) return;
+            const obs = new IntersectionObserver((entries) => {
+                for (const e of entries) {
+                    document.body.classList.toggle('anat-section-active', e.isIntersecting);
+                }
+            }, { rootMargin: '-10% 0px -10% 0px', threshold: 0 });
+            obs.observe(target);
         })();
     </script>
 </body>

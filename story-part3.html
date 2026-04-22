@@ -88,10 +88,17 @@
                 bottom: 12px;
                 right: 12px;
                 left: auto;
-                width: 130px;
+                width: 170px;
                 z-index: 90;
                 padding: 4px;
                 box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.2s ease;
+            }
+            body.card-anat-section-active .card-anat-sticky {
+                opacity: 1;
+                pointer-events: auto;
             }
             .card-anat-sticky .card-anat-toggle,
             .card-anat-sticky .live-controls { display: none; }
@@ -1252,6 +1259,19 @@
                 }
                 applyAnimSpeed(speedSlider.value);
             }
+        })();
+
+        // Mobile thumbnail gate: floating card only shows while the
+        // anatomy layout is in view. Desktop sticky column is unaffected.
+        (function mountCardAnatObserver() {
+            const target = document.querySelector('.card-anat-layout');
+            if (!target || !('IntersectionObserver' in window)) return;
+            const obs = new IntersectionObserver((entries) => {
+                for (const e of entries) {
+                    document.body.classList.toggle('card-anat-section-active', e.isIntersecting);
+                }
+            }, { rootMargin: '-10% 0px -10% 0px', threshold: 0 });
+            obs.observe(target);
         })();
     </script>
 </body>
